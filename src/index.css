@@ -1,0 +1,253 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-bg: var(--bg);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-surface: var(--surface);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-divider: var(--divider);
+  --color-hairline: var(--hairline);
+  
+  --font-heading: "DM Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "Inter Mono", "Roboto Mono", monospace;
+}
+
+@layer base {
+  :root {
+    --bg: #FAFAF7;
+    --bg-subtle: #F5F4F1;
+    --surface: #FFFFFF;
+    --text-primary: #111214;
+    --text-secondary: #53575F;
+    --text-muted: rgba(17, 18, 20, 0.72);
+    --border: #E4E1D9;
+    --border-strong: #CFCBBF;
+    --divider: #ECEAE4;
+    --primary: #007BFF;
+    --accent: #FFD722;
+    --hairline: rgba(17, 18, 20, 0.1);
+    --scrollbar-hover: var(--primary);
+  }
+
+  [data-theme="dark"], .dark {
+    --bg: #0B0C0E;
+    --bg-subtle: #141518;
+    --surface: #111214;
+    --text-primary: #F2F3F5;
+    --text-secondary: #A7ABB3;
+    --text-muted: #A1A5AB;
+    --border: #2A2C31;
+    --border-strong: #3A3D43;
+    --divider: #202226;
+    --primary: #3B93FF;
+    --accent: #FFD722;
+    --hairline: rgba(255, 255, 255, 0.1);
+    --scrollbar-hover: var(--accent);
+  }
+
+  /* Global Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-hover);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    transition-property: color, background-color;
+    transition-duration: 320ms;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+
+  /* Scoped theme transition — header surfaces only, not global */
+  header, header * {
+    transition-property: color, background-color, border-color, opacity;
+    transition-duration: 320ms;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+  }
+  /* SVG stroke transitions for wave color in dark mode */
+  header svg path {
+    transition: stroke 320ms cubic-bezier(.4,0,.2,1);
+  }
+}
+
+@utility animate-fade-in {
+  animation: fadeIn 0.8s ease forwards;
+  opacity: 0;
+}
+
+@utility animate-slide-up {
+  animation: slideUp 0.7s cubic-bezier(.4,0,.2,1) forwards;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+@utility animate-fade-scale {
+  animation: fadeScale 0.7s cubic-bezier(.4,0,.2,1) forwards;
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+@utility animation-delay-100 { animation-delay: 100ms; }
+@utility animation-delay-200 { animation-delay: 200ms; }
+@utility animation-delay-300 { animation-delay: 300ms; }
+@utility animation-delay-400 { animation-delay: 400ms; }
+
+@keyframes badge-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeScale {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sheen {
+  0% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
+}
+
+.animate-sheen {
+  background: linear-gradient(
+    110deg,
+    #007BFF 45%,
+    #A3CFFF 50%,
+    #007BFF 55%
+  );
+  background-size: 300% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: sheen 3.5s linear infinite;
+}
+
+.dark .animate-sheen {
+  background: linear-gradient(
+    110deg,
+    #FFD722 45%,
+    #FFF0A3 50%,
+    #FFD722 55%
+  );
+  background-size: 300% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.animate-vansh-shine {
+  background: linear-gradient(
+    120deg,
+    #007BFF 0%,
+    #007BFF 40%,
+    rgba(255, 255, 255, 0.85) 50%,
+    #007BFF 60%,
+    #007BFF 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: vanshShine 6s linear infinite;
+}
+
+.dark .animate-vansh-shine {
+  background: linear-gradient(
+    120deg,
+    #FFD21F 0%,
+    #FFD21F 40%,
+    rgba(255, 255, 255, 0.95) 50%,
+    #FFD21F 60%,
+    #FFD21F 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@keyframes vanshShine {
+  0% {
+    background-position: 150% center;
+  }
+  50% {
+    background-position: -50% center;
+  }
+  100% {
+    background-position: -50% center;
+  }
+}
+
+/* Watermark Fluid Ink Animation */
+@keyframes ink-fluid {
+  0% { background-position: 0% 0%, 100% 100%, 50% 0%, 0% 100%; }
+  25% { background-position: 100% 50%, 50% 100%, 100% 0%, 0% 0%; }
+  50% { background-position: 50% 100%, 0% 50%, 50% 100%, 100% 0%; }
+  75% { background-position: 0% 50%, 50% 0%, 0% 100%, 100% 100%; }
+  100% { background-position: 0% 0%, 100% 100%, 50% 0%, 0% 100%; }
+}
+
+.animate-ink-fluid {
+  animation: ink-fluid 12s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-fade-scale {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .animate-sheen {
+    animation: none !important;
+    background-image: none !important;
+    color: currentColor !important;
+  }
+}
