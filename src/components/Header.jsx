@@ -69,10 +69,13 @@ export default function Header() {
   // ── Theme init ────────────────────────────────────────────────────────────
   useEffect(() => {
     const stored = localStorage.getItem('theme');
-    const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (stored === 'dark' || (!stored && sysDark)) {
+    // Default to light mode unless 'dark' is explicitly stored
+    if (stored === 'dark') {
       document.documentElement.classList.add('dark');
       setIsDark(true);
+    } else {
+      document.documentElement.classList.remove('dark');
+      setIsDark(false);
     }
 
     const handleScroll = () => setScrolled(window.scrollY > 8);
