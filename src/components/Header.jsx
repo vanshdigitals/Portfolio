@@ -52,8 +52,8 @@ export default function Header() {
     const onRmChange = (e) => setReducedMotion(e.matches);
     rmSq.addEventListener('change', onRmChange);
 
-    // Desktop breakpoint
-    const deskMq = window.matchMedia('(min-width: 768px)');
+    // Desktop breakpoint — full nav only when there is room for all items
+    const deskMq = window.matchMedia('(min-width: 1024px)');
     setIsDesktop(deskMq.matches);
     const onDeskChange = (e) => {
       setIsDesktop(e.matches);
@@ -199,7 +199,7 @@ export default function Header() {
       {/* ── TOP BAR BACKGROUND (Base Layer) ─────────────────────────────── */}
       <div 
         className={`
-          absolute top-0 left-0 w-full h-16 md:h-24 bg-bg z-10
+          absolute top-0 left-0 w-full h-16 lg:h-24 bg-bg z-10
           transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)]
           ${scrolled ? 'border-b border-hairline' : 'border-b border-transparent'}
         `}
@@ -212,7 +212,7 @@ export default function Header() {
           fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm
           transition-opacity duration-300
           ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-          md:hidden
+          lg:hidden
         `}
         onClick={() => setMobileMenuOpen(false)}
         aria-hidden="true"
@@ -232,11 +232,11 @@ export default function Header() {
           ${mobileMenuOpen 
             ? 'translate-x-0 motion-reduce:opacity-100' 
             : 'translate-x-full motion-reduce:translate-x-0 motion-reduce:opacity-0 pointer-events-none'}
-          md:hidden
+          lg:hidden
         `}
       >
         {/* Drawer Header */}
-        <div className="flex items-center justify-between px-5 h-16 md:h-24 shrink-0 border-b border-hairline">
+        <div className="flex items-center justify-between px-5 h-16 shrink-0 border-b border-hairline">
           <Link
             to="/#hero"
             onClick={(e) => {
@@ -333,7 +333,7 @@ export default function Header() {
       </div>
 
       {/* ── TOP BAR CONTENT (Top Layer) ──────────────────────────────────── */}
-      <div className="relative z-40 w-full max-w-[1536px] mx-auto px-4 md:px-5 lg:px-5 xl:px-6 2xl:px-8 h-16 md:h-24 flex items-center justify-between pointer-events-none">
+      <div className="relative z-40 w-full max-w-[1536px] mx-auto px-4 lg:px-5 xl:px-6 2xl:px-8 h-16 lg:h-24 flex items-center justify-between pointer-events-none">
         
         {/* LEFT: Brand */}
         <div className="flex-1 min-w-[180px] pointer-events-auto">
@@ -344,10 +344,10 @@ export default function Header() {
               handleNavClick(e, NAV_LINKS[0], 0);
               setMobileMenuOpen(false);
             }}
-            className="group inline-flex items-baseline gap-[2px] md:gap-[3px] tracking-[-0.02em] font-heading text-[22px] md:text-[26px] font-extrabold leading-none text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
+            className="group inline-flex items-baseline gap-[2px] lg:gap-[3px] tracking-[-0.02em] font-heading text-[22px] lg:text-[26px] font-extrabold leading-none text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
           >
             Vansh Digitals
-            <span className={`inline-block w-[9px] h-[9px] md:w-[11px] md:h-[11px] rounded-full transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.25] motion-reduce:transition-[background-color] ${isDark ? 'bg-[#FFD722]' : 'bg-[#007BFF]'}`} />
+            <span className={`inline-block w-[9px] h-[9px] lg:w-[11px] lg:h-[11px] rounded-full transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.25] motion-reduce:transition-[background-color] ${isDark ? 'bg-[#FFD722]' : 'bg-[#007BFF]'}`} />
           </a>
         </div>
 
@@ -355,7 +355,7 @@ export default function Header() {
         <nav
           ref={navRef}
           aria-label="Primary"
-          className="relative hidden md:flex items-center h-full pointer-events-auto"
+          className="relative hidden lg:flex items-center h-full pointer-events-auto"
         >
           <ul className="flex items-center gap-4 lg:gap-5 xl:gap-8 2xl:gap-10 pb-3 pt-3">
             {NAV_LINKS.map((link, index) => {
@@ -408,7 +408,7 @@ export default function Header() {
             aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
             aria-pressed={isDark}
             className={`
-              group relative w-[48px] h-[26px] md:w-[56px] md:h-[30px] rounded-full p-[2px] md:p-[3px]
+              group relative w-[48px] h-[26px] lg:w-[56px] lg:h-[30px] rounded-full p-[2px] lg:p-[3px]
               border transition-colors duration-[260ms]
               focus-visible:outline-none focus-visible:ring-2
               focus-visible:ring-primary focus-visible:ring-offset-2
@@ -418,15 +418,15 @@ export default function Header() {
           >
             <div 
               className={`
-                w-[20px] h-[20px] md:w-[22px] md:h-[22px] rounded-full
+                w-[20px] h-[20px] lg:w-[22px] lg:h-[22px] rounded-full
                 shadow-[0_1px_3px_rgba(0,0,0,0.1)]
                 flex items-center justify-center
                 transition-transform duration-[260ms] ease-[cubic-bezier(.65,0,.35,1)]
                 motion-reduce:transition-none
-                ${isDark ? 'translate-x-[22px] md:translate-x-[26px] bg-[#111111] border border-[#111111] text-[#FFD722]' : 'translate-x-0 bg-white border border-black/5 text-[#007BFF]'}
+                ${isDark ? 'translate-x-[22px] lg:translate-x-[26px] bg-[#111111] border border-[#111111] text-[#FFD722]' : 'translate-x-0 bg-white border border-black/5 text-[#007BFF]'}
               `}
             >
-              <div className="relative flex items-center justify-center w-[14px] h-[14px] md:w-4 md:h-4">
+              <div className="relative flex items-center justify-center w-[14px] h-[14px] lg:w-4 lg:h-4">
                 <Sun
                   className={`
                     absolute w-full h-full
@@ -455,7 +455,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             className={`
-              group hidden sm:flex h-[44px] items-center justify-center gap-3
+              group hidden lg:flex h-[44px] items-center justify-center gap-3
               rounded-full pl-5 pr-1.5 font-heading text-[15px] font-medium
               transition-colors duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
               focus-visible:outline-none focus-visible:ring-2
@@ -489,7 +489,7 @@ export default function Header() {
             onClick={() => setMobileMenuOpen(true)}
             aria-expanded={mobileMenuOpen}
             className="
-              md:hidden relative w-9 h-9 rounded-full border border-hairline
+              lg:hidden relative w-9 h-9 rounded-full border border-hairline
               flex items-center justify-center text-text-primary
               bg-transparent hover:bg-black/5 dark:hover:bg-white/10
               transition-colors duration-[240ms]

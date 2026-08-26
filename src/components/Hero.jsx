@@ -8,21 +8,22 @@ export default function Hero() {
   return (
     <section 
       id="hero" 
-      className="relative w-full mt-24 pt-[10px] pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] border-b border-border transition-colors duration-[320ms] overflow-x-clip"
+      className="relative w-full mt-16 md:mt-24 pt-[10px] pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] border-b border-border transition-colors duration-[320ms] overflow-x-clip"
+      style={{ scrollMarginTop: 'var(--header-h, 64px)' }}
     >
       {/* 
         COMPOSITION GROUP 
         Uses CSS Grid to stack the elements naturally without absolute positioning.
         The Hero height automatically expands to fit the tallest element.
       */}
-      <div className="relative w-full max-w-[1440px] mx-auto px-[20px] grid grid-cols-1 items-start text-center isolate">
+      <div className="relative w-full max-w-[1800px] mx-auto px-[20px] grid grid-cols-1 items-start text-center isolate">
         
         {/* PORTFOLIO (Layer 10) 
             Sits BEHIND the portrait as requested.
         */}
         <div className="col-start-1 row-start-1 z-10 w-full justify-self-center self-start">
           <h1 
-            className="font-furgatorio text-[54vw] sm:text-[48vw] md:text-[44vw] lg:text-[40vw] xl:text-[515px] leading-[1.1] m-0 select-none whitespace-nowrap overflow-visible animate-portfolio-init motion-safe:animate-portfolio-flicker"
+            className="font-furgatorio portfolio-wordmark leading-[1.1] m-0 select-none whitespace-nowrap animate-portfolio-init motion-safe:animate-portfolio-flicker"
           >
             PORTFOLIO
           </h1>

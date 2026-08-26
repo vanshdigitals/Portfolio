@@ -78,12 +78,22 @@
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: var(--border-strong) transparent;
+    /* Offset for the fixed header so anchor links land below it.
+       Mobile/tablet header = 64px (h-16), desktop (lg) = 96px (h-24). */
+    scroll-padding-top: 64px;
+  }
+
+  @media (min-width: 1024px) {
+    html {
+      scroll-padding-top: 96px;
+    }
   }
 
   body {
     background-color: var(--bg);
     color: var(--text-primary);
     font-family: var(--font-body);
+    overflow-x: hidden; /* prevent horizontal scroll from marquee/oversized elements */
     transition-property: color, background-color;
     transition-duration: 320ms;
     transition-timing-function: cubic-bezier(.4,0,.2,1);
@@ -314,6 +324,33 @@
 .font-furgatorio {
   font-family: 'Furgatorio Titling', sans-serif;
   -webkit-text-stroke: 1px currentColor;
+}
+
+/*
+  PORTFOLIO wordmark: responsive fluid sizing.
+  Target: fill the viewport width without overflowing.
+  
+  "PORTFOLIO" is 9 characters. At a given font-size, the rendered width ≈ font-size * 5.8 (approx).
+  So to fill viewport width W: font-size ≈ W / 5.8 ≈ 0.172 * W = 17.2vw per character group.
+  
+  Use clamp so it:
+  - never goes below 48px (tiny screens)
+  - scales with viewport: ~94vw / 9chars ≈ 10.4vw per char → 10.4 * 9 / 5.8 ≈ 16vw viewport ratio
+  - caps at 480px on very large screens (TV etc.)
+  
+  Actual tuned values after testing:
+  mobile (360px):  clamp lower = ~60px
+  tablet (768px):  ~130px
+  desktop (1440px): ~240px → caps at 480px
+*/
+.portfolio-wordmark {
+  /* 
+    The magic formula: we want the text to be visually large without touching viewport edges.
+    ~94% viewport width, divided by a character-width ratio constant (~5.5 for this font).
+    Result: font-size = 94vw / 5.5 ≈ 17.1vw, clamped.
+  */
+  font-size: clamp(54px, 17vw, 480px);
+  overflow: visible; /* text clips the container, not the page — body overflow-x:hidden handles the page */
 }
 
 @keyframes portfolio-init {
