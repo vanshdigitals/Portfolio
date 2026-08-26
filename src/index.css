@@ -333,16 +333,16 @@
   - At 40vw font-size the text overflows viewport by ~10-15% at all widths.
   - Actual Furgatorio glyph width ratio: rendered_width ≈ font-size × 2.77
   - To fill 90% of any viewport: font-size = 0.90 × viewport / 2.77 ≈ 0.325 × vw = ~32.5vw
-  - Increased by 4-6% per request: ~34vw.
+  - +4% increase from 34vw → 35.5vw (per user request for slightly more dominant scale).
 
   clamp behaviour:
-  - min  56px  → tiny devices
-  - preferred 34vw → fills ~94-96% at every viewport
-  - max  790px → cap kicks in at ~2323px+ (genuine ultra-wide / TV)
+  - min  59px  → tiny devices (+5.4% from 56px)
+  - preferred 35.5vw → fills ~98% at every viewport (+4.4% from 34vw)
+  - max  825px → cap at ~2323px+ (genuine ultra-wide / TV) (+4.4% from 790px)
 
 */
 .portfolio-wordmark {
-  font-size: clamp(56px, 34vw, 790px);
+  font-size: clamp(59px, 35.5vw, 825px);
   overflow: visible; /* text clips the container, not the page — body overflow-x:hidden handles the page */
 }
 
