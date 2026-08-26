@@ -15,9 +15,9 @@ function OldChar({ char, index, isFlipped }) {
         rotateX: isFlipped ? -180 : 0 
       }}
       transition={{ 
-        duration: 1.2, 
-        delay: index * 0.08, 
-        ease: [0.76, 0, 0.24, 1] 
+        duration: 1.8, 
+        delay: index * 0.12, 
+        ease: [0.7, 0, 0.3, 1] 
       }}
     >
       {char === " " ? "\u00A0" : char}
@@ -35,9 +35,9 @@ function NewChar({ char, index, isFlipped }) {
         rotateX: isFlipped ? 0 : 180 
       }}
       transition={{ 
-        duration: 1.2, 
-        delay: (index + offset) * 0.08, 
-        ease: [0.76, 0, 0.24, 1] 
+        duration: 1.8, 
+        delay: (index + offset) * 0.12, 
+        ease: [0.7, 0, 0.3, 1] 
       }}
     >
       {char === " " ? "\u00A0" : char}
@@ -59,36 +59,40 @@ export default function Preloader({ onComplete }) {
     }
 
     const t1 = setTimeout(() => setStep(1), 400); // Start wave
-    const t2 = setTimeout(() => setStep(2), 3000); // Completely remove VANSH DIGITALS from DOM (after 2.3s wave)
-    const t3 = setTimeout(() => setStep(3), 3300); // Start circle expansion
-    const t4 = setTimeout(() => {
+    const t2 = setTimeout(() => setStep(2), 4200); // Completely remove VANSH DIGITALS from DOM
+    const t3 = setTimeout(() => setStep(3), 4600); // Start circle expansion
+    const t4 = setTimeout(() => setStep(4), 5900); // Fade out preloader seamlessly
+    const t5 = setTimeout(() => {
       onComplete();
-    }, 4200); // Unmount
+    }, 6700); // Unmount
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
       clearTimeout(t4);
+      clearTimeout(t5);
     };
   }, [prefersReducedMotion, onComplete]);
 
   if (prefersReducedMotion) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-[var(--primary)] w-[100vw] h-[100dvh] flex items-center justify-center overflow-hidden pointer-events-none">
+    <motion.div 
+      initial={{ opacity: 1 }}
+      animate={{ opacity: step >= 4 ? 0 : 1 }}
+      transition={{ duration: 0.7, ease: [0.33, 1, 0.68, 1] }}
+      className="fixed inset-0 z-[9999] bg-[var(--primary)] w-[100vw] h-[100dvh] flex items-center justify-center overflow-hidden pointer-events-none"
+    >
       
-      {/* Expanding white circular wipe */}
+      {/* Expanding white circular wipe (hardware accelerated) */}
       <motion.div 
         className="absolute z-10 bg-white rounded-full pointer-events-none"
-        initial={{ width: 0, height: 0, opacity: 1 }}
-        animate={
-          step >= 3 
-            ? { width: '250vmax', height: '250vmax' } 
-            : { width: 0, height: 0 }
-        }
-        transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+        initial={{ scale: 0 }}
+        animate={{ scale: step >= 3 ? 1 : 0 }}
+        transition={{ duration: 1.4, ease: [0.7, 0, 0.3, 1] }}
         style={{ 
+          width: '250vmax', height: '250vmax',
           top: '50%', left: '50%', 
           x: '-50%', y: '-50%' 
         }}
@@ -100,7 +104,7 @@ export default function Preloader({ onComplete }) {
         {/* OLD: VANSH DIGITALS */}
         {step < 2 && (
           <div 
-            className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(18px,7.5vw,145px)]"
+            className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(20px,8vw,120px)] md:text-[clamp(40px,11vw,200px)] xl:text-[clamp(60px,14vw,320px)]"
             style={{ gridArea: '1/1' }}
           >
             {str1.map((char, i) => (
@@ -111,7 +115,7 @@ export default function Preloader({ onComplete }) {
 
         {/* NEW: PORTFOLIO (Centered from frame 1) */}
         <div 
-          className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(18px,7.5vw,145px)]"
+          className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(20px,8vw,120px)] md:text-[clamp(40px,11vw,200px)] xl:text-[clamp(60px,14vw,320px)]"
           style={{ gridArea: '1/1' }}
         >
           {str2.map((char, i) => (
@@ -120,6 +124,6 @@ export default function Preloader({ onComplete }) {
         </div>
 
       </div>
-    </div>
+    </motion.div>
   );
 }
