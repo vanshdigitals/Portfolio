@@ -113,39 +113,36 @@ export default function Hero() {
                 desktop (1440px): 5vw = 72px    → clamp max 68px applies
             */}
 
-            {/* ChatGPT — upper-left, shoulder/head region */}
-            <div className="absolute top-[26%] sm:top-[22%] left-[-20%] sm:left-[10%] -translate-y-1/2 z-10 pointer-events-auto">
-              {/* Mobile Pill */}
-              <div className="flex sm:hidden items-center gap-2 bg-white/95 dark:bg-[#1C1C1C]/95 border border-black/5 dark:border-white/10 rounded-[14px] p-1.5 pr-3 shadow-sm w-max max-w-[130px]">
-                <img src={chatgptIcon} alt="ChatGPT" className="w-[41px] h-[41px] object-contain shrink-0 drop-shadow-sm" />
-                <span className="font-body text-[10px] leading-[1.2] font-medium text-text-primary">
-                  AI-Assisted<br/>Design Workflows
-                </span>
-              </div>
-              {/* Desktop Icon */}
-              <img
-                src={chatgptIcon}
-                alt="ChatGPT"
-                className="hidden sm:block w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md"
-              />
+            {/* ── MOBILE ONLY: MIRRORED ORBITAL PILLS ── */}
+            {/* LEFT PILL: Canva (Outer Text -> Inner Icon) */}
+            <div className="absolute top-[20%] left-[-22%] -translate-y-1/2 z-10 pointer-events-auto flex sm:hidden items-center gap-2 bg-white dark:bg-[#1A1A1A] border border-border rounded-full p-1.5 pl-3.5 shadow-sm w-max max-w-[130px]">
+              <span className="font-body text-[10px] leading-[1.2] font-medium text-text-primary text-right">
+                Canva Specialist<br/>(3+ Yrs)
+              </span>
+              <img src={canvaIcon} alt="Canva" className="w-[34px] h-[34px] object-contain shrink-0 drop-shadow-sm" />
             </div>
 
-            {/* Canva — upper-right, shoulder/head region */}
-            <div className="absolute top-[18%] sm:top-[22%] right-[-20%] sm:right-[10%] -translate-y-1/2 z-10 pointer-events-auto">
-              {/* Mobile Pill */}
-              <div className="flex sm:hidden items-center gap-2 bg-white/95 dark:bg-[#1C1C1C]/95 border border-black/5 dark:border-white/10 rounded-[14px] p-1.5 pr-3 shadow-sm w-max max-w-[130px]">
-                <img src={canvaIcon} alt="Canva" className="w-[34px] h-[34px] object-contain shrink-0 drop-shadow-sm" />
-                <span className="font-body text-[10px] leading-[1.2] font-medium text-text-primary">
-                  Canva Specialist<br/>(3+ Yrs)
-                </span>
-              </div>
-              {/* Desktop Icon */}
-              <img
-                src={canvaIcon}
-                alt="Canva"
-                className="hidden sm:block w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md"
-              />
+            {/* RIGHT PILL: ChatGPT (Inner Icon -> Outer Text) */}
+            <div className="absolute top-[28%] right-[-24%] -translate-y-1/2 z-10 pointer-events-auto flex sm:hidden items-center gap-2 bg-white dark:bg-[#1A1A1A] border border-border rounded-full p-1.5 pr-3 shadow-sm w-max max-w-[130px]">
+              <img src={chatgptIcon} alt="ChatGPT" className="w-[41px] h-[41px] object-contain shrink-0 drop-shadow-sm" />
+              <span className="font-body text-[10px] leading-[1.2] font-medium text-text-primary text-left">
+                AI-Assisted<br/>Design Workflows
+              </span>
             </div>
+
+            {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
+            {/* ChatGPT — upper-left */}
+            <img
+              src={chatgptIcon}
+              alt="ChatGPT"
+              className="hidden sm:block absolute top-[22%] left-[10%] -translate-y-1/2 w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md z-10 pointer-events-auto"
+            />
+            {/* Canva — upper-right */}
+            <img
+              src={canvaIcon}
+              alt="Canva"
+              className="hidden sm:block absolute top-[22%] right-[10%] -translate-y-1/2 w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md z-10 pointer-events-auto"
+            />
 
             {/* Photoshop — lower-left, arm/hand region */}
             <img
