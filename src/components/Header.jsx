@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Sun, Moon, ArrowRight, Menu, X, 
-  House, User, BriefcaseBusiness, Code2, BadgeCheck, Send, 
+  House, User, Briefcase, PenTool, BadgeCheck, Send, 
   MessageCircle 
 } from 'lucide-react';
 import AnimatedNavIndicator, { buildSinePath } from './AnimatedNavIndicator';
@@ -65,8 +65,8 @@ function MobileNavWave({ isDark, reducedMotion, pointCount }) {
 const NAV_LINKS = [
   { name: 'Home',       href: '/#hero',       sectionId: 'hero',       icon: House },
   { name: 'About',      href: '/#about',      sectionId: 'about',      icon: User },
-  { name: 'Work',       href: '/#work',       sectionId: 'work',       icon: BriefcaseBusiness },
-  { name: 'Skills',     href: '/#skills',     sectionId: 'skills',     icon: Code2 },
+  { name: 'Work',       href: '/#work',       sectionId: 'work',       icon: Briefcase },
+  { name: 'Skills',     href: '/#skills',     sectionId: 'skills',     icon: PenTool },
   { name: 'Experience', href: '/#experience', sectionId: 'experience', icon: BadgeCheck },
   { name: 'Kind Words', href: '/#testimonials', sectionId: 'testimonials', icon: MessageCircle },
   { name: 'Contact',    href: '/#contact',    sectionId: 'contact',    icon: Send },
@@ -327,7 +327,9 @@ export default function Header() {
                     : 'text-text-primary hover:bg-black/5 dark:hover:bg-white/5'}
                 `}
               >
-                <Icon size={20} strokeWidth={isActive ? 2.5 : 2} className={isActive ? 'text-primary' : 'text-text-muted'} />
+                <div className="flex items-center justify-center w-6 shrink-0">
+                  <Icon size={20} strokeWidth={isActive ? 2.5 : 2} className={isActive ? 'text-primary' : 'text-text-muted'} />
+                </div>
                 
                 <div className="relative flex flex-col">
                   <span className="relative z-10">{link.name}</span>
@@ -346,36 +348,38 @@ export default function Header() {
           <div className="my-4 h-px bg-hairline w-full" />
 
           {/* View Resume Button */}
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              group flex h-[48px] w-full items-center justify-center gap-3
-              rounded-full bg-[#007BFF] hover:bg-[#006AE0] text-white
-              px-2 font-heading text-[15px] font-medium
-              transition-colors duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
-              outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg
-            "
-          >
-            <span className="pl-3">Resume</span>
-            <div className="
-              flex items-center justify-center w-[34px] h-[34px] rounded-full
-              transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
-              group-hover:scale-[1.03]
-              bg-white text-[#111214]
-            ">
-              <ArrowRight 
-                size={16} 
-                strokeWidth={2}
-                className="
-                  -rotate-45 group-hover:rotate-0
-                  transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
-                  motion-reduce:transition-none
-                "
-              />
-            </div>
-          </a>
+          <div className="flex justify-center w-full mb-6">
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+                group flex h-[44px] w-auto items-center justify-center gap-3
+                rounded-full bg-[#007BFF] hover:bg-[#006AE0] text-white
+                pl-5 pr-1.5 font-heading text-[15px] font-medium
+                transition-colors duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
+                outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg
+              "
+            >
+              <span>Resume</span>
+              <div className="
+                flex items-center justify-center w-[32px] h-[32px] rounded-full
+                transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
+                group-hover:scale-[1.03]
+                bg-white text-[#111214]
+              ">
+                <ArrowRight 
+                  size={16} 
+                  strokeWidth={2}
+                  className="
+                    -rotate-45 group-hover:rotate-0
+                    transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
+                    motion-reduce:transition-none
+                  "
+                />
+              </div>
+            </a>
+          </div>
         </nav>
       </div>
 
