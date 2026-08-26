@@ -1,4 +1,3 @@
-import portrait from '../assets/New Profile Icon DP.png';
 import chatgptIcon from '../assets/Chatgpt.png';
 import canvaIcon from '../assets/Canva.png';
 import photoshopIcon from '../assets/Photoshop.png';
@@ -90,10 +89,13 @@ export default function Hero() {
           {/* Inner: the true positioning context for icons */}
           <div className="relative w-full">
 
-            {/* Portrait image — renders at natural aspect ratio via h-auto */}
+            {/* Portrait image — renders at natural aspect ratio via h-auto. Width/Height attributes prevent layout shift. */}
             <img
-              src={portrait}
+              src="/images/hero-portrait.webp"
               alt="Vansh Gupta"
+              width="1377"
+              height="2000"
+              fetchpriority="high"
               className="w-full h-auto object-contain block select-none pointer-events-none"
               draggable="false"
             />
@@ -127,6 +129,19 @@ export default function Hero() {
               alt="Canva"
               className="sm:hidden absolute top-[35%] right-[6%] -translate-y-1/2 rotate-[22deg] w-[26%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
             />
+
+            {/* ── MOBILE ONLY: INFO PILLS ── */}
+            {/* AI Pill (Mobile) */}
+            <div className="sm:hidden absolute top-[28%] left-[-15%] z-20 flex flex-col items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
+              <span className="font-heading font-bold text-black text-[10px] leading-tight tracking-tight">AI-Assisted</span>
+              <span className="font-sans font-medium text-text-muted text-[9px] leading-tight">Design Workflows</span>
+            </div>
+
+            {/* Canva Pill (Mobile) */}
+            <div className="sm:hidden absolute top-[22%] right-[-5%] z-20 flex flex-col items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
+              <span className="font-heading font-bold text-black text-[10px] leading-tight tracking-tight">Canva Specialist</span>
+              <span className="font-sans font-medium text-text-muted text-[9px] leading-tight">3+ Years</span>
+            </div>
 
             {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
             {/* ChatGPT — upper-left */}

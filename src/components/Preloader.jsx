@@ -63,13 +63,13 @@ export default function Preloader({ onComplete }) {
       return;
     }
 
-    const t1 = setTimeout(() => setStep(1), 400); // Start wave
-    const t2 = setTimeout(() => setStep(2), 3500); // Completely remove VANSH DIGITALS from DOM
-    const t3 = setTimeout(() => setStep(3), 3900); // Start circle expansion
-    const t4 = setTimeout(() => setStep(4), 5200); // Fade out preloader seamlessly
+    const t1 = setTimeout(() => setStep(1), 100); // Start wave immediately
+    const t2 = setTimeout(() => setStep(2), 1800); // Completely remove VANSH DIGITALS from DOM
+    const t3 = setTimeout(() => setStep(3), 2000); // Start circle expansion
+    const t4 = setTimeout(() => setStep(4), 2800); // Fade out preloader seamlessly
     const t5 = setTimeout(() => {
       onComplete();
-    }, 6000); // Unmount
+    }, 3200); // Unmount
 
     return () => {
       clearTimeout(t1);
