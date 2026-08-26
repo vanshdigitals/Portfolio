@@ -118,14 +118,14 @@ export default function Hero() {
             <img
               src={chatgptIcon}
               alt="ChatGPT"
-              className="sm:hidden absolute top-[42%] left-[-12%] -translate-y-1/2 -rotate-45 w-[68px] h-[68px] object-contain drop-shadow-md z-10 pointer-events-auto"
+              className="sm:hidden absolute top-[42%] left-[-12%] -translate-y-1/2 -rotate-45 w-[31%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
             {/* Canva (Mobile) — upper-right / right shoulder */}
             <img
               src={canvaIcon}
               alt="Canva"
-              className="sm:hidden absolute top-[35%] right-[6%] -translate-y-1/2 rotate-[22deg] w-[58px] h-[58px] object-contain drop-shadow-md z-10 pointer-events-auto"
+              className="sm:hidden absolute top-[35%] right-[6%] -translate-y-1/2 rotate-[22deg] w-[26%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
             {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
@@ -148,7 +148,7 @@ export default function Hero() {
               src={photoshopIcon}
               alt="Photoshop"
               className="absolute top-[78%] sm:top-[72%] left-[-22%] sm:left-[10%] -translate-y-1/2 -rotate-[80deg]
-                         w-[54px] h-[54px] sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)]
+                         w-[25%] aspect-square sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)] sm:aspect-auto
                          object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
@@ -157,7 +157,7 @@ export default function Hero() {
               src={illustratorIcon}
               alt="Illustrator"
               className="absolute top-[72%] right-[-22%] sm:right-[10%] -translate-y-1/2 rotate-[78deg]
-                         w-[54px] h-[54px] sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)]
+                         w-[25%] aspect-square sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)] sm:aspect-auto
                          object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
@@ -181,7 +181,7 @@ export default function Hero() {
               rotate-3
               bg-[#FFD722]
               flex items-center
-              h-[clamp(50px,8.5vw,90px)]
+              h-[12.1vw] sm:h-[clamp(50px,8.5vw,90px)]
               pointer-events-auto
               overflow-hidden
             "
@@ -193,7 +193,7 @@ export default function Hero() {
                   font-heading font-bold uppercase
                   text-black
                   tracking-wide
-                  text-[clamp(24px,3.5vw,46px)]
+                  text-[5.8vw] sm:text-[clamp(24px,3.5vw,46px)]
                   px-4
                 "
               >
@@ -207,7 +207,7 @@ export default function Hero() {
                   font-heading font-bold uppercase
                   text-black
                   tracking-wide
-                  text-[clamp(24px,3.5vw,46px)]
+                  text-[5.8vw] sm:text-[clamp(24px,3.5vw,46px)]
                   px-4
                 "
               >
