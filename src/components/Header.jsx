@@ -243,10 +243,9 @@ export default function Header() {
               handleNavClick(e, NAV_LINKS[0], 0);
               setMobileMenuOpen(false);
             }}
-            className="group inline-flex items-baseline gap-[2px] md:gap-[3px] tracking-[-0.02em] font-heading text-[22px] md:text-[26px] font-extrabold leading-none text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
+            className="group inline-flex items-baseline tracking-[-0.02em] font-heading text-[22px] md:text-[26px] font-extrabold leading-none text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
           >
             Vansh Digitals
-            <span className={`inline-block w-[9px] h-[9px] md:w-[11px] md:h-[11px] rounded-full transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.25] ${isDark ? 'bg-[#FFD722]' : 'bg-[#007BFF]'}`} />
           </Link>
 
           <button
@@ -336,7 +335,7 @@ export default function Header() {
       <div className="relative z-40 w-full max-w-[1536px] mx-auto px-4 lg:px-5 xl:px-6 2xl:px-8 h-16 lg:h-24 flex items-center justify-between pointer-events-none">
         
         {/* LEFT: Brand */}
-        <div className="flex-1 min-w-[180px] pointer-events-auto">
+        <div className="flex-1 min-w-0 sm:min-w-[180px] pointer-events-auto">
           <a
             href="/#hero"
             aria-label="Vansh Digitals — home"
@@ -344,10 +343,9 @@ export default function Header() {
               handleNavClick(e, NAV_LINKS[0], 0);
               setMobileMenuOpen(false);
             }}
-            className="group inline-flex items-baseline gap-[2px] lg:gap-[3px] tracking-[-0.02em] font-heading text-[22px] lg:text-[26px] font-extrabold leading-none text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
+            className="group inline-flex items-baseline tracking-[-0.02em] font-heading text-[22px] lg:text-[26px] font-extrabold leading-none text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
           >
             Vansh Digitals
-            <span className={`inline-block w-[9px] h-[9px] lg:w-[11px] lg:h-[11px] rounded-full transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.25] motion-reduce:transition-[background-color] ${isDark ? 'bg-[#FFD722]' : 'bg-[#007BFF]'}`} />
           </a>
         </div>
 
@@ -400,7 +398,7 @@ export default function Header() {
         </nav>
 
         {/* RIGHT: Utilities */}
-        <div className="flex-1 min-w-[180px] flex items-center justify-end gap-3 sm:gap-4 pointer-events-auto">
+        <div className="flex-1 min-w-0 sm:min-w-[180px] flex items-center justify-end gap-3 sm:gap-4 pointer-events-auto">
           
           {/* Theme toggle (Pill track) */}
           <button
