@@ -28,7 +28,7 @@ export default function About() {
     <section 
       id="about" 
       ref={sectionRef}
-      className={`w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-[96px] py-24 md:py-32 transition-all duration-[800ms] ease-[cubic-bezier(.4,0,.2,1)] ${
+      className={`w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-[96px] pt-48 pb-24 md:py-32 transition-all duration-[800ms] ease-[cubic-bezier(.4,0,.2,1)] ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
     >

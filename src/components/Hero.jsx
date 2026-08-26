@@ -1,7 +1,38 @@
+import { Fragment } from 'react';
 import chatgptIcon from '../assets/Chatgpt.png';
 import canvaIcon from '../assets/Canva.png';
 import photoshopIcon from '../assets/Photoshop.png';
 import illustratorIcon from '../assets/Ilustrator.png';
+
+const marqueeItems = [
+  "SOCIAL MEDIA DESIGN",
+  "CAROUSEL DESIGN",
+  "POST DESIGN",
+  "REEL COVERS",
+  "HIGHLIGHT COVERS",
+  "POSTERS",
+  "SOCIAL MEDIA BRANDING"
+];
+
+const MarqueeContent = ({ ariaHidden = false }) => (
+  <span
+    aria-hidden={ariaHidden}
+    className={`flex items-center whitespace-nowrap font-heading font-bold uppercase text-black tracking-wide text-[9vw] sm:text-[clamp(26px,4vw,50px)] ${ariaHidden ? 'motion-reduce:hidden' : ''}`}
+  >
+    {marqueeItems.map((item, idx) => (
+      <Fragment key={idx}>
+        <span>{item}</span>
+        <svg 
+          className="w-[0.8em] h-[0.8em] text-[#0B7FF3] mx-[0.2em] shrink-0" 
+          viewBox="0 0 24 24" 
+          fill="currentColor"
+        >
+          <path d="M12 0C12 5 17 12 24 12C17 12 12 19 12 24C12 19 7 12 0 12C7 12 12 5 12 0Z" />
+        </svg>
+      </Fragment>
+    ))}
+  </span>
+);
 
 export default function Hero() {
   return (
@@ -86,8 +117,8 @@ export default function Hero() {
                      justify-self-center self-start
                      pt-[18vw] sm:pt-[18vw] md:pt-[18vw] lg:pt-[19vw] xl:pt-[270px]"
         >
-          {/* Inner: the true positioning context for icons */}
-          <div className="relative w-full">
+          {/* Portrait Container */}
+          <div className="relative w-full scale-[1.11] origin-[50%_15%] sm:transform-none">
 
             {/* Portrait image — renders at natural aspect ratio via h-auto. Width/Height attributes prevent layout shift. */}
             <img
@@ -120,7 +151,7 @@ export default function Hero() {
             <img
               src={chatgptIcon}
               alt="ChatGPT"
-              className="sm:hidden absolute top-[42%] left-[-12%] -translate-y-1/2 -rotate-45 w-[31%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
+              className="sm:hidden absolute top-[38%] left-[-10%] -translate-y-1/2 -rotate-45 w-[31%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
             {/* Canva (Mobile) — upper-right / right shoulder */}
@@ -130,17 +161,24 @@ export default function Hero() {
               className="sm:hidden absolute top-[35%] right-[6%] -translate-y-1/2 rotate-[22deg] w-[26%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
-            {/* ── MOBILE ONLY: INFO PILLS ── */}
-            {/* AI Pill (Mobile) */}
-            <div className="sm:hidden absolute top-[28%] left-[-15%] z-20 flex flex-col items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
-              <span className="font-heading font-bold text-black text-[10px] leading-tight tracking-tight">AI-Assisted</span>
-              <span className="font-sans font-medium text-text-muted text-[9px] leading-tight">Design Workflows</span>
+            {/* AI Text Pills (Mobile) */}
+            <div className="sm:hidden absolute top-[60%] left-[-25%] -mt-[4px] z-20 flex flex-col items-start gap-1.5 -translate-y-1/2 rotate-[3deg]">
+              <div className="-rotate-[4deg] translate-y-[2px] mb-2 flex items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
+                <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">AI-Assisted</span>
+              </div>
+              <div className="-ml-2 rotate-[3deg] flex items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
+                <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">Design Workflows</span>
+              </div>
             </div>
 
-            {/* Canva Pill (Mobile) */}
-            <div className="sm:hidden absolute top-[22%] right-[-5%] z-20 flex flex-col items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
-              <span className="font-heading font-bold text-black text-[10px] leading-tight tracking-tight">Canva Specialist</span>
-              <span className="font-sans font-medium text-text-muted text-[9px] leading-tight">3+ Years</span>
+            {/* Canva Text Pills (Mobile) */}
+            <div className="sm:hidden absolute top-[52%] right-[-25%] z-20 flex flex-col items-end gap-[2px] -translate-y-1/2 -rotate-[3deg]">
+              <div className="rotate-[43deg] -mt-2 flex items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
+                <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">Canva Experienced</span>
+              </div>
+              <div className="rotate-[6deg] mr-6 flex items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
+                <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">3+ Yrs</span>
+              </div>
             </div>
 
             {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
@@ -188,7 +226,7 @@ export default function Hero() {
             scale 8.5vw on tablet/desktop
             max 90px for large screens
         */}
-        <div className="absolute inset-x-0 bottom-[3%] z-30 pointer-events-none">
+        <div className="absolute inset-x-0 bottom-[3%] translate-y-[28px] sm:translate-y-0 z-30 pointer-events-none">
           <div
             className="
               absolute left-1/2 -translate-x-1/2
@@ -196,38 +234,37 @@ export default function Hero() {
               rotate-3
               bg-[#FFD722]
               flex items-center
-              h-[12.1vw] sm:h-[clamp(50px,8.5vw,90px)]
+              h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
+              mt-[1.2vw] sm:mt-0
+              border-y-2 border-black
               pointer-events-auto
               overflow-hidden
             "
           >
             <div className="flex w-max shrink-0 motion-safe:animate-marquee">
-              <span
-                className="
-                  whitespace-nowrap
-                  font-heading font-bold uppercase
-                  text-black
-                  tracking-wide
-                  text-[5.8vw] sm:text-[clamp(24px,3.5vw,46px)]
-                  px-4
-                "
-              >
-                SOCIAL MEDIA DESIGN • CAROUSEL DESIGN • POST DESIGN • REEL COVERS • HIGHLIGHT COVERS • POSTERS • SOCIAL MEDIA BRANDING • 
-              </span>
-              <span
-                aria-hidden="true"
-                className="
-                  motion-reduce:hidden
-                  whitespace-nowrap
-                  font-heading font-bold uppercase
-                  text-black
-                  tracking-wide
-                  text-[5.8vw] sm:text-[clamp(24px,3.5vw,46px)]
-                  px-4
-                "
-              >
-                SOCIAL MEDIA DESIGN • CAROUSEL DESIGN • POST DESIGN • REEL COVERS • HIGHLIGHT COVERS • POSTERS • SOCIAL MEDIA BRANDING • 
-              </span>
+              <MarqueeContent />
+              <MarqueeContent ariaHidden={true} />
+            </div>
+          </div>
+            
+          {/* DUPLICATE MARQUEE (-6deg, normal, shifted down more, reversed direction) */}
+          <div
+            className="
+              absolute left-1/2 -translate-x-1/2 top-[14.5vw]
+              w-[120vw] max-w-none
+              -rotate-[6deg]
+              bg-[#FFD722]
+              flex items-center
+              h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
+              mt-[1.2vw] sm:mt-0
+              border-y-2 border-black
+              pointer-events-auto
+              overflow-hidden
+            "
+          >
+            <div className="flex w-max shrink-0 motion-safe:animate-marquee" style={{ animationDirection: 'reverse' }}>
+              <MarqueeContent />
+              <MarqueeContent ariaHidden={true} />
             </div>
           </div>
         </div>
