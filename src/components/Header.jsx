@@ -5,62 +5,8 @@ import {
   House, User, Briefcase, PenTool, BadgeCheck, Send, 
   MessageCircle 
 } from 'lucide-react';
-import AnimatedNavIndicator, { buildSinePath } from './AnimatedNavIndicator';
+import AnimatedNavIndicator from './AnimatedNavIndicator';
 
-function MobileNavWave({ isDark, reducedMotion }) {
-  const svgRef = useRef(null);
-  const phaseRef = useRef(0);
-  const rafRef = useRef(null);
-  
-  const width = 48;
-  const crests = 3;
-  
-  useEffect(() => {
-    if (reducedMotion) return;
-    
-    let last = null;
-    const tick = (now) => {
-      if (!last) last = now;
-      const dt = Math.min(now - last, 50);
-      last = now;
-      
-      const baseSpeed = 1000 / 3500;
-      phaseRef.current += baseSpeed * (dt / 1000);
-      
-      if (svgRef.current) {
-        const pathEl = svgRef.current.querySelector('path');
-        if (pathEl) {
-          pathEl.setAttribute('d', buildSinePath(width, crests, phaseRef.current));
-        }
-      }
-      rafRef.current = requestAnimationFrame(tick);
-    };
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, [reducedMotion]);
-  
-  return (
-    <div className="absolute left-1/2 -translate-x-1/2 -bottom-[6px] h-[4px] overflow-hidden pointer-events-none" style={{ width: `${width}px` }}>
-      <svg
-        ref={svgRef}
-        className="absolute top-0 h-[4px] w-full"
-        viewBox={`0 0 ${width} 10`}
-        preserveAspectRatio="none"
-      >
-        <path
-          d={buildSinePath(width, crests, 0)}
-          stroke={isDark ? '#FFD722' : '#007BFF'}
-          strokeWidth="3"
-          strokeLinecap="round"
-          fill="none"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
-    </div>
-  );
-}
 
 // ── Nav data ──────────────────────────────────────────────────────────────────
 const NAV_LINKS = [
@@ -146,15 +92,25 @@ export default function Header() {
     setIsDark(next);
   };
 
-  // ── Mobile Menu Effects (Scroll lock, Esc, Focus Trap) ───────────────────
+  // ── Mobile Menu Effects (Scroll lock, Esc) ─────────────────────────────
+  // Track whether close was triggered by keyboard so we only restore
+  // focus (and its visible ring) after keyboard interactions, not taps.
+  const closeByKeyboard = useRef(false);
+
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
-      if (hamburgerRef.current) {
+      // Only programmatically focus the hamburger when closed via keyboard
+      // (Esc key). Tapping the close button or backdrop must NOT restore
+      // focus to the hamburger — that's what causes the persistent blue ring
+      // on Android Chrome, because programmatic .focus() triggers :focus
+      // (not just :focus-visible) on touch browsers.
+      if (closeByKeyboard.current && hamburgerRef.current) {
         setTimeout(() => hamburgerRef.current?.focus(), 50);
       }
+      closeByKeyboard.current = false;
     }
     return () => { document.body.style.overflow = ''; };
   }, [mobileMenuOpen]);
@@ -162,6 +118,7 @@ export default function Header() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && mobileMenuOpen) {
+        closeByKeyboard.current = true; // mark as keyboard-initiated close
         setMobileMenuOpen(false);
       }
     };
@@ -323,6 +280,7 @@ export default function Header() {
                 className={`
                   flex items-center gap-4 px-4 py-3 rounded-xl font-heading text-[16px] font-medium
                   transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary
+                  focus-visible:ring-offset-2 focus-visible:ring-offset-bg
                   ${isActive 
                     ? 'text-primary bg-primary/5' 
                     : 'text-text-primary hover:bg-black/5 dark:hover:bg-white/5'}
@@ -331,16 +289,7 @@ export default function Header() {
                 <div className="flex items-center justify-center w-6 shrink-0">
                   <Icon size={20} strokeWidth={isActive ? 2.5 : 2} className={isActive ? 'text-primary' : 'text-text-muted'} />
                 </div>
-                
-                <div className="relative inline-flex flex-col items-center">
-                  <span className="relative z-10">{link.name}</span>
-                  {isActive && (
-                    <MobileNavWave 
-                      isDark={isDark} 
-                      reducedMotion={reducedMotion} 
-                    />
-                  )}
-                </div>
+                <span>{link.name}</span>
               </a>
             );
           })}
