@@ -113,26 +113,20 @@ export default function Hero() {
                 desktop (1440px): 5vw = 72px    → clamp max 68px applies
             */}
 
-            {/* ── MOBILE ONLY: MIRRORED ORBITAL PILLS ── */}
-            {/* LEFT PILL: Canva (Icon outside top-right, Pill bottom-left) */}
-            <div className="absolute top-[20%] left-[-26%] -translate-y-1/2 z-10 pointer-events-auto flex sm:hidden flex-col items-end gap-1.5 w-max max-w-[130px]">
-              <img src={canvaIcon} alt="Canva" className="w-[32px] h-[32px] object-contain drop-shadow-sm mr-2" />
-              <div className="bg-white dark:bg-[#1A1A1A] border border-border rounded-full py-1.5 px-3.5 shadow-sm flex items-center justify-center">
-                <span className="font-body text-[9px] leading-[1.3] font-medium text-text-primary text-center">
-                  Canva Specialist<br/>(3+ Yrs)
-                </span>
-              </div>
-            </div>
+            {/* ── MOBILE ONLY: ICONS ON SHOULDERS ── */}
+            {/* ChatGPT (Mobile) — upper-left / left shoulder */}
+            <img
+              src={chatgptIcon}
+              alt="ChatGPT"
+              className="sm:hidden absolute top-[35%] left-[2%] -translate-y-1/2 w-[38px] h-[38px] object-contain drop-shadow-md z-10 pointer-events-auto"
+            />
 
-            {/* RIGHT PILL: ChatGPT (Pill top-right, Icon outside bottom-left) */}
-            <div className="absolute top-[32%] right-[-26%] -translate-y-1/2 z-10 pointer-events-auto flex sm:hidden flex-col items-start gap-1.5 w-max max-w-[130px]">
-              <div className="bg-white dark:bg-[#1A1A1A] border border-border rounded-full py-1.5 px-3.5 shadow-sm flex items-center justify-center">
-                <span className="font-body text-[9px] leading-[1.3] font-medium text-text-primary text-center">
-                  AI-Assisted<br/>Design Workflows
-                </span>
-              </div>
-              <img src={chatgptIcon} alt="ChatGPT" className="w-[36px] h-[36px] object-contain drop-shadow-sm ml-2" />
-            </div>
+            {/* Canva (Mobile) — upper-right / right shoulder */}
+            <img
+              src={canvaIcon}
+              alt="Canva"
+              className="sm:hidden absolute top-[35%] right-[2%] -translate-y-1/2 w-[38px] h-[38px] object-contain drop-shadow-md z-10 pointer-events-auto"
+            />
 
             {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
             {/* ChatGPT — upper-left */}
@@ -148,21 +142,22 @@ export default function Hero() {
               className="hidden sm:block absolute top-[22%] right-[10%] -translate-y-1/2 w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
-            {/* Photoshop — lower-left, arm/hand region */}
+            {/* ── RESPONSIVE ICONS: PHOTOSHOP & ILLUSTRATOR ── */}
+            {/* Photoshop — lower-left, arm/hand region. Pushed further out and larger on mobile. */}
             <img
               src={photoshopIcon}
               alt="Photoshop"
-              className="absolute top-[72%] left-[10%] -translate-y-1/2
-                         w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)]
+              className="absolute top-[72%] left-[2%] sm:left-[10%] -translate-y-1/2
+                         w-[48px] h-[48px] sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)]
                          object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
-            {/* Illustrator — lower-right, arm/hand region */}
+            {/* Illustrator — lower-right, arm/hand region. Pushed further out and larger on mobile. */}
             <img
               src={illustratorIcon}
               alt="Illustrator"
-              className="absolute top-[72%] right-[10%] -translate-y-1/2
-                         w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)]
+              className="absolute top-[72%] right-[2%] sm:right-[10%] -translate-y-1/2
+                         w-[48px] h-[48px] sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)]
                          object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
