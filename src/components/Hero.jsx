@@ -118,14 +118,14 @@ export default function Hero() {
             <img
               src={chatgptIcon}
               alt="ChatGPT"
-              className="sm:hidden absolute top-[35%] left-[2%] -translate-y-1/2 w-[38px] h-[38px] object-contain drop-shadow-md z-10 pointer-events-auto"
+              className="sm:hidden absolute top-[35%] left-[2%] -translate-y-1/2 w-[48px] h-[48px] object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
             {/* Canva (Mobile) — upper-right / right shoulder */}
             <img
               src={canvaIcon}
               alt="Canva"
-              className="sm:hidden absolute top-[35%] right-[2%] -translate-y-1/2 w-[38px] h-[38px] object-contain drop-shadow-md z-10 pointer-events-auto"
+              className="sm:hidden absolute top-[35%] right-[2%] -translate-y-1/2 w-[48px] h-[48px] object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
             {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
