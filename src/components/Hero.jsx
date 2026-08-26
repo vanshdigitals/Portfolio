@@ -83,7 +83,7 @@ export default function Hero() {
         */}
         <div
           className="col-start-1 row-start-1 z-20 pointer-events-none
-                     w-[68%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
+                     w-[64%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
                      justify-self-center self-start
                      pt-[18vw] sm:pt-[18vw] md:pt-[18vw] lg:pt-[19vw] xl:pt-[270px]"
         >
@@ -114,22 +114,38 @@ export default function Hero() {
             */}
 
             {/* ChatGPT — upper-left, shoulder/head region */}
-            <img
-              src={chatgptIcon}
-              alt="ChatGPT"
-              className="absolute top-[22%] left-[10%] -translate-y-1/2
-                         w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)]
-                         object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
+            <div className="absolute top-[26%] sm:top-[22%] left-[-20%] sm:left-[10%] -translate-y-1/2 z-10 pointer-events-auto">
+              {/* Mobile Pill */}
+              <div className="flex sm:hidden items-center gap-2 bg-white/95 dark:bg-[#1C1C1C]/95 border border-black/5 dark:border-white/10 rounded-[14px] p-1.5 pr-3 shadow-sm w-max max-w-[130px]">
+                <img src={chatgptIcon} alt="ChatGPT" className="w-[41px] h-[41px] object-contain shrink-0 drop-shadow-sm" />
+                <span className="font-body text-[10px] leading-[1.2] font-medium text-text-primary">
+                  AI-Assisted<br/>Design Workflows
+                </span>
+              </div>
+              {/* Desktop Icon */}
+              <img
+                src={chatgptIcon}
+                alt="ChatGPT"
+                className="hidden sm:block w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md"
+              />
+            </div>
 
             {/* Canva — upper-right, shoulder/head region */}
-            <img
-              src={canvaIcon}
-              alt="Canva"
-              className="absolute top-[22%] right-[10%] -translate-y-1/2
-                         w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)]
-                         object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
+            <div className="absolute top-[18%] sm:top-[22%] right-[-20%] sm:right-[10%] -translate-y-1/2 z-10 pointer-events-auto">
+              {/* Mobile Pill */}
+              <div className="flex sm:hidden items-center gap-2 bg-white/95 dark:bg-[#1C1C1C]/95 border border-black/5 dark:border-white/10 rounded-[14px] p-1.5 pr-3 shadow-sm w-max max-w-[130px]">
+                <img src={canvaIcon} alt="Canva" className="w-[34px] h-[34px] object-contain shrink-0 drop-shadow-sm" />
+                <span className="font-body text-[10px] leading-[1.2] font-medium text-text-primary">
+                  Canva Specialist<br/>(3+ Yrs)
+                </span>
+              </div>
+              {/* Desktop Icon */}
+              <img
+                src={canvaIcon}
+                alt="Canva"
+                className="hidden sm:block w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md"
+              />
+            </div>
 
             {/* Photoshop — lower-left, arm/hand region */}
             <img
