@@ -147,7 +147,7 @@ export default function Hero() {
             <img
               src={photoshopIcon}
               alt="Photoshop"
-              className="absolute top-[72%] left-[-18%] sm:left-[10%] -translate-y-1/2
+              className="absolute top-[72%] left-[-18%] sm:left-[10%] -translate-y-1/2 -rotate-[72deg]
                          w-[54px] h-[54px] sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)]
                          object-contain drop-shadow-md z-10 pointer-events-auto"
             />
