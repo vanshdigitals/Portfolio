@@ -118,14 +118,14 @@ export default function Hero() {
             <img
               src={chatgptIcon}
               alt="ChatGPT"
-              className="sm:hidden absolute top-[35%] left-[2%] -translate-y-1/2 w-[48px] h-[48px] object-contain drop-shadow-md z-10 pointer-events-auto"
+              className="sm:hidden absolute top-[35%] left-[2%] -translate-y-1/2 w-[54px] h-[54px] object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
             {/* Canva (Mobile) — upper-right / right shoulder */}
             <img
               src={canvaIcon}
               alt="Canva"
-              className="sm:hidden absolute top-[35%] right-[2%] -translate-y-1/2 w-[48px] h-[48px] object-contain drop-shadow-md z-10 pointer-events-auto"
+              className="sm:hidden absolute top-[35%] right-[2%] -translate-y-1/2 w-[54px] h-[54px] object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
             {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
@@ -148,7 +148,7 @@ export default function Hero() {
               src={photoshopIcon}
               alt="Photoshop"
               className="absolute top-[72%] left-[-6%] sm:left-[10%] -translate-y-1/2
-                         w-[48px] h-[48px] sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)]
+                         w-[54px] h-[54px] sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)]
                          object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
@@ -157,7 +157,7 @@ export default function Hero() {
               src={illustratorIcon}
               alt="Illustrator"
               className="absolute top-[72%] right-[2%] sm:right-[10%] -translate-y-1/2
-                         w-[48px] h-[48px] sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)]
+                         w-[54px] h-[54px] sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)]
                          object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
