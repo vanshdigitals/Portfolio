@@ -333,24 +333,16 @@
   - At 40vw font-size the text overflows viewport by ~10-15% at all widths.
   - Actual Furgatorio glyph width ratio: rendered_width ≈ font-size × 2.77
   - To fill 90% of any viewport: font-size = 0.90 × viewport / 2.77 ≈ 0.325 × vw = ~32.5vw
-  - Using 32vw gives ~89% fill — tight but safe.
+  - Increased by 4-6% per request: ~34vw.
 
   clamp behaviour:
-  - min  54px  → tiny devices
-  - preferred 32vw → fills ~88-90% at every viewport
-  - max  750px → cap kicks in at 750/0.32 = 2344px+ (genuine ultra-wide / TV)
+  - min  56px  → tiny devices
+  - preferred 34vw → fills ~94-96% at every viewport
+  - max  790px → cap kicks in at ~2323px+ (genuine ultra-wide / TV)
 
-  Width verification (glyph ratio 2.77):
-  360px  → font 115px → rendered ~319px = 89% ✓
-  390px  → font 125px → rendered ~346px = 89% ✓
-  768px  → font 246px → rendered ~681px = 89% ✓
-  1024px → font 328px → rendered ~909px = 89% ✓
-  1440px → font 461px → rendered ~1277px = 89% ✓
-  1920px → font 614px → rendered ~1701px = 89% ✓
-  2560px → font 750px (capped) → rendered ~2078px = 81% (TV — controlled) ✓
 */
 .portfolio-wordmark {
-  font-size: clamp(54px, 32vw, 750px);
+  font-size: clamp(56px, 34vw, 790px);
   overflow: visible; /* text clips the container, not the page — body overflow-x:hidden handles the page */
 }
 
@@ -383,8 +375,7 @@
   }
 }
 
-.animate-portfolio-init {
-  animation: portfolio-init 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+.portfolio-gradient {
   background: 
     linear-gradient(120deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%, transparent 100%),
     linear-gradient(to bottom, #0056b3 0%, var(--primary) 45%, #a2c2ff 80%, #f2f5f9 100%);
@@ -395,7 +386,7 @@
   background-clip: text;
 }
 
-.dark .animate-portfolio-init {
+.dark .portfolio-gradient {
   background: 
     linear-gradient(120deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.8) 50%, transparent 60%, transparent 100%),
     linear-gradient(to bottom, #1a66ff 0%, var(--primary) 45%, #7aa8ff 80%, #e1e5eb 100%);
@@ -406,6 +397,9 @@
   background-clip: text;
 }
 
+.animate-portfolio-init {
+  animation: portfolio-init 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
 @keyframes portfolio-flicker {
   0%, 97% { opacity: 1; }
   98% { opacity: 0.8; }

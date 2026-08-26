@@ -23,7 +23,7 @@ export default function Hero() {
         */}
         <div className="col-start-1 row-start-1 z-10 w-full justify-self-center self-start">
           <h1 
-            className="font-furgatorio portfolio-wordmark leading-[1.1] m-0 select-none whitespace-nowrap animate-portfolio-init motion-safe:animate-portfolio-flicker"
+            className="font-furgatorio portfolio-wordmark portfolio-gradient leading-[1.1] m-0 select-none whitespace-nowrap animate-portfolio-init motion-safe:animate-portfolio-flicker"
           >
             PORTFOLIO
           </h1>
