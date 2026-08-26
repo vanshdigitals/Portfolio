@@ -125,7 +125,7 @@ export default function Hero() {
             <img
               src={canvaIcon}
               alt="Canva"
-              className="sm:hidden absolute top-[35%] right-[2%] -translate-y-1/2 w-[54px] h-[54px] object-contain drop-shadow-md z-10 pointer-events-auto"
+              className="sm:hidden absolute top-[35%] right-[6%] -translate-y-1/2 rotate-[22deg] w-[58px] h-[58px] object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
             {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
