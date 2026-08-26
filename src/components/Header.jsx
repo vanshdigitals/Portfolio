@@ -2,8 +2,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Sun, Moon, ArrowRight, Menu, X, 
-  House, User, Briefcase, Code2, Award, Send, 
-  MessageCircle, Link2, Code 
+  House, User, BriefcaseBusiness, Code2, BadgeCheck, Send, 
+  MessageCircle 
 } from 'lucide-react';
 import AnimatedNavIndicator from './AnimatedNavIndicator';
 
@@ -11,9 +11,9 @@ import AnimatedNavIndicator from './AnimatedNavIndicator';
 const NAV_LINKS = [
   { name: 'Home',       href: '/#hero',       sectionId: 'hero',       icon: House },
   { name: 'About',      href: '/#about',      sectionId: 'about',      icon: User },
-  { name: 'Work',       href: '/#work',       sectionId: 'work',       icon: Briefcase },
+  { name: 'Work',       href: '/#work',       sectionId: 'work',       icon: BriefcaseBusiness },
   { name: 'Skills',     href: '/#skills',     sectionId: 'skills',     icon: Code2 },
-  { name: 'Experience', href: '/#experience', sectionId: 'experience', icon: Award },
+  { name: 'Experience', href: '/#experience', sectionId: 'experience', icon: BadgeCheck },
   { name: 'Kind Words', href: '/#testimonials', sectionId: 'testimonials', icon: MessageCircle },
   { name: 'Contact',    href: '/#contact',    sectionId: 'contact',    icon: Send },
 ];
@@ -193,11 +193,11 @@ export default function Header() {
         `}
       />
 
-      {/* ── MOBILE MENU OVERLAY & PANEL (Middle Layer) ──────────────────── */}
+      {/* ── MOBILE MENU OVERLAY & PANEL (Top Layer) ──────────────────── */}
       {/* Scrim */}
       <div 
         className={`
-          fixed inset-0 z-20 bg-black/20 dark:bg-black/60
+          fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm
           transition-opacity duration-300
           ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
           md:hidden
@@ -212,9 +212,9 @@ export default function Header() {
         aria-modal="true"
         aria-label="Mobile navigation"
         className={`
-          fixed top-0 right-0 z-30 h-full w-[85%] max-w-[360px]
+          fixed top-0 right-0 z-[70] h-full w-[80vw] max-w-[320px]
           bg-bg border-l border-hairline shadow-2xl
-          flex flex-col pt-24
+          flex flex-col
           transition-transform duration-[320ms] ease-[cubic-bezier(.65,0,.35,1)]
           motion-reduce:transition-[opacity] motion-reduce:duration-200
           ${mobileMenuOpen 
@@ -223,7 +223,37 @@ export default function Header() {
           md:hidden
         `}
       >
-        <nav className="flex-1 overflow-y-auto py-6 px-5 flex flex-col gap-2">
+        {/* Drawer Header */}
+        <div className="flex items-center justify-between px-5 h-24 shrink-0 border-b border-hairline">
+          <Link
+            to="/#hero"
+            onClick={(e) => {
+              handleNavClick(e, NAV_LINKS[0], 0);
+              setMobileMenuOpen(false);
+            }}
+            className="group inline-flex items-baseline gap-[3px] tracking-[-0.02em] font-heading text-[20px] font-extrabold leading-none text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
+          >
+            Vansh Digitals
+            <span className={`inline-block w-[8px] h-[8px] rounded-full transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.25] ${isDark ? 'bg-[#FFD722]' : 'bg-[#007BFF]'}`} />
+          </Link>
+
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            aria-label="Close menu"
+            className="
+              relative w-10 h-10 rounded-full border border-hairline
+              flex items-center justify-center text-text-primary
+              bg-transparent hover:bg-black/5 dark:hover:bg-white/10
+              transition-colors duration-[240ms]
+              outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg
+            "
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Drawer Content */}
+        <nav className="flex-1 overflow-y-auto py-8 px-5 flex flex-col gap-3">
           {NAV_LINKS.map((link, index) => {
             const isActive = activeIndex === index;
             const Icon = link.icon;
@@ -237,13 +267,13 @@ export default function Header() {
                 }}
                 className={`
                   flex items-center gap-4 px-4 py-3 rounded-xl font-heading text-[16px] font-medium
-                  transition-colors duration-200
+                  transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-primary
                   ${isActive 
                     ? 'text-primary bg-primary/5' 
                     : 'text-text-primary hover:bg-black/5 dark:hover:bg-white/5'}
                 `}
               >
-                <Icon size={20} className={isActive ? 'text-primary' : 'text-text-muted'} />
+                <Icon size={20} strokeWidth={isActive ? 2.5 : 2} className={isActive ? 'text-primary' : 'text-text-muted'} />
                 {link.name}
               </a>
             );
@@ -251,42 +281,38 @@ export default function Header() {
 
           <div className="my-4 h-px bg-hairline w-full" />
 
-          {/* Light/Dark Toggle Row */}
-          <button
-            onClick={toggleTheme}
-            className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 text-text-primary font-heading text-[16px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <div className="flex items-center gap-4">
-              {isDark ? <Moon size={20} className="text-text-muted" /> : <Sun size={20} className="text-text-muted" />}
-              Theme
-            </div>
-            <span className="text-[14px] text-text-muted">{isDark ? 'Dark' : 'Light'}</span>
-          </button>
-
           {/* View Resume Button */}
           <a
             href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="
-              mt-4 flex h-[48px] items-center justify-center gap-2
-              rounded-xl bg-primary hover:bg-[#006AE0] dark:hover:bg-[#5AAEFF]
-              text-white px-5 font-heading text-[16px] font-medium
-              transition-colors duration-[240ms]
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg
+              group flex h-[48px] w-full items-center justify-center gap-3
+              rounded-full bg-[#007BFF] hover:bg-[#006AE0] text-white
+              px-2 font-heading text-[15px] font-medium
+              transition-colors duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
+              outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg
             "
           >
-            <span>View Resume</span>
-            <ArrowRight size={18} strokeWidth={2} />
+            <span className="pl-3">Resume</span>
+            <div className="
+              flex items-center justify-center w-[34px] h-[34px] rounded-full
+              transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
+              group-hover:scale-[1.03]
+              bg-white text-[#111214]
+            ">
+              <ArrowRight 
+                size={16} 
+                strokeWidth={2}
+                className="
+                  -rotate-45 group-hover:rotate-0
+                  transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
+                  motion-reduce:transition-none
+                "
+              />
+            </div>
           </a>
         </nav>
-
-        {/* Footer Socials */}
-        <div className="p-5 border-t border-hairline flex items-center justify-center gap-6 text-text-muted">
-          <a href="#" aria-label="Twitter" className="hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"><MessageCircle size={20} /></a>
-          <a href="#" aria-label="LinkedIn" className="hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"><Link2 size={20} /></a>
-          <a href="#" aria-label="GitHub" className="hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"><Code size={20} /></a>
-        </div>
       </div>
 
       {/* ── TOP BAR CONTENT (Top Layer) ──────────────────────────────────── */}
@@ -443,39 +469,18 @@ export default function Header() {
           {/* Hamburger button (mobile only) */}
           <button
             ref={hamburgerRef}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => setMobileMenuOpen(true)}
             aria-expanded={mobileMenuOpen}
             className="
               md:hidden relative w-10 h-10 rounded-full border border-hairline
               flex items-center justify-center text-text-primary
               bg-transparent hover:bg-black/5 dark:hover:bg-white/10
               transition-colors duration-[240ms]
-              focus-visible:outline-none focus-visible:ring-2
-              focus-visible:ring-primary focus-visible:ring-offset-2
-              focus-visible:ring-offset-bg
+              outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg
             "
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-label="Open menu"
           >
-            <div className="relative flex items-center justify-center w-[20px] h-[20px]">
-              <Menu 
-                className={`
-                  absolute
-                  transition-all duration-[240ms] ease-[cubic-bezier(.4,0,.2,1)]
-                  motion-reduce:transition-none
-                  ${mobileMenuOpen ? 'opacity-0 rotate-180 scale-75' : 'opacity-100 rotate-0 scale-100'}
-                `}
-                size={20} 
-              />
-              <X
-                className={`
-                  absolute
-                  transition-all duration-[240ms] ease-[cubic-bezier(.4,0,.2,1)]
-                  motion-reduce:transition-none
-                  ${mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-180 scale-75'}
-                `}
-                size={20} 
-              />
-            </div>
+            <Menu size={20} />
           </button>
         </div>
 
