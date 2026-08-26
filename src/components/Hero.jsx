@@ -83,9 +83,9 @@ export default function Hero() {
         */}
         <div
           className="col-start-1 row-start-1 z-20 pointer-events-none
-                     w-[80%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
+                     w-[74%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
                      justify-self-center self-start
-                     pt-[25vw] sm:pt-[20vw] md:pt-[17vw] lg:pt-[13vw] xl:pt-[190px]"
+                     pt-[21vw] sm:pt-[20vw] md:pt-[17vw] lg:pt-[13vw] xl:pt-[190px]"
         >
           {/* Inner: the true positioning context for icons */}
           <div className="relative w-full">
