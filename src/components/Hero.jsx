@@ -83,9 +83,9 @@ export default function Hero() {
         */}
         <div
           className="col-start-1 row-start-1 z-20 pointer-events-none
-                     w-[64%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
+                     w-[58%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
                      justify-self-center self-start
-                     pt-[18vw] sm:pt-[18vw] md:pt-[18vw] lg:pt-[19vw] xl:pt-[270px]"
+                     pt-[20vw] sm:pt-[18vw] md:pt-[18vw] lg:pt-[19vw] xl:pt-[270px]"
         >
           {/* Inner: the true positioning context for icons */}
           <div className="relative w-full">
@@ -114,20 +114,24 @@ export default function Hero() {
             */}
 
             {/* ── MOBILE ONLY: MIRRORED ORBITAL PILLS ── */}
-            {/* LEFT PILL: Canva (Outer Text -> Inner Icon) */}
-            <div className="absolute top-[20%] left-[-22%] -translate-y-1/2 z-10 pointer-events-auto flex sm:hidden items-center gap-2 bg-white dark:bg-[#1A1A1A] border border-border rounded-full p-1.5 pl-3.5 shadow-sm w-max max-w-[130px]">
-              <span className="font-body text-[10px] leading-[1.2] font-medium text-text-primary text-right">
-                Canva Specialist<br/>(3+ Yrs)
-              </span>
-              <img src={canvaIcon} alt="Canva" className="w-[34px] h-[34px] object-contain shrink-0 drop-shadow-sm" />
+            {/* LEFT PILL: Canva (Icon outside top-right, Pill bottom-left) */}
+            <div className="absolute top-[20%] left-[-26%] -translate-y-1/2 z-10 pointer-events-auto flex sm:hidden flex-col items-end gap-1.5 w-max max-w-[130px]">
+              <img src={canvaIcon} alt="Canva" className="w-[32px] h-[32px] object-contain drop-shadow-sm mr-2" />
+              <div className="bg-white dark:bg-[#1A1A1A] border border-border rounded-full py-1.5 px-3.5 shadow-sm flex items-center justify-center">
+                <span className="font-body text-[9px] leading-[1.3] font-medium text-text-primary text-center">
+                  Canva Specialist<br/>(3+ Yrs)
+                </span>
+              </div>
             </div>
 
-            {/* RIGHT PILL: ChatGPT (Inner Icon -> Outer Text) */}
-            <div className="absolute top-[28%] right-[-24%] -translate-y-1/2 z-10 pointer-events-auto flex sm:hidden items-center gap-2 bg-white dark:bg-[#1A1A1A] border border-border rounded-full p-1.5 pr-3 shadow-sm w-max max-w-[130px]">
-              <img src={chatgptIcon} alt="ChatGPT" className="w-[41px] h-[41px] object-contain shrink-0 drop-shadow-sm" />
-              <span className="font-body text-[10px] leading-[1.2] font-medium text-text-primary text-left">
-                AI-Assisted<br/>Design Workflows
-              </span>
+            {/* RIGHT PILL: ChatGPT (Pill top-right, Icon outside bottom-left) */}
+            <div className="absolute top-[32%] right-[-26%] -translate-y-1/2 z-10 pointer-events-auto flex sm:hidden flex-col items-start gap-1.5 w-max max-w-[130px]">
+              <div className="bg-white dark:bg-[#1A1A1A] border border-border rounded-full py-1.5 px-3.5 shadow-sm flex items-center justify-center">
+                <span className="font-body text-[9px] leading-[1.3] font-medium text-text-primary text-center">
+                  AI-Assisted<br/>Design Workflows
+                </span>
+              </div>
+              <img src={chatgptIcon} alt="ChatGPT" className="w-[36px] h-[36px] object-contain drop-shadow-sm ml-2" />
             </div>
 
             {/* ── DESKTOP ONLY: FLOATING ICONS ── */}

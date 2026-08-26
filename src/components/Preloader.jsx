@@ -5,6 +5,11 @@ const str1 = "VANSH DIGITALS".split("");
 const str2 = "PORTFOLIO".split("");
 const offset = (str1.length - str2.length) / 2; // Mathematically aligns the center wave
 
+// Sharp, mechanical cubic bezier for a physical dice flip
+const flipEase = [0.6, 0.05, 0.01, 0.9];
+const flipDuration = 0.7;
+const flipDelay = 0.08;
+
 function OldChar({ char, index, isFlipped }) {
   return (
     <motion.span
@@ -12,12 +17,12 @@ function OldChar({ char, index, isFlipped }) {
       style={{ backfaceVisibility: 'hidden', transformStyle: 'preserve-3d' }}
       initial={{ rotateX: 0 }}
       animate={{ 
-        rotateX: isFlipped ? -180 : 0 
+        rotateX: isFlipped ? 90 : 0 
       }}
       transition={{ 
-        duration: 1.8, 
-        delay: index * 0.12, 
-        ease: [0.7, 0, 0.3, 1] 
+        duration: flipDuration, 
+        delay: index * flipDelay, 
+        ease: flipEase
       }}
     >
       {char === " " ? "\u00A0" : char}
@@ -30,14 +35,14 @@ function NewChar({ char, index, isFlipped }) {
     <motion.span
       className="inline-block"
       style={{ backfaceVisibility: 'hidden', transformStyle: 'preserve-3d' }}
-      initial={{ rotateX: 180 }}
+      initial={{ rotateX: -90 }}
       animate={{ 
-        rotateX: isFlipped ? 0 : 180 
+        rotateX: isFlipped ? 0 : -90 
       }}
       transition={{ 
-        duration: 1.8, 
-        delay: (index + offset) * 0.12, 
-        ease: [0.7, 0, 0.3, 1] 
+        duration: flipDuration, 
+        delay: (index + offset) * flipDelay, 
+        ease: flipEase
       }}
     >
       {char === " " ? "\u00A0" : char}
@@ -59,12 +64,12 @@ export default function Preloader({ onComplete }) {
     }
 
     const t1 = setTimeout(() => setStep(1), 400); // Start wave
-    const t2 = setTimeout(() => setStep(2), 4200); // Completely remove VANSH DIGITALS from DOM
-    const t3 = setTimeout(() => setStep(3), 4600); // Start circle expansion
-    const t4 = setTimeout(() => setStep(4), 5900); // Fade out preloader seamlessly
+    const t2 = setTimeout(() => setStep(2), 3500); // Completely remove VANSH DIGITALS from DOM
+    const t3 = setTimeout(() => setStep(3), 3900); // Start circle expansion
+    const t4 = setTimeout(() => setStep(4), 5200); // Fade out preloader seamlessly
     const t5 = setTimeout(() => {
       onComplete();
-    }, 6700); // Unmount
+    }, 6000); // Unmount
 
     return () => {
       clearTimeout(t1);
@@ -99,30 +104,32 @@ export default function Preloader({ onComplete }) {
       />
 
       {/* ONE CENTERED TYPOGRAPHY STAGE */}
-      <div className="relative z-20 w-full px-[30px] perspective-[1200px] grid place-items-center">
-        
-        {/* OLD: VANSH DIGITALS */}
-        {step < 2 && (
+      <div className="relative z-20 w-full px-[30px] flex justify-center">
+        <div className="w-max perspective-[1200px] grid place-items-center">
+          
+          {/* OLD: VANSH DIGITALS */}
+          {step < 2 && (
+            <div 
+              className="flex items-center justify-center text-white font-furgatorio tracking-wide leading-none m-0 select-none whitespace-nowrap text-[clamp(26px,11vw,140px)] md:text-[clamp(50px,13vw,220px)] xl:text-[clamp(80px,14vw,340px)]"
+              style={{ gridArea: '1/1' }}
+            >
+              {str1.map((char, i) => (
+                <OldChar key={`old-${i}`} char={char} index={i} isFlipped={step >= 1} />
+              ))}
+            </div>
+          )}
+
+          {/* NEW: PORTFOLIO (Centered from frame 1) */}
           <div 
-            className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(20px,8vw,120px)] md:text-[clamp(40px,11vw,200px)] xl:text-[clamp(60px,14vw,320px)]"
+            className="flex items-center justify-center text-white font-furgatorio tracking-wide leading-none m-0 select-none whitespace-nowrap text-[clamp(26px,11vw,140px)] md:text-[clamp(50px,13vw,220px)] xl:text-[clamp(80px,14vw,340px)]"
             style={{ gridArea: '1/1' }}
           >
-            {str1.map((char, i) => (
-              <OldChar key={`old-${i}`} char={char} index={i} isFlipped={step >= 1} />
+            {str2.map((char, i) => (
+              <NewChar key={`new-${i}`} char={char} index={i} isFlipped={step >= 1} />
             ))}
           </div>
-        )}
 
-        {/* NEW: PORTFOLIO (Centered from frame 1) */}
-        <div 
-          className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(20px,8vw,120px)] md:text-[clamp(40px,11vw,200px)] xl:text-[clamp(60px,14vw,320px)]"
-          style={{ gridArea: '1/1' }}
-        >
-          {str2.map((char, i) => (
-            <NewChar key={`new-${i}`} char={char} index={i} isFlipped={step >= 1} />
-          ))}
         </div>
-
       </div>
     </motion.div>
   );
