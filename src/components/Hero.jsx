@@ -30,11 +30,29 @@ export default function Hero() {
           that text-align:center alone cannot correct.
         */}
         <div className="col-start-1 row-start-1 z-10 w-full justify-self-center self-start flex justify-center">
-          <h1
-            className="font-furgatorio portfolio-wordmark portfolio-gradient leading-[1.1] m-0 select-none whitespace-nowrap animate-portfolio-init motion-safe:animate-portfolio-flicker"
-          >
-            PORTFOLIO
-          </h1>
+          {/*
+            OPTICAL CENTERING CORRECTION
+            Furgatorio Titling's final "O" carries extra right-side advance space,
+            so the text bounding box centres ~1% left of the visible glyph edges.
+            translateX(0.8%) shifts the visual rendering right without touching layout.
+
+            Applied to a wrapper div — NOT the h1 — because the h1's portfolio-init
+            animation uses transform and ends with `translateX(0)` in forwards fill mode,
+            which would override any base transform on the h1 itself.
+
+            The percentage is relative to this div's own width (= rendered text width),
+            so the correction scales proportionally with font size at every breakpoint:
+              375px  → text ≈ 368px → shift ≈ 2.9px
+              768px  → text ≈ 752px → shift ≈ 6.0px
+              1440px → text ≈ 1415px → shift ≈ 11.3px
+          */}
+          <div style={{ transform: 'translateX(0.8%)' }}>
+            <h1
+              className="font-furgatorio portfolio-wordmark portfolio-gradient leading-[1.1] m-0 select-none whitespace-nowrap animate-portfolio-init motion-safe:animate-portfolio-flicker"
+            >
+              PORTFOLIO
+            </h1>
+          </div>
         </div>
 
         {/*
