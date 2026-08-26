@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import WorkPreview from './components/WorkPreview';
+import About from './components/About';
 import { PlaceholderSection } from './components/SectionPlaceholders';
 import WorkCollections from './pages/WorkCollections';
 import Contact from './components/Contact';
@@ -14,12 +15,7 @@ function LandingPage() {
       <Header />
       <main className="flex-grow">
         <Hero />
-        <PlaceholderSection 
-          id="about" 
-          num="01" 
-          title="Introduction" 
-          desc="Who I am. How design started. Current focus. What type of design work I create." 
-        />
+        <About />
         <WorkPreview />
         <PlaceholderSection 
           id="skills" 

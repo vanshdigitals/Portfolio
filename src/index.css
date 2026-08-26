@@ -17,6 +17,12 @@
   --font-heading: "DM Sans", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-mono: "Inter Mono", "Roboto Mono", monospace;
+
+  --animate-marquee: marquee 30s linear infinite;
+  @keyframes marquee {
+    0% { transform: translate3d(-50%, 0, 0); }
+    100% { transform: translate3d(0, 0, 0); }
+  }
 }
 
 @layer base {
@@ -237,6 +243,38 @@
   animation: ink-fluid 12s linear infinite;
 }
 
+/* Concept A: Ink Bloom */
+@keyframes ink-bloom {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-ink-bloom {
+  background: linear-gradient(
+    270deg,
+    var(--primary) 0%,
+    #001a40 100% /* blue-black */
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: ink-bloom 16s linear infinite;
+}
+
+.dark .animate-ink-bloom {
+  background: linear-gradient(
+    270deg,
+    var(--accent) 0%,
+    #b45309 100% /* deep amber */
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in,
   .animate-slide-up,
@@ -250,4 +288,93 @@
     background-image: none !important;
     color: currentColor !important;
   }
+  .animate-ink-bloom {
+    animation: none !important;
+  }
+  .animate-portfolio-init {
+    animation: none !important;
+    background-image: none !important;
+    color: var(--primary) !important;
+  }
+  .animate-portfolio-flicker {
+    animation: none !important;
+  }
+}
+
+/* ── FINAL HERO REPLACEMENT ───────────────────────────────────── */
+
+@font-face {
+  font-family: 'Furgatorio Titling';
+  src: url('/fonts/furgatorio-titling.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-furgatorio {
+  font-family: 'Furgatorio Titling', sans-serif;
+  -webkit-text-stroke: 1px currentColor;
+}
+
+@keyframes portfolio-init {
+  0% {
+    opacity: 0;
+    transform: translateX(-5px);
+    background-position: -200% center, 0 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+  25% {
+    opacity: 0.3;
+    transform: translateX(-2px);
+  }
+  40% {
+    opacity: 1;
+    transform: translateX(1px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    background-position: 200% center, 0 0;
+  }
+}
+
+.animate-portfolio-init {
+  animation: portfolio-init 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  background: 
+    linear-gradient(120deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%, transparent 100%),
+    linear-gradient(to bottom, #0056b3 0%, var(--primary) 45%, #a2c2ff 80%, #f2f5f9 100%);
+  background-size: 200% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.dark .animate-portfolio-init {
+  background: 
+    linear-gradient(120deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.8) 50%, transparent 60%, transparent 100%),
+    linear-gradient(to bottom, #1a66ff 0%, var(--primary) 45%, #7aa8ff 80%, #e1e5eb 100%);
+  background-size: 200% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@keyframes portfolio-flicker {
+  0%, 97% { opacity: 1; }
+  98% { opacity: 0.8; }
+  99% { opacity: 0.95; }
+  100% { opacity: 1; }
+}
+
+.animate-portfolio-flicker {
+  animation: portfolio-flicker 10s infinite;
 }

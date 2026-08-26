@@ -112,10 +112,10 @@ export default function Footer() {
           
           {/* Column 1: Brand & Socials */}
           <div className="flex flex-col items-start lg:col-span-1 min-w-max">
-            <h3 className="w-max font-heading text-[50px] font-[800] animate-vansh-shine leading-[0.95] tracking-tight pb-2 pr-2 mb-3">
+            <h3 className="w-max font-heading text-[50px] font-[800] animate-vansh-shine leading-[0.95] tracking-tight pr-2 pb-2 mb-1 mt-0">
               Vansh<br/>Digitals
             </h3>
-            <p className="font-body text-sm text-text-muted leading-[1.15] mb-6 max-w-[240px]">
+            <p className="font-body text-sm text-text-muted leading-[1.4] mb-6 max-w-[240px]">
               Crafting visual experiences that connect and communicate.
             </p>
             <div className="flex flex-wrap items-center gap-3">

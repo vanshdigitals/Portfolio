@@ -27,6 +27,15 @@ export default {
         body: ['Inter', 'sans-serif'],
         mono: ['"Inter Mono"', '"Roboto Mono"', 'monospace'], // Added Roboto Mono fallback just in case
       },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translate3d(0, 0, 0)' },
+          '100%': { transform: 'translate3d(-50%, 0, 0)' },
+        }
+      },
+      animation: {
+        marquee: 'marquee 30s linear infinite',
+      },
     },
   },
   plugins: [],
