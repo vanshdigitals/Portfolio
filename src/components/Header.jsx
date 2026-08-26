@@ -7,12 +7,13 @@ import {
 } from 'lucide-react';
 import AnimatedNavIndicator, { buildSinePath } from './AnimatedNavIndicator';
 
-function MobileNavWave({ isDark, reducedMotion, pointCount }) {
+function MobileNavWave({ isDark, reducedMotion }) {
   const svgRef = useRef(null);
   const phaseRef = useRef(0);
   const rafRef = useRef(null);
   
-  const width = pointCount * 9; // Tighter for mobile
+  const width = 48;
+  const crests = 3;
   
   useEffect(() => {
     if (reducedMotion) return;
@@ -29,7 +30,7 @@ function MobileNavWave({ isDark, reducedMotion, pointCount }) {
       if (svgRef.current) {
         const pathEl = svgRef.current.querySelector('path');
         if (pathEl) {
-          pathEl.setAttribute('d', buildSinePath(width, pointCount, phaseRef.current));
+          pathEl.setAttribute('d', buildSinePath(width, crests, phaseRef.current));
         }
       }
       rafRef.current = requestAnimationFrame(tick);
@@ -38,20 +39,20 @@ function MobileNavWave({ isDark, reducedMotion, pointCount }) {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [reducedMotion, width, pointCount]);
+  }, [reducedMotion]);
   
   return (
-    <div className="absolute left-0 -bottom-1 h-[5px] overflow-hidden pointer-events-none" style={{ width: `${width}px` }}>
+    <div className="absolute left-1/2 -translate-x-1/2 -bottom-[6px] h-[4px] overflow-hidden pointer-events-none" style={{ width: `${width}px` }}>
       <svg
         ref={svgRef}
-        className="absolute top-0 h-[5px] w-full"
+        className="absolute top-0 h-[4px] w-full"
         viewBox={`0 0 ${width} 10`}
         preserveAspectRatio="none"
       >
         <path
-          d={buildSinePath(width, pointCount, 0)}
+          d={buildSinePath(width, crests, 0)}
           stroke={isDark ? '#FFD722' : '#007BFF'}
-          strokeWidth="3.5"
+          strokeWidth="3"
           strokeLinecap="round"
           fill="none"
           vectorEffect="non-scaling-stroke"
@@ -331,13 +332,12 @@ export default function Header() {
                   <Icon size={20} strokeWidth={isActive ? 2.5 : 2} className={isActive ? 'text-primary' : 'text-text-muted'} />
                 </div>
                 
-                <div className="relative flex flex-col">
+                <div className="relative inline-flex flex-col items-center">
                   <span className="relative z-10">{link.name}</span>
                   {isActive && (
                     <MobileNavWave 
                       isDark={isDark} 
                       reducedMotion={reducedMotion} 
-                      pointCount={POINT_COUNTS[index]} 
                     />
                   )}
                 </div>
