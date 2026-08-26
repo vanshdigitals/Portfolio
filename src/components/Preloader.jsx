@@ -3,54 +3,45 @@ import { motion } from 'framer-motion';
 
 const str1 = "VANSH DIGITALS".split("");
 const str2 = "PORTFOLIO".split("");
-const maxLength = Math.max(str1.length, str2.length);
+const offset = (str1.length - str2.length) / 2; // Mathematically aligns the center wave
 
-function FlipChar({ char1, char2, isFlipped, isCentered, index }) {
-  const isDisappearing = !char2;
-  
+function OldChar({ char, index, isFlipped }) {
   return (
-    <motion.div 
-      layout
+    <motion.span
+      className="inline-block"
+      style={{ backfaceVisibility: 'hidden', transformStyle: 'preserve-3d' }}
+      initial={{ rotateX: 0 }}
       animate={{ 
-        rotateX: isFlipped ? -180 : 0,
-        opacity: (isFlipped && isDisappearing) ? 0 : 1,
+        rotateX: isFlipped ? -180 : 0 
       }}
       transition={{ 
-        rotateX: { duration: 0.9, delay: index * 0.06, ease: [0.65, 0, 0.35, 1] },
-        opacity: { duration: 0.9, delay: index * 0.06, ease: [0.65, 0, 0.35, 1] },
-        layout: { duration: 0.8, ease: [0.65, 0, 0.35, 1] }
+        duration: 0.9, 
+        delay: index * 0.06, 
+        ease: [0.65, 0, 0.35, 1] 
       }}
-      className="relative flex items-center justify-center"
-      style={{ transformStyle: 'preserve-3d' }}
     >
-      {/* INVISIBLE RELATIVE SPACER TO DICTATE EXACT WIDTH */}
-      {/* Before isCentered, this strictly holds the char1 footprint. After isCentered, it holds char2 footprint (which may be empty). */}
-      <motion.span 
-        layout
-        className={isCentered ? "font-furgatorio" : "font-sans font-medium tracking-[0.1em] uppercase"}
-        style={{ visibility: 'hidden', pointerEvents: 'none' }}
-      >
-        {isCentered ? (char2 === " " ? "\u00A0" : char2) : (char1 === " " ? "\u00A0" : char1)}
-      </motion.span>
+      {char === " " ? "\u00A0" : char}
+    </motion.span>
+  );
+}
 
-      {/* FRONT: VANSH DIGITALS (sans-serif) */}
-      <motion.span 
-        initial={{ rotateX: 0 }}
-        className="font-sans font-medium tracking-[0.1em] uppercase absolute inset-0 flex items-center justify-center"
-        style={{ backfaceVisibility: 'hidden' }}
-      >
-        {char1 === " " ? "\u00A0" : char1}
-      </motion.span>
-
-      {/* BACK: PORTFOLIO (furgatorio) */}
-      <motion.span 
-        initial={{ rotateX: -180 }}
-        className="font-furgatorio absolute inset-0 flex items-center justify-center"
-        style={{ backfaceVisibility: 'hidden' }}
-      >
-        {char2 === " " ? "\u00A0" : char2}
-      </motion.span>
-    </motion.div>
+function NewChar({ char, index, isFlipped }) {
+  return (
+    <motion.span
+      className="inline-block"
+      style={{ backfaceVisibility: 'hidden', transformStyle: 'preserve-3d' }}
+      initial={{ rotateX: 180 }}
+      animate={{ 
+        rotateX: isFlipped ? 0 : 180 
+      }}
+      transition={{ 
+        duration: 0.9, 
+        delay: (index + offset) * 0.06, 
+        ease: [0.65, 0, 0.35, 1] 
+      }}
+    >
+      {char === " " ? "\u00A0" : char}
+    </motion.span>
   );
 }
 
@@ -67,12 +58,12 @@ export default function Preloader({ onComplete }) {
       return;
     }
 
-    const t1 = setTimeout(() => setStep(1), 400); // Start wave (flips in place)
-    const t2 = setTimeout(() => setStep(2), 2200); // Re-center layout shift (after wave completes)
-    const t3 = setTimeout(() => setStep(3), 3200); // Start circle expansion (after layout settles and holds)
+    const t1 = setTimeout(() => setStep(1), 400); // Start wave
+    const t2 = setTimeout(() => setStep(2), 2200); // Completely remove VANSH DIGITALS from DOM
+    const t3 = setTimeout(() => setStep(3), 2600); // Start circle expansion
     const t4 = setTimeout(() => {
       onComplete();
-    }, 4100); // Unmount
+    }, 3400); // Unmount
 
     return () => {
       clearTimeout(t1);
@@ -103,21 +94,32 @@ export default function Preloader({ onComplete }) {
         }}
       />
 
-      {/* Typography container */}
-      <div className="relative z-20 flex items-center justify-center w-full px-[30px] perspective-[1200px]">
-        <motion.div 
-          layout
-          transition={{ layout: { duration: 0.8, ease: [0.65, 0, 0.35, 1] } }}
-          className="flex items-center justify-center text-white leading-none m-0 select-none whitespace-nowrap text-[clamp(20px,8.5vw,150px)]"
-        >
-          {Array.from({ length: maxLength }).map((_, i) => {
-             const char1 = str1[i] || "";
-             const char2 = str2[i] || "";
-             return <FlipChar key={i} char1={char1} char2={char2} isFlipped={step >= 1} isCentered={step >= 2} index={i} />;
-          })}
-        </motion.div>
-      </div>
+      {/* ONE CENTERED TYPOGRAPHY STAGE */}
+      <div className="relative z-20 w-full px-[30px] perspective-[1200px] grid place-items-center">
+        
+        {/* OLD: VANSH DIGITALS */}
+        {step < 2 && (
+          <div 
+            className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(16px,6.5vw,130px)]"
+            style={{ gridArea: '1/1' }}
+          >
+            {str1.map((char, i) => (
+              <OldChar key={`old-${i}`} char={char} index={i} isFlipped={step >= 1} />
+            ))}
+          </div>
+        )}
 
+        {/* NEW: PORTFOLIO (Centered from frame 1) */}
+        <div 
+          className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(16px,6.5vw,130px)]"
+          style={{ gridArea: '1/1' }}
+        >
+          {str2.map((char, i) => (
+            <NewChar key={`new-${i}`} char={char} index={i} isFlipped={step >= 1} />
+          ))}
+        </div>
+
+      </div>
     </div>
   );
 }
