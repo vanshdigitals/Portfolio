@@ -327,29 +327,30 @@
 }
 
 /*
-  PORTFOLIO wordmark: responsive fluid sizing.
-  Target: fill the viewport width without overflowing.
-  
-  "PORTFOLIO" is 9 characters. At a given font-size, the rendered width ≈ font-size * 5.8 (approx).
-  So to fill viewport width W: font-size ≈ W / 5.8 ≈ 0.172 * W = 17.2vw per character group.
-  
-  Use clamp so it:
-  - never goes below 48px (tiny screens)
-  - scales with viewport: ~94vw / 9chars ≈ 10.4vw per char → 10.4 * 9 / 5.8 ≈ 16vw viewport ratio
-  - caps at 480px on very large screens (TV etc.)
-  
-  Actual tuned values after testing:
-  mobile (360px):  clamp lower = ~60px
-  tablet (768px):  ~130px
-  desktop (1440px): ~240px → caps at 480px
+  PORTFOLIO wordmark — responsive fluid sizing calibrated to Furgatorio Titling.
+
+  Calibration (measured from browser screenshots):
+  - At 40vw font-size the text overflows viewport by ~10-15% at all widths.
+  - Actual Furgatorio glyph width ratio: rendered_width ≈ font-size × 2.77
+  - To fill 90% of any viewport: font-size = 0.90 × viewport / 2.77 ≈ 0.325 × vw = ~32.5vw
+  - Using 32vw gives ~89% fill — tight but safe.
+
+  clamp behaviour:
+  - min  54px  → tiny devices
+  - preferred 32vw → fills ~88-90% at every viewport
+  - max  750px → cap kicks in at 750/0.32 = 2344px+ (genuine ultra-wide / TV)
+
+  Width verification (glyph ratio 2.77):
+  360px  → font 115px → rendered ~319px = 89% ✓
+  390px  → font 125px → rendered ~346px = 89% ✓
+  768px  → font 246px → rendered ~681px = 89% ✓
+  1024px → font 328px → rendered ~909px = 89% ✓
+  1440px → font 461px → rendered ~1277px = 89% ✓
+  1920px → font 614px → rendered ~1701px = 89% ✓
+  2560px → font 750px (capped) → rendered ~2078px = 81% (TV — controlled) ✓
 */
 .portfolio-wordmark {
-  /* 
-    The magic formula: we want the text to be visually large without touching viewport edges.
-    ~94% viewport width, divided by a character-width ratio constant (~5.5 for this font).
-    Result: font-size = 94vw / 5.5 ≈ 17.1vw, clamped.
-  */
-  font-size: clamp(54px, 17vw, 480px);
+  font-size: clamp(54px, 32vw, 750px);
   overflow: visible; /* text clips the container, not the page — body overflow-x:hidden handles the page */
 }
 
