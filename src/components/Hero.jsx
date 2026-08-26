@@ -8,68 +8,141 @@ export default function Hero() {
   return (
     <section 
       id="hero" 
-      className="relative w-full mt-16 md:mt-24 pt-[10px] pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] border-b border-border transition-colors duration-[320ms] overflow-x-clip"
+      className="relative w-full mt-16 lg:mt-24 pt-0 pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] border-b border-border transition-colors duration-[320ms] overflow-x-clip"
       style={{ scrollMarginTop: 'var(--header-h, 64px)' }}
     >
-      {/* 
-        COMPOSITION GROUP 
-        Uses CSS Grid to stack the elements naturally without absolute positioning.
-        The Hero height automatically expands to fit the tallest element.
+      {/*
+        ── COMPOSITION GROUP ──────────────────────────────────────────────────────
+        Single-column CSS grid. All layers share col-start-1 row-start-1 so they
+        stack naturally. Height is content-driven (no fixed heights).
+
+        max-w-[1600px] caps the composition so ultra-wide / TV screens stay
+        controlled and centered.
+
+        px-4 sm:px-6 gives equal breathing room on both sides at all widths.
       */}
-      <div className="relative w-full max-w-[1800px] mx-auto px-[20px] grid grid-cols-1 items-start text-center isolate">
-        
-        {/* PORTFOLIO (Layer 10) 
-            Sits BEHIND the portrait as requested.
+      <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 grid grid-cols-1 items-start isolate">
+
+        {/*
+          ── PORTFOLIO WORDMARK ── Layer z-10 (behind portrait) ────────────────
+          flex + justify-center ensures the h1's fit-content bounding box is
+          optically centered — fixing any glyph-metric sidebearing imbalance
+          that text-align:center alone cannot correct.
         */}
-        <div className="col-start-1 row-start-1 z-10 w-full justify-self-center self-start">
-          <h1 
+        <div className="col-start-1 row-start-1 z-10 w-full justify-self-center self-start flex justify-center">
+          <h1
             className="font-furgatorio portfolio-wordmark portfolio-gradient leading-[1.1] m-0 select-none whitespace-nowrap animate-portfolio-init motion-safe:animate-portfolio-flicker"
           >
             PORTFOLIO
           </h1>
         </div>
 
-        {/* ORBIT GUIDE & ICONS 
-            This single wrapper acts as both the circle border and the positioning parent for the icons.
-            We use z-auto (instead of z-[15]) so it doesn't create a stacking context. 
-            This allows the circle border to naturally render BEHIND the z-20 portrait, 
-            while the icons (z-[25]) can break out and render IN FRONT of the portrait.
-        */}
-        <div className="col-start-1 row-start-1 z-auto w-[95%] sm:w-[80%] md:w-[65%] lg:w-[55%] max-w-[650px] justify-self-center self-start pt-[30vw] sm:pt-[25vw] md:pt-[22vw] lg:pt-[18vw] xl:pt-[260px] pointer-events-none">
-          <div className="relative w-full flex justify-center mt-[-5%] sm:mt-[-2%]">
-            
-            {/* ONE dedicated wrapper div that is BOTH the circle's visual border AND the icons' positioning parent. */}
-            <div className="relative w-full aspect-square rounded-full border-2 border-dashed border-[#007BFF] dark:border-[#FFD722] bg-transparent">
-              
-              <img src={chatgptIcon} alt="ChatGPT" className="absolute top-[15%] left-[15%] -translate-x-1/2 -translate-y-1/2 w-[clamp(44px,6vw,72px)] h-[clamp(44px,6vw,72px)] object-contain drop-shadow-md pointer-events-auto z-[25]" />
-              
-              <img src={canvaIcon} alt="Canva" className="absolute top-[15%] left-[85%] -translate-x-1/2 -translate-y-1/2 w-[clamp(44px,6vw,72px)] h-[clamp(44px,6vw,72px)] object-contain drop-shadow-md pointer-events-auto z-[25]" />
-              
-              <img src={photoshopIcon} alt="Photoshop" className="absolute top-[85%] left-[15%] -translate-x-1/2 -translate-y-1/2 w-[clamp(44px,6vw,72px)] h-[clamp(44px,6vw,72px)] object-contain drop-shadow-md pointer-events-auto z-[25]" />
-              
-              <img src={illustratorIcon} alt="Illustrator" className="absolute top-[85%] left-[85%] -translate-x-1/2 -translate-y-1/2 w-[clamp(44px,6vw,72px)] h-[clamp(44px,6vw,72px)] object-contain drop-shadow-md pointer-events-auto z-[25]" />
+        {/*
+          ── PORTRAIT + ICONS ── Layer z-20 ────────────────────────────────────
 
-            </div>
-          </div>
-        </div>
+          TWO-LEVEL WRAPPER PATTERN:
 
-        {/* PORTRAIT (Layer 20) 
-            Sits IN FRONT of the typography. 
-            Responsive top padding pushes it down so the head aligns with the lower letters.
+          Outer div  → handles vertical offset from PORTFOLIO so the portrait
+                       slides into its correct overlap position. Width here
+                       controls the portrait's rendered size.
+
+          Inner div  → `relative` with `w-full` — this becomes the positioning
+                       parent for ALL four icons. Icon `top/left/right` percentages
+                       are calculated against the portrait IMAGE bounds (not the
+                       padded outer div), so icons track portrait anatomy at every
+                       breakpoint.
+
+          RESPONSIVE PORTRAIT SIZING:
+            mobile  (<640px):  80% of content area — slightly smaller than before
+            sm      (640px+):  70%
+            md      (768px+):  60%
+            lg      (1024px+): 50%
+            xl cap:            580px max — prevents infinite growth on large screens
+
+          VERTICAL OFFSET (pt-*):
+            Controls how far the portrait slides down beneath PORTFOLIO.
+            Smaller values = tighter connection between text and portrait.
         */}
-        <div className="col-start-1 row-start-1 z-20 w-[95%] sm:w-[80%] md:w-[65%] lg:w-[55%] max-w-[650px] justify-self-center self-start pt-[30vw] sm:pt-[25vw] md:pt-[22vw] lg:pt-[18vw] xl:pt-[260px]">
-          <div className="relative w-full h-auto">
-            <img 
-              src={portrait} 
+        <div
+          className="col-start-1 row-start-1 z-20 pointer-events-none
+                     w-[80%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
+                     justify-self-center self-start
+                     pt-[25vw] sm:pt-[20vw] md:pt-[17vw] lg:pt-[13vw] xl:pt-[190px]"
+        >
+          {/* Inner: the true positioning context for icons */}
+          <div className="relative w-full">
+
+            {/* Portrait image — renders at natural aspect ratio via h-auto */}
+            <img
+              src={portrait}
               alt="Vansh Gupta"
-              className="w-full h-auto object-contain object-bottom"
+              className="w-full h-auto object-contain block select-none pointer-events-none"
+              draggable="false"
             />
+
+            {/*
+              ICON POSITIONS — anchored to portrait image anatomy:
+              
+              top: 22% → shoulder/head-transition zone (below face, at collar)
+              top: 72% → lower arm / hand zone
+              left/right: 10% → near the silhouette edges without face overlap
+
+              -translate-y-1/2 vertically centers each icon on its anchor row.
+
+              ICON SIZING — clamp():
+                mobile  (375px):  5vw = 18.75px → clamp min 36px applies
+                tablet  (768px):  5vw = 38.4px  → ~38px
+                desktop (1440px): 5vw = 72px    → clamp max 68px applies
+            */}
+
+            {/* ChatGPT — upper-left, shoulder/head region */}
+            <img
+              src={chatgptIcon}
+              alt="ChatGPT"
+              className="absolute top-[22%] left-[10%] -translate-y-1/2
+                         w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)]
+                         object-contain drop-shadow-md z-10 pointer-events-auto"
+            />
+
+            {/* Canva — upper-right, shoulder/head region */}
+            <img
+              src={canvaIcon}
+              alt="Canva"
+              className="absolute top-[22%] right-[10%] -translate-y-1/2
+                         w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)]
+                         object-contain drop-shadow-md z-10 pointer-events-auto"
+            />
+
+            {/* Photoshop — lower-left, arm/hand region */}
+            <img
+              src={photoshopIcon}
+              alt="Photoshop"
+              className="absolute top-[72%] left-[10%] -translate-y-1/2
+                         w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)]
+                         object-contain drop-shadow-md z-10 pointer-events-auto"
+            />
+
+            {/* Illustrator — lower-right, arm/hand region */}
+            <img
+              src={illustratorIcon}
+              alt="Illustrator"
+              className="absolute top-[72%] right-[10%] -translate-y-1/2
+                         w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)]
+                         object-contain drop-shadow-md z-10 pointer-events-auto"
+            />
+
           </div>
         </div>
 
-
-
-        {/* Layer 30: Tape Overlay — sits above Portrait (z-20), independent DOM element, not a pseudo-element */}
+        {/*
+          ── YELLOW MARQUEE STRIP ── Layer z-30 ────────────────────────────────
+          Sits above portrait (z-20) at the bottom of the composition.
+          
+          h-[clamp(50px,8.5vw,90px)]:
+            min 50px (was 44px) — thicker on mobile for better readability
+            scale 8.5vw on tablet/desktop
+            max 90px for large screens
+        */}
         <div className="absolute inset-x-0 bottom-[3%] z-30 pointer-events-none">
           <div
             className="
@@ -78,7 +151,7 @@ export default function Hero() {
               rotate-3
               bg-[#FFD722]
               flex items-center
-              h-[clamp(44px,8.5vw,90px)]
+              h-[clamp(50px,8.5vw,90px)]
               pointer-events-auto
               overflow-hidden
             "
