@@ -14,7 +14,6 @@ import yellowBadge        from '../assets/Yellow Badge.png';
 import blueYellowStars    from '../assets/Blue Yellow Stars.png';
 import curveArrow         from '../assets/Stylish Curve Black Arrow.png';
 import yellowBrush        from '../assets/Yellow Brush Highlight.png';
-import multiDots          from '../assets/Multi Dots Rectangle.png';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Data
@@ -278,17 +277,7 @@ export default function WorkCollections() {
             "
           />
 
-          {/* RIGHT FRAMING: Dots + Badge + Small Star */}
-          <img
-            src={multiDots}
-            alt=""
-            aria-hidden="true"
-            className="
-              hidden md:block absolute -right-4 top-8 w-24
-              opacity-25 dark:opacity-15
-              select-none pointer-events-none
-            "
-          />
+          {/* RIGHT FRAMING: Badge + Small Star */}
           <img
             src={yellowBadge}
             alt=""
