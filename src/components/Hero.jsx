@@ -118,7 +118,7 @@ export default function Hero() {
             <img
               src={chatgptIcon}
               alt="ChatGPT"
-              className="sm:hidden absolute top-[38%] left-[2%] -translate-y-1/2 w-[54px] h-[54px] object-contain drop-shadow-md z-10 pointer-events-auto"
+              className="sm:hidden absolute top-[42%] left-[-4%] -translate-y-1/2 -rotate-45 w-[60px] h-[60px] object-contain drop-shadow-md z-10 pointer-events-auto"
             />
 
             {/* Canva (Mobile) — upper-right / right shoulder */}
