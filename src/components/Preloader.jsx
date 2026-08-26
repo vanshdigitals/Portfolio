@@ -1,89 +1,97 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export default function Preloader({ onComplete }) {
-  const [progress, setProgress] = useState(0);
-  const [isRevealed, setIsRevealed] = useState(false);
-  const [isExiting, setIsExiting] = useState(false);
+  const [step, setStep] = useState(0);
+
+  const prefersReducedMotion = typeof window !== 'undefined' 
+    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
+    : false;
 
   useEffect(() => {
-    // Artificial progress over 2.2 seconds for an editorial feel
-    const duration = 2200;
-    const interval = 20;
-    const step = (100 / (duration / interval));
-    
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev + step >= 100) {
-          clearInterval(timer);
-          // Wait a tiny bit at 100% before triggering exit
-          setTimeout(() => setIsExiting(true), 400);
-          return 100;
-        }
-        return prev + step;
-      });
-    }, interval);
+    if (prefersReducedMotion) {
+      onComplete();
+      return;
+    }
 
-    // Trigger the wordmark reveal slightly after mount
-    const revealTimer = setTimeout(() => {
-      setIsRevealed(true);
-    }, 100);
+    const t1 = setTimeout(() => setStep(1), 450); // Flip to PORTFOLIO
+    const t2 = setTimeout(() => setStep(2), 1000); // End flip
+    const t3 = setTimeout(() => setStep(3), 1250); // Start circle expansion
+    const t4 = setTimeout(() => {
+      onComplete();
+    }, 1900); // Unmount
 
     return () => {
-      clearInterval(timer);
-      clearTimeout(revealTimer);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
     };
-  }, []);
+  }, [prefersReducedMotion, onComplete]);
+
+  if (prefersReducedMotion) return null;
 
   return (
-    <AnimatePresence onExitComplete={onComplete}>
-      {!isExiting && (
-        <motion.div
-          key="preloader"
-          initial={{ opacity: 1, y: 0 }}
-          exit={{ 
-            opacity: 0, 
-            y: "-100%", 
-            transition: { duration: 0.9, ease: [0.76, 0, 0.24, 1] } 
-          }}
-          className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden"
-        >
-          {/* Top minimal branding */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="absolute top-8 left-0 right-0 flex justify-center"
-          >
-            <span className="text-white/70 font-sans tracking-[0.2em] text-[10px] sm:text-xs uppercase font-medium">
-              Vansh Digitals
-            </span>
-          </motion.div>
+    <div className="fixed inset-0 z-[9999] bg-[var(--primary)] w-[100vw] h-[100dvh] flex items-center justify-center overflow-hidden pointer-events-none">
+      
+      {/* Expanding white circular wipe */}
+      <motion.div 
+        className="absolute z-10 bg-white rounded-full pointer-events-none"
+        initial={{ width: 0, height: 0, opacity: 1 }}
+        animate={
+          step >= 3 
+            ? { width: '250vmax', height: '250vmax' } 
+            : { width: 0, height: 0 }
+        }
+        transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
+        style={{ 
+          top: '50%', left: '50%', 
+          x: '-50%', y: '-50%' 
+        }}
+      />
 
-          {/* Central Oversized Typography Reveal */}
-          <div className="relative w-full max-w-[1800px] mx-auto px-[20px] flex justify-center overflow-hidden py-10">
-            <motion.div
-              initial={{ y: "120%" }}
-              animate={isRevealed ? { y: "0%" } : { y: "120%" }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <h1 className="font-furgatorio portfolio-wordmark portfolio-gradient leading-[1.1] m-0 select-none whitespace-nowrap">
-                PORTFOLIO
-              </h1>
-            </motion.div>
+      {/* Typography container */}
+      <div className="relative z-20 flex items-center justify-center w-full px-[30px] perspective-[1200px]">
+        <motion.div
+          className="relative flex items-center justify-center w-full"
+          initial={{ rotateX: 0 }}
+          animate={
+            step >= 1 
+              ? { rotateX: -180, scale: [1, 0.95, 1] } 
+              : { rotateX: 0, scale: 1 }
+          }
+          transition={{ 
+            duration: 0.55, 
+            ease: [0.65, 0, 0.35, 1],
+            scale: { duration: 0.55, ease: "easeInOut" }
+          }}
+          style={{ transformStyle: 'preserve-3d' }}
+        >
+          {/* Front: VANSH DIGITALS */}
+          <div 
+            className="absolute flex items-center justify-center w-full"
+            style={{ backfaceVisibility: 'hidden' }}
+          >
+            <h2 className="text-white font-sans font-medium uppercase tracking-[0.2em] text-[clamp(14px,3.5vw,20px)] text-center m-0">
+              Vansh Digitals
+            </h2>
           </div>
 
-          {/* Progress Indicator (Bottom thin line) */}
-          <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/5">
-            <motion.div
-              className="h-full bg-[#0A84FF]"
-              initial={{ width: "0%" }}
-              animate={{ width: `${progress}%` }}
-              transition={{ ease: "linear", duration: 0.05 }}
-            />
+          {/* Back: PORTFOLIO */}
+          <div 
+            className="flex items-center justify-center w-full"
+            style={{ 
+              backfaceVisibility: 'hidden',
+              transform: 'rotateX(180deg)'
+            }}
+          >
+            <h1 className="text-white font-furgatorio leading-none m-0 select-none whitespace-nowrap text-[clamp(40px,24vw,250px)] text-center max-w-full">
+              PORTFOLIO
+            </h1>
           </div>
         </motion.div>
-      )}
-    </AnimatePresence>
+      </div>
+
+    </div>
   );
 }
