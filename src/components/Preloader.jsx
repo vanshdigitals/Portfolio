@@ -15,9 +15,9 @@ function OldChar({ char, index, isFlipped }) {
         rotateX: isFlipped ? -180 : 0 
       }}
       transition={{ 
-        duration: 0.9, 
-        delay: index * 0.06, 
-        ease: [0.65, 0, 0.35, 1] 
+        duration: 1.2, 
+        delay: index * 0.08, 
+        ease: [0.76, 0, 0.24, 1] 
       }}
     >
       {char === " " ? "\u00A0" : char}
@@ -35,9 +35,9 @@ function NewChar({ char, index, isFlipped }) {
         rotateX: isFlipped ? 0 : 180 
       }}
       transition={{ 
-        duration: 0.9, 
-        delay: (index + offset) * 0.06, 
-        ease: [0.65, 0, 0.35, 1] 
+        duration: 1.2, 
+        delay: (index + offset) * 0.08, 
+        ease: [0.76, 0, 0.24, 1] 
       }}
     >
       {char === " " ? "\u00A0" : char}
@@ -59,11 +59,11 @@ export default function Preloader({ onComplete }) {
     }
 
     const t1 = setTimeout(() => setStep(1), 400); // Start wave
-    const t2 = setTimeout(() => setStep(2), 2200); // Completely remove VANSH DIGITALS from DOM
-    const t3 = setTimeout(() => setStep(3), 2600); // Start circle expansion
+    const t2 = setTimeout(() => setStep(2), 3000); // Completely remove VANSH DIGITALS from DOM (after 2.3s wave)
+    const t3 = setTimeout(() => setStep(3), 3300); // Start circle expansion
     const t4 = setTimeout(() => {
       onComplete();
-    }, 3400); // Unmount
+    }, 4200); // Unmount
 
     return () => {
       clearTimeout(t1);
@@ -100,7 +100,7 @@ export default function Preloader({ onComplete }) {
         {/* OLD: VANSH DIGITALS */}
         {step < 2 && (
           <div 
-            className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(16px,6.5vw,130px)]"
+            className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(18px,7.5vw,145px)]"
             style={{ gridArea: '1/1' }}
           >
             {str1.map((char, i) => (
@@ -111,7 +111,7 @@ export default function Preloader({ onComplete }) {
 
         {/* NEW: PORTFOLIO (Centered from frame 1) */}
         <div 
-          className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(16px,6.5vw,130px)]"
+          className="flex items-center justify-center text-white font-furgatorio tracking-tight leading-none m-0 select-none whitespace-nowrap text-[clamp(18px,7.5vw,145px)]"
           style={{ gridArea: '1/1' }}
         >
           {str2.map((char, i) => (
