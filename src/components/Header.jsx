@@ -5,7 +5,61 @@ import {
   House, User, BriefcaseBusiness, Code2, BadgeCheck, Send, 
   MessageCircle 
 } from 'lucide-react';
-import AnimatedNavIndicator from './AnimatedNavIndicator';
+import AnimatedNavIndicator, { buildSinePath } from './AnimatedNavIndicator';
+
+function MobileNavWave({ isDark, reducedMotion, pointCount }) {
+  const svgRef = useRef(null);
+  const phaseRef = useRef(0);
+  const rafRef = useRef(null);
+  
+  const width = pointCount * 9; // Tighter for mobile
+  
+  useEffect(() => {
+    if (reducedMotion) return;
+    
+    let last = null;
+    const tick = (now) => {
+      if (!last) last = now;
+      const dt = Math.min(now - last, 50);
+      last = now;
+      
+      const baseSpeed = 1000 / 3500;
+      phaseRef.current += baseSpeed * (dt / 1000);
+      
+      if (svgRef.current) {
+        const pathEl = svgRef.current.querySelector('path');
+        if (pathEl) {
+          pathEl.setAttribute('d', buildSinePath(width, pointCount, phaseRef.current));
+        }
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [reducedMotion, width, pointCount]);
+  
+  return (
+    <div className="absolute left-0 -bottom-1 h-[5px] overflow-hidden pointer-events-none" style={{ width: `${width}px` }}>
+      <svg
+        ref={svgRef}
+        className="absolute top-0 h-[5px] w-full"
+        viewBox={`0 0 ${width} 10`}
+        preserveAspectRatio="none"
+      >
+        <path
+          d={buildSinePath(width, pointCount, 0)}
+          stroke={isDark ? '#FFD722' : '#007BFF'}
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          fill="none"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+    </div>
+  );
+}
 
 // ── Nav data ──────────────────────────────────────────────────────────────────
 const NAV_LINKS = [
@@ -187,7 +241,7 @@ export default function Header() {
       {/* ── TOP BAR BACKGROUND (Base Layer) ─────────────────────────────── */}
       <div 
         className={`
-          absolute top-0 left-0 w-full h-24 bg-bg z-10
+          absolute top-0 left-0 w-full h-16 md:h-24 bg-bg z-10
           transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)]
           ${scrolled ? 'border-b border-hairline' : 'border-b border-transparent'}
         `}
@@ -224,17 +278,17 @@ export default function Header() {
         `}
       >
         {/* Drawer Header */}
-        <div className="flex items-center justify-between px-5 h-24 shrink-0 border-b border-hairline">
+        <div className="flex items-center justify-between px-5 h-16 md:h-24 shrink-0 border-b border-hairline">
           <Link
             to="/#hero"
             onClick={(e) => {
               handleNavClick(e, NAV_LINKS[0], 0);
               setMobileMenuOpen(false);
             }}
-            className="group inline-flex items-baseline gap-[3px] tracking-[-0.02em] font-heading text-[20px] font-extrabold leading-none text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
+            className="group inline-flex items-baseline gap-[2px] md:gap-[3px] tracking-[-0.02em] font-heading text-[22px] md:text-[26px] font-extrabold leading-none text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
           >
             Vansh Digitals
-            <span className={`inline-block w-[8px] h-[8px] rounded-full transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.25] ${isDark ? 'bg-[#FFD722]' : 'bg-[#007BFF]'}`} />
+            <span className={`inline-block w-[9px] h-[9px] md:w-[11px] md:h-[11px] rounded-full transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.25] ${isDark ? 'bg-[#FFD722]' : 'bg-[#007BFF]'}`} />
           </Link>
 
           <button
@@ -274,7 +328,17 @@ export default function Header() {
                 `}
               >
                 <Icon size={20} strokeWidth={isActive ? 2.5 : 2} className={isActive ? 'text-primary' : 'text-text-muted'} />
-                {link.name}
+                
+                <div className="relative flex flex-col">
+                  <span className="relative z-10">{link.name}</span>
+                  {isActive && (
+                    <MobileNavWave 
+                      isDark={isDark} 
+                      reducedMotion={reducedMotion} 
+                      pointCount={POINT_COUNTS[index]} 
+                    />
+                  )}
+                </div>
               </a>
             );
           })}
@@ -316,7 +380,7 @@ export default function Header() {
       </div>
 
       {/* ── TOP BAR CONTENT (Top Layer) ──────────────────────────────────── */}
-      <div className="relative z-40 w-full max-w-[1536px] mx-auto px-5 lg:px-5 xl:px-6 2xl:px-8 h-24 flex items-center justify-between pointer-events-none">
+      <div className="relative z-40 w-full max-w-[1536px] mx-auto px-4 md:px-5 lg:px-5 xl:px-6 2xl:px-8 h-16 md:h-24 flex items-center justify-between pointer-events-none">
         
         {/* LEFT: Brand */}
         <div className="flex-1 min-w-[180px] pointer-events-auto">
@@ -327,10 +391,10 @@ export default function Header() {
               handleNavClick(e, NAV_LINKS[0], 0);
               setMobileMenuOpen(false);
             }}
-            className="group inline-flex items-baseline gap-[3px] tracking-[-0.02em] font-heading text-[26px] font-extrabold leading-none text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
+            className="group inline-flex items-baseline gap-[2px] md:gap-[3px] tracking-[-0.02em] font-heading text-[22px] md:text-[26px] font-extrabold leading-none text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-md transition-colors duration-[320ms]"
           >
             Vansh Digitals
-            <span className={`inline-block w-[11px] h-[11px] rounded-full transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.25] motion-reduce:transition-[background-color] ${isDark ? 'bg-[#FFD722]' : 'bg-[#007BFF]'}`} />
+            <span className={`inline-block w-[9px] h-[9px] md:w-[11px] md:h-[11px] rounded-full transition-colors duration-[320ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.25] motion-reduce:transition-[background-color] ${isDark ? 'bg-[#FFD722]' : 'bg-[#007BFF]'}`} />
           </a>
         </div>
 
@@ -391,7 +455,7 @@ export default function Header() {
             aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
             aria-pressed={isDark}
             className={`
-              group relative w-[56px] h-[30px] rounded-full p-[3px]
+              group relative w-[48px] h-[26px] md:w-[56px] md:h-[30px] rounded-full p-[2px] md:p-[3px]
               border transition-colors duration-[260ms]
               focus-visible:outline-none focus-visible:ring-2
               focus-visible:ring-primary focus-visible:ring-offset-2
@@ -401,32 +465,32 @@ export default function Header() {
           >
             <div 
               className={`
-                w-[22px] h-[22px] rounded-full
+                w-[20px] h-[20px] md:w-[22px] md:h-[22px] rounded-full
                 shadow-[0_1px_3px_rgba(0,0,0,0.1)]
                 flex items-center justify-center
                 transition-transform duration-[260ms] ease-[cubic-bezier(.65,0,.35,1)]
                 motion-reduce:transition-none
-                ${isDark ? 'translate-x-[26px] bg-[#111111] border border-[#111111] text-[#FFD722]' : 'translate-x-0 bg-white border border-black/5 text-[#007BFF]'}
+                ${isDark ? 'translate-x-[22px] md:translate-x-[26px] bg-[#111111] border border-[#111111] text-[#FFD722]' : 'translate-x-0 bg-white border border-black/5 text-[#007BFF]'}
               `}
             >
-              <div className="relative flex items-center justify-center w-full h-full">
+              <div className="relative flex items-center justify-center w-[14px] h-[14px] md:w-4 md:h-4">
                 <Sun
                   className={`
-                    absolute
+                    absolute w-full h-full
                     transition-all duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
                     motion-reduce:transition-none
                     ${isDark ? 'opacity-0 rotate-180 scale-75' : 'opacity-100 rotate-0 scale-100'}
                   `}
-                  size={16} strokeWidth={2}
+                  strokeWidth={2}
                 />
                 <Moon
                   className={`
-                    absolute
+                    absolute w-full h-full
                     transition-all duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
                     motion-reduce:transition-none
                     ${isDark ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-180 scale-75'}
                   `}
-                  size={16} strokeWidth={2}
+                  strokeWidth={2}
                 />
               </div>
             </div>
@@ -472,7 +536,7 @@ export default function Header() {
             onClick={() => setMobileMenuOpen(true)}
             aria-expanded={mobileMenuOpen}
             className="
-              md:hidden relative w-10 h-10 rounded-full border border-hairline
+              md:hidden relative w-9 h-9 rounded-full border border-hairline
               flex items-center justify-center text-text-primary
               bg-transparent hover:bg-black/5 dark:hover:bg-white/10
               transition-colors duration-[240ms]
@@ -480,7 +544,7 @@ export default function Header() {
             "
             aria-label="Open menu"
           >
-            <Menu size={20} />
+            <Menu className="w-[18px] h-[18px]" />
           </button>
         </div>
 

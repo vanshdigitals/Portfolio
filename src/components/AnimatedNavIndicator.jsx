@@ -19,7 +19,7 @@ const WAVE_H    = 10;
 const AMPLITUDE = 3;
 const MID       = WAVE_H / 2;
 
-function buildSinePath(width, crests, phase = 0) {
+export function buildSinePath(width, crests, phase = 0) {
   if (!width || crests < 1) return '';
   const step = width / crests;
   
