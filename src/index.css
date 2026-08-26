@@ -58,26 +58,14 @@
     --scrollbar-hover: var(--accent);
   }
 
-  /* Global Scrollbar */
+  /* Global Scrollbar (Hidden) */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--border-strong);
-    border-radius: 9999px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-hover);
+    display: none;
   }
 
   html {
     scroll-behavior: smooth;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-strong) transparent;
+    scrollbar-width: none;
     /* Offset for the fixed header so anchor links land below it.
        Mobile/tablet header = 64px (h-16), desktop (lg) = 96px (h-24). */
     scroll-padding-top: 64px;
@@ -303,11 +291,13 @@
   }
   .animate-portfolio-init {
     animation: none !important;
-    background-image: none !important;
-    color: var(--primary) !important;
+    opacity: 1 !important;
+    transform: none !important;
+    /* gradient remains visible but static */
   }
-  .animate-portfolio-flicker {
+  .portfolio-gradient {
     animation: none !important;
+    background-position: center 55% !important;
   }
 }
 
@@ -350,7 +340,6 @@
   0% {
     opacity: 0;
     transform: translateX(-5px);
-    background-position: -200% center, 0 0;
   }
   15% {
     opacity: 1;
@@ -371,15 +360,37 @@
   100% {
     opacity: 1;
     transform: translateX(0);
-    background-position: 200% center, 0 0;
   }
 }
 
+/*
+  PORTFOLIO gradient — one-time arc reveal.
+
+  Uses a radial-gradient with an extremely wide ellipse (500% × 140%)
+  centered above the gradient image (center -30%). This creates a very
+  subtle curved boundary between the blue and grey regions — the "arc"
+  effect described in the design spec.
+
+  background-size: 100% 220% makes the gradient taller than the element.
+  Initial position (center 0%) shows only the blue portion.
+  The portfolio-reveal animation slides it to center 55%, exposing the
+  blue → grey transition with a natural arc shape.
+*/
 .portfolio-gradient {
-  background: 
-    linear-gradient(120deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%, transparent 100%),
-    linear-gradient(to bottom, #0056b3 0%, var(--primary) 45%, #a2c2ff 80%, #f2f5f9 100%);
-  background-size: 200% 100%, 100% 100%;
+  background: radial-gradient(
+    ellipse 500% 140% at center -30%,
+    #0056b3 0%,
+    var(--primary) 22%,
+    var(--primary) 46%,
+    #7daee8 52%,
+    #a8c4e0 57%,
+    #bfcdd9 62%,
+    #d8dee3 68%,
+    #e8ecef 76%,
+    #e8ecef 100%
+  );
+  background-size: 100% 220%;
+  background-position: center 0%;
   background-repeat: no-repeat;
   color: transparent;
   -webkit-background-clip: text;
@@ -387,19 +398,43 @@
 }
 
 .dark .portfolio-gradient {
-  background: 
-    linear-gradient(120deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.8) 50%, transparent 60%, transparent 100%),
-    linear-gradient(to bottom, #1a66ff 0%, var(--primary) 45%, #7aa8ff 80%, #e1e5eb 100%);
-  background-size: 200% 100%, 100% 100%;
+  background: radial-gradient(
+    ellipse 500% 140% at center -30%,
+    #1a66ff 0%,
+    var(--primary) 22%,
+    var(--primary) 46%,
+    #5a8bdb 52%,
+    #849ec0 57%,
+    #9dafc4 62%,
+    #bcc5d0 68%,
+    #d1d7de 76%,
+    #d1d7de 100%
+  );
+  background-size: 100% 220%;
+  background-position: center 0%;
   background-repeat: no-repeat;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
 }
 
-.animate-portfolio-init {
-  animation: portfolio-init 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+/*
+  One-time arc reveal — grey arc enters from the bottom of the letters.
+  Slides background-position from 0% (all blue) to 55% (blue top, grey bottom).
+  Runs once with forwards fill; NO infinite loop.
+*/
+@keyframes portfolio-reveal {
+  0%   { background-position: center 0%; }
+  100% { background-position: center 55%; }
 }
+
+.animate-portfolio-init {
+  animation:
+    portfolio-init 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards,
+    portfolio-reveal 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s forwards,
+    portfolio-flicker 10s linear 2s infinite;
+}
+
 @keyframes portfolio-flicker {
   0%, 97% { opacity: 1; }
   98% { opacity: 0.8; }
@@ -407,6 +442,3 @@
   100% { opacity: 1; }
 }
 
-.animate-portfolio-flicker {
-  animation: portfolio-flicker 10s infinite;
-}
