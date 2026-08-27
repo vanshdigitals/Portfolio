@@ -40,7 +40,8 @@ const defaultPills = [
   { id: 'canva-experienced', content: 'Canva Experienced', x: 110, y: 47, rotation: 40 },
   { id: '3-yrs', content: '3+ Yrs', x: 105, y: 55, rotation: 3 },
   { id: '5-brands', content: '5+ BRANDS', x: -20, y: 30, rotation: -5 },
-  { id: 'internships', content: 'OPEN TO INTERNSHIPS', x: 120, y: 30, rotation: 10 }
+  { id: 'internships', content: 'OPEN TO INTERNSHIPS', x: 120, y: 30, rotation: 10 },
+  { id: 'chatgpt-icon', type: 'image', content: chatgptIcon, x: -10, y: 38, rotation: -45, width: 31 }
 ];
 
 const DraggableTextPill = ({ pill, isEditMode, onUpdate, isSelected, onSelect }) => {
@@ -82,22 +83,45 @@ const DraggableTextPill = ({ pill, isEditMode, onUpdate, isSelected, onSelect })
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      className={`sm:hidden absolute z-20 flex items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap ${isEditMode ? 'cursor-move touch-none ring-1 ring-blue-500/50 hover:ring-2 hover:ring-blue-500 pointer-events-auto' : 'pointer-events-none'}`}
+      className={`sm:hidden absolute z-20 flex items-center justify-center whitespace-nowrap ${
+        pill.type === 'image' ? '' : 'bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3'
+      } ${isEditMode ? 'cursor-move touch-none ring-1 ring-blue-500/50 hover:ring-2 hover:ring-blue-500 pointer-events-auto' : 'pointer-events-none'}`}
       style={{
         left: `${pill.x}%`,
         top: `${pill.y}%`,
-        transform: `translate(-50%, -50%) rotate(${pill.rotation}deg)`
+        transform: `translate(-50%, -50%) rotate(${pill.rotation}deg)`,
+        width: pill.type === 'image' ? `${pill.width}%` : 'auto'
       }}
     >
-      <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">
-        {pill.content}
-      </span>
+      {pill.type === 'image' ? (
+        <img src={pill.content} alt={pill.id} className="w-full aspect-square object-contain drop-shadow-md pointer-events-none" draggable={false} />
+      ) : (
+        <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">
+          {pill.content}
+        </span>
+      )}
       {isEditMode && isSelected && (
         <div className="absolute top-[120%] left-1/2 -translate-x-1/2 mt-2 bg-black/90 text-white text-[10px] p-2 rounded shadow-xl pointer-events-auto flex flex-col gap-2 z-50 cursor-default">
           <div className="text-center font-mono opacity-80 border-b border-white/20 pb-1">
-            x:{pill.x} y:{pill.y} r:{pill.rotation}°
+            x:{pill.x} y:{pill.y} r:{pill.rotation}° {pill.type === 'image' && `w:${pill.width}%`}
           </div>
           <div className="flex gap-2 justify-center">
+            {pill.type === 'image' && (
+              <>
+                <button 
+                  onPointerDown={(e) => { e.stopPropagation(); onUpdate(pill.id, { width: Math.max(5, pill.width - 2) }); }}
+                  className="bg-white/20 hover:bg-white/30 px-2 py-1 rounded font-bold"
+                >
+                  -
+                </button>
+                <button 
+                  onPointerDown={(e) => { e.stopPropagation(); onUpdate(pill.id, { width: pill.width + 2 }); }}
+                  className="bg-white/20 hover:bg-white/30 px-2 py-1 rounded font-bold"
+                >
+                  +
+                </button>
+              </>
+            )}
             <button 
               onPointerDown={(e) => { e.stopPropagation(); onUpdate(pill.id, { rotation: pill.rotation - 5 }); }}
               className="bg-white/20 hover:bg-white/30 px-2 py-1 rounded"
@@ -130,7 +154,7 @@ export default function Hero() {
           const parsed = JSON.parse(saved);
           const merged = defaultPills.map(def => {
             const found = parsed.find(p => p.id === def.id);
-            return found ? { ...def, x: found.x, y: found.y, rotation: found.rotation } : def;
+            return found ? { ...def, x: found.x, y: found.y, rotation: found.rotation, ...(found.width && {width: found.width}) } : def;
           });
           setPills(merged);
         } catch (e) {
@@ -151,7 +175,7 @@ export default function Hero() {
   };
 
   const handleExport = () => {
-    const cleanData = pills.map(({ id, x, y, rotation }) => ({ id, x, y, rotation }));
+    const cleanData = pills.map(({ id, x, y, rotation, width }) => ({ id, x, y, rotation, ...(width && {width}) }));
     const json = JSON.stringify(cleanData, null, 2);
     console.log("=== HERO TEXT PILLS EXPORT ===");
     console.log(json);
@@ -291,13 +315,6 @@ export default function Hero() {
             */}
 
             {/* ── MOBILE ONLY: ICONS ON SHOULDERS ── */}
-            {/* ChatGPT (Mobile) — upper-left / left shoulder */}
-            <img
-              src={chatgptIcon}
-              alt="ChatGPT"
-              className="sm:hidden absolute top-[38%] left-[-10%] -translate-y-1/2 -rotate-45 w-[31%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-
             {/* Canva (Mobile) — upper-right / right shoulder */}
             <img
               src={canvaIcon}
