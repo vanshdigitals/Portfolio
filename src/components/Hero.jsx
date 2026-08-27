@@ -39,8 +39,8 @@ const defaultPills = [
   { id: 'design-workflows', content: 'Design Workflows', x: -15, y: 62, rotation: 3 },
   { id: 'canva-experienced', content: 'Canva Experienced', x: 110, y: 47, rotation: 40 },
   { id: '3-yrs', content: '3+ Yrs', x: 105, y: 55, rotation: 3 },
-  { id: '5-brands', content: '5+ BRANDS', x: 20, y: 50, rotation: -5 },
-  { id: 'internships', content: 'OPEN TO INTERNSHIPS', x: 25, y: 65, rotation: 10 }
+  { id: '5-brands', content: '5+ BRANDS', x: -20, y: 30, rotation: -5 },
+  { id: 'internships', content: 'OPEN TO INTERNSHIPS', x: 120, y: 30, rotation: 10 }
 ];
 
 const DraggableTextPill = ({ pill, isEditMode, onUpdate, isSelected, onSelect }) => {
