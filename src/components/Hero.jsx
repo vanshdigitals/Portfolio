@@ -40,7 +40,7 @@ const defaultPills = [
   { id: 'canva-experienced', content: 'Canva Experienced', x: 94.55, y: 59.19, rotation: 0 },
   { id: '5-brands', content: '5+ BRANDS', x: 1.03, y: 50.19, rotation: 10 },
   { id: 'internships', content: 'OPEN TO INTERNSHIPS', x: 49.1, y: 89.14, rotation: 0 },
-  { id: 'chatgpt-icon', type: 'image', content: chatgptIcon, x: 18.04, y: 35.33, rotation: -45, width: 31 }
+  { id: 'chatgpt-icon', type: 'image', content: chatgptIcon, x: 12.8, y: 36.23, rotation: -45, width: 31 }
 ];
 
 const DraggableTextPill = ({ pill, isEditMode, onUpdate, isSelected, onSelect }) => {
@@ -147,7 +147,7 @@ export default function Hero() {
 
   useEffect(() => {
     if (import.meta.env.DEV) {
-      const saved = localStorage.getItem('heroTextPillsConfigV3');
+      const saved = localStorage.getItem('heroTextPillsConfigV4');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -167,7 +167,7 @@ export default function Hero() {
     setPills(prev => {
       const next = prev.map(p => p.id === id ? { ...p, ...updates } : p);
       if (import.meta.env.DEV) {
-        localStorage.setItem('heroTextPillsConfigV3', JSON.stringify(next));
+        localStorage.setItem('heroTextPillsConfigV4', JSON.stringify(next));
       }
       return next;
     });
