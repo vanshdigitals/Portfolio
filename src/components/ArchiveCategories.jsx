@@ -52,12 +52,13 @@ export default function ArchiveCategories() {
       
       {/* ── CATEGORY SELECTOR ────────────────────────────────────────────── */}
       <div 
-        className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24 md:mb-32"
+        className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-24 md:mb-32"
         role="tablist"
         aria-label="Work Categories"
       >
         {TABS.map((tab, idx) => {
           const isActive = activeTab === idx;
+          const isSelected = idx === 0;
 
           return (
             <button
@@ -68,11 +69,15 @@ export default function ArchiveCategories() {
               id={`tab-${tab.id}`}
               onClick={() => handleTabClick(idx, tab.id)}
               className={`
-                group relative text-left w-full rounded-[20px] p-6 md:p-8
-                flex flex-col min-h-[260px]
+                group relative text-left w-full rounded-[20px]
+                flex flex-col
                 transition-all duration-300 ease-[cubic-bezier(.65,0,.35,1)]
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
                 overflow-hidden
+                ${isSelected
+                  ? 'col-span-2 md:col-span-1 min-h-[240px] md:min-h-[260px] p-6 md:p-8'
+                  : 'col-span-1 min-h-[210px] md:min-h-[260px] p-4 sm:p-5 md:p-8'
+                }
                 ${isActive 
                   ? 'border border-[#007BFF] dark:border-[#FFD722] shadow-[0_4px_24px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_24px_rgba(255,255,255,0.02)]' 
                   : 'border border-border/40 hover:border-border hover:-translate-y-1'
@@ -91,7 +96,7 @@ export default function ArchiveCategories() {
               />
 
               {/* Top Row: Index + Icon */}
-              <div className="relative flex justify-between items-start w-full mb-8 z-10">
+              <div className={`relative flex justify-between items-start w-full z-10 ${isSelected ? 'mb-8' : 'mb-5 md:mb-8'}`}>
                 <span className={`
                   font-mono text-sm font-medium transition-colors duration-300
                   ${isActive ? 'text-[#007BFF] dark:text-[#FFD722]' : 'text-text-muted'}
@@ -104,31 +109,34 @@ export default function ArchiveCategories() {
                   className={`
                     transition-colors duration-300
                     ${isActive ? 'text-[#007BFF] dark:text-[#FFD722]' : 'text-border'}
+                    ${isSelected ? '' : 'scale-90 md:scale-100 origin-top-right'}
                   `}
                 />
               </div>
 
               {/* Middle: Title & Accent */}
-              <div className="relative z-10 mb-6">
-                <h2 className="font-heading text-2xl md:text-3xl font-[800] leading-tight text-text-primary">
+              <div className={`relative z-10 ${isSelected ? 'mb-6' : 'mb-4 md:mb-6'}`}>
+                <h2 className={`font-heading font-[800] leading-tight text-text-primary ${isSelected ? 'text-2xl md:text-3xl' : 'text-[20px] sm:text-[22px] md:text-3xl'}`}>
                   {tab.titleLine1}<br />
                   {tab.titleLine2}
                 </h2>
                 {/* Accent Underline */}
                 <div className={`
-                  mt-4 h-[3px] w-12 rounded-full transition-colors duration-300
+                  mt-4 h-[3px] rounded-full transition-colors duration-300
+                  ${isSelected ? 'w-12' : 'w-8 md:w-12'}
                   ${isActive ? 'bg-[#007BFF] dark:bg-[#FFD722]' : 'bg-border'}
                 `} />
               </div>
 
               {/* Bottom: Description & Arrow */}
               <div className="relative flex-grow flex flex-col justify-between z-10 mt-auto">
-                <p className="font-body text-sm text-text-secondary leading-relaxed max-w-[90%] mb-8">
+                <p className={`font-body text-text-secondary leading-relaxed max-w-[90%] ${isSelected ? 'text-sm mb-8' : 'text-[13px] md:text-sm mb-6 md:mb-8'}`}>
                   {tab.desc}
                 </p>
                 <div className={`
-                  w-11 h-11 rounded-full border flex items-center justify-center
+                  rounded-full border flex items-center justify-center
                   transition-all duration-300
+                  ${isSelected ? 'w-11 h-11' : 'w-9 h-9 md:w-11 md:h-11'}
                   ${isActive 
                     ? 'border-[#007BFF] text-[#007BFF] dark:border-[#FFD722] dark:text-[#FFD722]' 
                     : 'border-border text-text-muted'
@@ -136,7 +144,7 @@ export default function ArchiveCategories() {
                 `}>
                   <ArrowRight 
                     size={18} 
-                    className={`transition-transform duration-300 ${!isActive && 'group-hover:translate-x-0.5'}`} 
+                    className={`transition-transform duration-300 ${!isActive && 'group-hover:translate-x-0.5'} ${isSelected ? '' : 'scale-75 md:scale-100'}`} 
                   />
                 </div>
               </div>

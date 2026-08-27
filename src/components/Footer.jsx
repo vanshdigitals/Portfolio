@@ -1,8 +1,8 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { Mail, MapPin, Phone } from 'lucide-react';
-import arrowImage from '../assets/Small Arrow Black.png';
-import creditLight from '../assets/Blue Credit Light Mode.png';
-import creditDark from '../assets/Yellow Credit Dark Mode.png';
+import arrowImage from '../assets/arrow-small-black.png';
+import creditLight from '../assets/blue-credit-light-mode.png';
+import creditDark from '../assets/yellow-credit-dark-mode.png';
 // ── Inline SVGs for Brand Icons (Simple Icons)
 const IconIg = () => (
   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">

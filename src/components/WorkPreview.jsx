@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
-import imgCutsCurves  from '../assets/card_cuts_curves.jpg';
-import imgWaterplane  from '../assets/card_waterplane.jpg';
-import imgKeshvi      from '../assets/card_keshvi.jpg';
-import imgBuilders    from '../assets/card_builders.jpg';
-import imgRanjeet     from '../assets/card_ranjeet.jpg';
+import imgCutsCurves  from '../assets/card-cuts-curves.jpg';
+import imgWaterplane  from '../assets/card-waterplane.jpg';
+import imgKeshvi      from '../assets/card-keshvi.jpg';
+import imgBuilders    from '../assets/card-builders.jpg';
+import imgRanjeet     from '../assets/card-ranjeet.jpg';
 
 // ── Client data ────────────────────────────────────────────────────────────────
 const PROJECTS = [

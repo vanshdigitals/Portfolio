@@ -1,8 +1,8 @@
 import { Fragment, useState, useEffect } from 'react';
-import chatgptIcon from '../assets/Chatgpt.png';
-import canvaIcon from '../assets/Canva.png';
-import photoshopIcon from '../assets/Photoshop.png';
-import illustratorIcon from '../assets/Ilustrator.png';
+import chatgptIcon from '../assets/chatgpt-icon.png';
+import canvaIcon from '../assets/canva-icon.png';
+import photoshopIcon from '../assets/photoshop-icon.png';
+import illustratorIcon from '../assets/illustrator-icon.png';
 
 const marqueeItems = [
   "SOCIAL MEDIA DESIGN",
@@ -186,7 +186,7 @@ export default function Hero() {
   return (
     <section 
       id="hero" 
-      className="relative w-full mt-16 lg:mt-24 pt-0 pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] border-b border-border transition-colors duration-[320ms] overflow-x-clip"
+      className="relative w-full mt-16 lg:mt-24 pt-0 pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] border-b border-hairline transition-colors duration-[320ms] overflow-x-clip"
       style={{ scrollMarginTop: 'var(--header-h, 64px)' }}
     >
       {import.meta.env.DEV && (
@@ -393,7 +393,7 @@ export default function Hero() {
               overflow-hidden
             "
           >
-            <div className="flex w-max shrink-0 motion-safe:animate-marquee">
+            <div className="flex w-max shrink-0 motion-safe:animate-marquee will-change-transform">
               <MarqueeContent />
               <MarqueeContent ariaHidden={true} />
             </div>
@@ -414,7 +414,7 @@ export default function Hero() {
               overflow-hidden
             "
           >
-            <div className="flex w-max shrink-0 motion-safe:animate-marquee" style={{ animationDirection: 'reverse' }}>
+            <div className="flex w-max shrink-0 motion-safe:animate-marquee will-change-transform" style={{ animationDirection: 'reverse' }}>
               <MarqueeContent />
               <MarqueeContent ariaHidden={true} />
             </div>

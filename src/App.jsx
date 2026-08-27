@@ -67,6 +67,15 @@ function App() {
     };
   }, [isPreloading]);
 
+  // Scroll to top instantly on route change
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+  }, [location.pathname]);
+
   return (
     <>
       {isPreloading && <Preloader onComplete={() => setIsPreloading(false)} />}

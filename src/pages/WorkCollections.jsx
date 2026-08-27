@@ -2,18 +2,18 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 
 // ── Brand card assets
-import imgCutsCurves  from '../assets/card_cuts_curves.jpg';
-import imgWaterplane  from '../assets/card_waterplane.jpg';
-import imgKeshvi      from '../assets/card_keshvi.jpg';
-import imgBuilders    from '../assets/card_builders.jpg';
-import imgRanjeet     from '../assets/card_ranjeet.jpg';
+import imgCutsCurves  from '../assets/card-cuts-curves.jpg';
+import imgWaterplane  from '../assets/card-waterplane.jpg';
+import imgKeshvi      from '../assets/card-keshvi.jpg';
+import imgBuilders    from '../assets/card-builders.jpg';
+import imgRanjeet     from '../assets/card-ranjeet.jpg';
 import ArchiveCategories from '../components/ArchiveCategories';
 
 // ── Decorative assets
-import yellowBadge        from '../assets/Yellow Badge.png';
-import blueYellowStars    from '../assets/Blue Yellow Stars.png';
-import curveArrow         from '../assets/Stylish Curve Black Arrow.png';
-import yellowBrush        from '../assets/Yellow Brush Highlight.png';
+import yellowBadge        from '../assets/yellow-badge.png';
+import blueYellowStars    from '../assets/blue-yellow-stars.png';
+import curveArrow         from '../assets/arrow-stylish-curve-black.png';
+import yellowBrush        from '../assets/yellow-brush-highlight.png';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Data
@@ -303,21 +303,10 @@ export default function WorkCollections() {
           </div>
 
           {/* Oversized Heading */}
-          <h1 className="relative font-heading text-[96px] md:text-[160px] font-bold leading-[0.8] tracking-[-0.03em] text-text-primary mb-6">
+          <h1 className="relative font-heading text-[clamp(40px,13vw,96px)] md:text-[160px] font-bold leading-[0.8] tracking-[-0.03em] text-text-primary mb-6">
             Work <br />
             <span className="relative inline-block text-[#007BFF] dark:text-[#FFD722] z-10 animate-sheen mt-[-19px] md:mt-[-43px] pr-2 md:pr-4">
               Collections
-              {/* Yellow brush highlight — tight to the word */}
-              <img
-                src={yellowBrush}
-                alt=""
-                aria-hidden="true"
-                className="
-                  absolute -bottom-1 left-[-2%] w-[104%] h-[12px] object-fill
-                  opacity-90 dark:opacity-70
-                  select-none pointer-events-none -z-10
-                "
-              />
             </span>
           </h1>
 
