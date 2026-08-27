@@ -41,13 +41,14 @@ const defaultPills = [
   { id: '3-yrs', content: '3+ Yrs', x: 105, y: 55, rotation: 3 }
 ];
 
-const DraggableTextPill = ({ pill, isEditMode, onUpdate }) => {
+const DraggableTextPill = ({ pill, isEditMode, onUpdate, isSelected, onSelect }) => {
   const [isDragging, setIsDragging] = useState(false);
   
   const handlePointerDown = (e) => {
     if (!isEditMode) return;
     e.preventDefault();
     e.stopPropagation();
+    onSelect(pill.id);
     setIsDragging(true);
     e.target.setPointerCapture(e.pointerId);
   };
@@ -74,19 +75,11 @@ const DraggableTextPill = ({ pill, isEditMode, onUpdate }) => {
     e.target.releasePointerCapture(e.pointerId);
   };
 
-  const handleWheel = (e) => {
-    if (!isEditMode) return;
-    e.preventDefault();
-    const delta = Math.sign(e.deltaY) * 1;
-    onUpdate(pill.id, { rotation: pill.rotation + delta });
-  };
-
   return (
     <div
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      onWheel={handleWheel}
       className={`sm:hidden absolute z-20 flex items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap ${isEditMode ? 'cursor-move touch-none ring-1 ring-blue-500/50 hover:ring-2 hover:ring-blue-500 pointer-events-auto' : 'pointer-events-none'}`}
       style={{
         left: `${pill.x}%`,
@@ -97,9 +90,25 @@ const DraggableTextPill = ({ pill, isEditMode, onUpdate }) => {
       <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">
         {pill.content}
       </span>
-      {isEditMode && (
-        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded pointer-events-none whitespace-nowrap z-50">
-          x:{pill.x} y:{pill.y} r:{pill.rotation}°
+      {isEditMode && isSelected && (
+        <div className="absolute top-[120%] left-1/2 -translate-x-1/2 mt-2 bg-black/90 text-white text-[10px] p-2 rounded shadow-xl pointer-events-auto flex flex-col gap-2 z-50 cursor-default">
+          <div className="text-center font-mono opacity-80 border-b border-white/20 pb-1">
+            x:{pill.x} y:{pill.y} r:{pill.rotation}°
+          </div>
+          <div className="flex gap-2 justify-center">
+            <button 
+              onPointerDown={(e) => { e.stopPropagation(); onUpdate(pill.id, { rotation: pill.rotation - 5 }); }}
+              className="bg-white/20 hover:bg-white/30 px-2 py-1 rounded"
+            >
+              ↺ -5°
+            </button>
+            <button 
+              onPointerDown={(e) => { e.stopPropagation(); onUpdate(pill.id, { rotation: pill.rotation + 5 }); }}
+              className="bg-white/20 hover:bg-white/30 px-2 py-1 rounded"
+            >
+              ↻ +5°
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -108,6 +117,7 @@ const DraggableTextPill = ({ pill, isEditMode, onUpdate }) => {
 
 export default function Hero() {
   const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedPillId, setSelectedPillId] = useState(null);
   const [pills, setPills] = useState(defaultPills);
 
   useEffect(() => {
@@ -300,6 +310,8 @@ export default function Hero() {
                 pill={pill} 
                 isEditMode={isEditMode} 
                 onUpdate={handleUpdatePill} 
+                isSelected={selectedPillId === pill.id}
+                onSelect={setSelectedPillId}
               />
             ))}
 
