@@ -377,45 +377,29 @@
   blue → grey transition with a natural arc shape.
 */
 .portfolio-gradient {
-  background: radial-gradient(
-    ellipse 500% 140% at center -30%,
-    #0056b3 0%,
-    var(--primary) 22%,
-    var(--primary) 46%,
-    #7daee8 52%,
-    #a8c4e0 57%,
-    #bfcdd9 62%,
-    #d8dee3 68%,
-    #e8ecef 76%,
-    #e8ecef 100%
+  background: linear-gradient(
+    to bottom,
+    #007BFF 0%,
+    rgba(0, 123, 255, 0.2) 100%
   );
-  background-size: 100% 220%;
-  background-position: center 0%;
-  background-repeat: no-repeat;
+  -webkit-text-stroke: 0;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
+  filter: drop-shadow(0 -15px 40px rgba(0, 123, 255, 0.3));
 }
 
 .dark .portfolio-gradient {
-  background: radial-gradient(
-    ellipse 500% 140% at center -30%,
-    #1a66ff 0%,
-    var(--primary) 22%,
-    var(--primary) 46%,
-    #5a8bdb 52%,
-    #849ec0 57%,
-    #9dafc4 62%,
-    #bcc5d0 68%,
-    #d1d7de 76%,
-    #d1d7de 100%
+  background: linear-gradient(
+    to bottom,
+    #FFD722 0%,
+    rgba(255, 215, 34, 0.2) 100%
   );
-  background-size: 100% 220%;
-  background-position: center 0%;
-  background-repeat: no-repeat;
+  -webkit-text-stroke: 0;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
+  filter: drop-shadow(0 -15px 40px rgba(255, 215, 34, 0.3));
 }
 
 /*
