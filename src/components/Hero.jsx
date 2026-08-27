@@ -35,12 +35,12 @@ const MarqueeContent = ({ ariaHidden = false }) => (
 );
 
 const defaultPills = [
-  { id: 'ai-assisted', content: 'AI-Assisted', x: 5, y: 55, rotation: -1 },
-  { id: 'design-workflows', content: 'Design Workflows', x: 8, y: 65, rotation: 3 },
-  { id: 'canva-experienced', content: 'Canva Experienced', x: 95, y: 47, rotation: 40 },
-  { id: '5-brands', content: '5+ BRANDS', x: 15, y: 25, rotation: -5 },
-  { id: 'internships', content: 'OPEN TO INTERNSHIPS', x: 85, y: 25, rotation: 10 },
-  { id: 'chatgpt-icon', type: 'image', content: chatgptIcon, x: 10, y: 35, rotation: -45, width: 31 }
+  { id: 'ai-assisted', content: 'AI-Assisted', x: 101.75, y: 46.36, rotation: -11 },
+  { id: 'design-workflows', content: 'Design Workflows', x: 1.68, y: 63.92, rotation: 3 },
+  { id: 'canva-experienced', content: 'Canva Experienced', x: 94.55, y: 59.19, rotation: 0 },
+  { id: '5-brands', content: '5+ BRANDS', x: 1.03, y: 50.19, rotation: 10 },
+  { id: 'internships', content: 'OPEN TO INTERNSHIPS', x: 49.1, y: 89.14, rotation: 0 },
+  { id: 'chatgpt-icon', type: 'image', content: chatgptIcon, x: 18.04, y: 35.33, rotation: -45, width: 31 }
 ];
 
 const DraggableTextPill = ({ pill, isEditMode, onUpdate, isSelected, onSelect }) => {
@@ -147,7 +147,7 @@ export default function Hero() {
 
   useEffect(() => {
     if (import.meta.env.DEV) {
-      const saved = localStorage.getItem('heroTextPillsConfigV2');
+      const saved = localStorage.getItem('heroTextPillsConfigV3');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
@@ -167,7 +167,7 @@ export default function Hero() {
     setPills(prev => {
       const next = prev.map(p => p.id === id ? { ...p, ...updates } : p);
       if (import.meta.env.DEV) {
-        localStorage.setItem('heroTextPillsConfigV2', JSON.stringify(next));
+        localStorage.setItem('heroTextPillsConfigV3', JSON.stringify(next));
       }
       return next;
     });
