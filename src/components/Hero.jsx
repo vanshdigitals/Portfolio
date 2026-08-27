@@ -1,9 +1,10 @@
-import { Fragment } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import chatgptIcon from '../assets/Chatgpt.png';
 import canvaIcon from '../assets/Canva.png';
 import photoshopIcon from '../assets/Photoshop.png';
 import illustratorIcon from '../assets/Ilustrator.png';
 
+// ── MARQUEE CONTENT ──────────────────────────────────────────────────────────
 const marqueeItems = [
   "SOCIAL MEDIA DESIGN",
   "CAROUSEL DESIGN",
@@ -34,93 +35,280 @@ const MarqueeContent = ({ ariaHidden = false }) => (
   </span>
 );
 
+// ── BADGE DATA ───────────────────────────────────────────────────────────────
+const defaultBadges = [
+  // MOBILE ICONS
+  {
+    id: 'chatgpt-mobile',
+    type: 'image',
+    content: chatgptIcon,
+    x: 5, y: 38, rotation: -45,
+    visibility: 'sm:hidden',
+    className: 'w-[31%] aspect-square object-contain drop-shadow-md'
+  },
+  {
+    id: 'canva-mobile',
+    type: 'image',
+    content: canvaIcon,
+    x: 81, y: 35, rotation: 22,
+    visibility: 'sm:hidden',
+    className: 'w-[26%] aspect-square object-contain drop-shadow-md'
+  },
+  {
+    id: 'photoshop-mobile',
+    type: 'image',
+    content: photoshopIcon,
+    x: -9, y: 78, rotation: -80,
+    visibility: 'sm:hidden',
+    className: 'w-[25%] aspect-square object-contain drop-shadow-md'
+  },
+  {
+    id: 'illustrator-mobile',
+    type: 'image',
+    content: illustratorIcon,
+    x: 109, y: 72, rotation: 78,
+    visibility: 'sm:hidden',
+    className: 'w-[25%] aspect-square object-contain drop-shadow-md'
+  },
+  // MOBILE TEXT PILLS
+  {
+    id: 'ai-assisted-mobile',
+    type: 'text',
+    content: 'AI-Assisted',
+    x: -12, y: 55, rotation: -1,
+    visibility: 'sm:hidden',
+    className: 'bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap font-heading font-bold text-black text-[10px] leading-none tracking-tight'
+  },
+  {
+    id: 'design-workflows-mobile',
+    type: 'text',
+    content: 'Design Workflows',
+    x: -15, y: 62, rotation: 0,
+    visibility: 'sm:hidden',
+    className: 'bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap font-heading font-bold text-black text-[10px] leading-none tracking-tight'
+  },
+  {
+    id: 'canva-experienced-mobile',
+    type: 'text',
+    content: 'Canva Experienced',
+    x: 110, y: 47, rotation: 40,
+    visibility: 'sm:hidden',
+    className: 'bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap font-heading font-bold text-black text-[10px] leading-none tracking-tight'
+  },
+  {
+    id: '3-yrs-mobile',
+    type: 'text',
+    content: '3+ Yrs',
+    x: 105, y: 55, rotation: 3,
+    visibility: 'sm:hidden',
+    className: 'bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap font-heading font-bold text-black text-[10px] leading-none tracking-tight'
+  },
+  // DESKTOP ICONS
+  {
+    id: 'chatgpt-desktop',
+    type: 'image',
+    content: chatgptIcon,
+    x: 15, y: 22, rotation: 0,
+    visibility: 'hidden sm:block',
+    className: 'w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md'
+  },
+  {
+    id: 'canva-desktop',
+    type: 'image',
+    content: canvaIcon,
+    x: 85, y: 22, rotation: 0,
+    visibility: 'hidden sm:block',
+    className: 'w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md'
+  },
+  {
+    id: 'photoshop-desktop',
+    type: 'image',
+    content: photoshopIcon,
+    x: 15, y: 72, rotation: -80,
+    visibility: 'hidden sm:block',
+    className: 'w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md'
+  },
+  {
+    id: 'illustrator-desktop',
+    type: 'image',
+    content: illustratorIcon,
+    x: 85, y: 72, rotation: 78,
+    visibility: 'hidden sm:block',
+    className: 'w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md'
+  }
+];
+
+// ── DRAGGABLE BADGE COMPONENT ────────────────────────────────────────────────
+const DraggableBadge = ({ badge, isEditMode, onUpdate }) => {
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef(null);
+  
+  const handlePointerDown = (e) => {
+    if (!isEditMode) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+    e.target.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDragging || !isEditMode) return;
+    
+    // Find the portrait container (parent of all badges)
+    const container = e.target.closest('.badge-container');
+    if (!container) return;
+    
+    const rect = container.getBoundingClientRect();
+    
+    // Calculate new percentages
+    const newX = ((e.clientX - rect.left) / rect.width) * 100;
+    const newY = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    onUpdate(badge.id, {
+      x: Number(newX.toFixed(2)),
+      y: Number(newY.toFixed(2))
+    });
+  };
+
+  const handlePointerUp = (e) => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    e.target.releasePointerCapture(e.pointerId);
+  };
+
+  const handleWheel = (e) => {
+    if (!isEditMode) return;
+    e.preventDefault();
+    // Adjust rotation by 1 degree per tick
+    const delta = Math.sign(e.deltaY) * 1;
+    onUpdate(badge.id, { rotation: badge.rotation + delta });
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onWheel={handleWheel}
+      className={`absolute z-20 ${badge.visibility} ${isEditMode ? 'cursor-move touch-none ring-1 ring-blue-500/50 hover:ring-2 hover:ring-blue-500' : 'pointer-events-none'}`}
+      style={{
+        left: `${badge.x}%`,
+        top: `${badge.y}%`,
+        transform: `translate(-50%, -50%) rotate(${badge.rotation}deg)`,
+        // In prod, let the normal float animation run on the parent container if needed, 
+        // but since these had `pointer-events-auto` originally we preserve that if needed
+        pointerEvents: isEditMode ? 'auto' : 'none'
+      }}
+    >
+      {badge.type === 'image' ? (
+        <img src={badge.content} alt={badge.id} className={badge.className} draggable={false} />
+      ) : (
+        <div className={badge.className}>
+          {badge.content}
+        </div>
+      )}
+      
+      {/* Dev Tooltip */}
+      {isEditMode && (
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded pointer-events-none whitespace-nowrap z-50">
+          x:{badge.x} y:{badge.y} r:{badge.rotation}°
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ── HERO COMPONENT ───────────────────────────────────────────────────────────
 export default function Hero() {
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [badges, setBadges] = useState(defaultBadges);
+
+  // Load from localStorage in DEV
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      const saved = localStorage.getItem('heroBadgesConfig');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          // Merge with defaults in case we added new ones
+          const merged = defaultBadges.map(defBadge => {
+            const found = parsed.find(b => b.id === defBadge.id);
+            return found ? { ...defBadge, x: found.x, y: found.y, rotation: found.rotation } : defBadge;
+          });
+          setBadges(merged);
+        } catch (e) {
+          console.error("Failed to parse saved badges", e);
+        }
+      }
+    }
+  }, []);
+
+  const handleUpdateBadge = (id, updates) => {
+    setBadges(prev => {
+      const next = prev.map(b => b.id === id ? { ...b, ...updates } : b);
+      if (import.meta.env.DEV) {
+        localStorage.setItem('heroBadgesConfig', JSON.stringify(next));
+      }
+      return next;
+    });
+  };
+
+  const handleExport = () => {
+    const cleanData = badges.map(({ id, x, y, rotation }) => ({ id, x, y, rotation }));
+    const json = JSON.stringify(cleanData, null, 2);
+    console.log("=== HERO BADGES EXPORT ===");
+    console.log(json);
+    navigator.clipboard.writeText(json).then(() => {
+      alert("Copied to clipboard! Paste this into the defaultBadges array to lock positions.");
+    });
+  };
+
   return (
     <section 
       id="hero" 
       className="relative w-full mt-16 lg:mt-24 pt-0 pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] border-b border-border transition-colors duration-[320ms] overflow-x-clip"
       style={{ scrollMarginTop: 'var(--header-h, 64px)' }}
     >
-      {/*
-        ── COMPOSITION GROUP ──────────────────────────────────────────────────────
-        Single-column CSS grid. All layers share col-start-1 row-start-1 so they
-        stack naturally. Height is content-driven (no fixed heights).
-
-        max-w-[1600px] caps the composition so ultra-wide / TV screens stay
-        controlled and centered.
-
-        px-4 sm:px-6 gives equal breathing room on both sides at all widths.
-      */}
-      <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 grid grid-cols-1 items-start isolate">
-
-        {/*
-          ── PORTFOLIO WORDMARK ── Layer z-10 (behind portrait) ────────────────
-          flex + justify-center ensures the h1's fit-content bounding box is
-          optically centered — fixing any glyph-metric sidebearing imbalance
-          that text-align:center alone cannot correct.
-        */}
-        <div className="col-start-1 row-start-1 z-10 w-full justify-self-center self-start flex justify-center">
-          {/*
-            OPTICAL CENTERING CORRECTION
-            Furgatorio Titling's final "O" carries extra right-side advance space,
-            so the text bounding box centres ~1% left of the visible glyph edges.
-            translateX(0.8%) shifts the visual rendering right without touching layout.
-
-            Applied to a wrapper div — NOT the h1 — because the h1's portfolio-init
-            animation uses transform and ends with `translateX(0)` in forwards fill mode,
-            which would override any base transform on the h1 itself.
-
-            The percentage is relative to this div's own width (= rendered text width),
-            so the correction scales proportionally with font size at every breakpoint:
-              375px  → text ≈ 368px → shift ≈ 2.9px
-              768px  → text ≈ 752px → shift ≈ 6.0px
-              1440px → text ≈ 1415px → shift ≈ 11.3px
-          */}
-          <div style={{ transform: 'translateX(0.8%)' }}>
-            <h1
-              className="font-furgatorio portfolio-wordmark portfolio-gradient leading-[1.1] m-0 select-none whitespace-nowrap animate-portfolio-init motion-safe:animate-portfolio-flicker"
+      {import.meta.env.DEV && (
+        <div className="absolute top-4 left-4 z-50 flex gap-2">
+          <button 
+            onClick={() => setIsEditMode(!isEditMode)}
+            className={`px-3 py-1.5 text-xs font-bold rounded ${isEditMode ? 'bg-blue-600 text-white' : 'bg-white/80 text-black border border-black/10'}`}
+          >
+            {isEditMode ? 'Finish Editing Layout' : 'Edit Hero Layout'}
+          </button>
+          {isEditMode && (
+            <button 
+              onClick={handleExport}
+              className="px-3 py-1.5 text-xs font-bold rounded bg-green-600 text-white"
             >
+              Export JSON
+            </button>
+          )}
+        </div>
+      )}
+
+      <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 grid grid-cols-1 items-start isolate">
+        
+        {/* PORTFOLIO WORDMARK */}
+        <div className="col-start-1 row-start-1 z-10 w-full justify-self-center self-start flex justify-center">
+          <div style={{ transform: 'translateX(0.8%)' }}>
+            <h1 className="font-furgatorio portfolio-wordmark portfolio-gradient leading-[1.1] m-0 select-none whitespace-nowrap animate-portfolio-init motion-safe:animate-portfolio-flicker">
               PORTFOLIO
             </h1>
           </div>
         </div>
 
-        {/*
-          ── PORTRAIT + ICONS ── Layer z-20 ────────────────────────────────────
-
-          TWO-LEVEL WRAPPER PATTERN:
-
-          Outer div  → handles vertical offset from PORTFOLIO so the portrait
-                       slides into its correct overlap position. Width here
-                       controls the portrait's rendered size.
-
-          Inner div  → `relative` with `w-full` — this becomes the positioning
-                       parent for ALL four icons. Icon `top/left/right` percentages
-                       are calculated against the portrait IMAGE bounds (not the
-                       padded outer div), so icons track portrait anatomy at every
-                       breakpoint.
-
-          RESPONSIVE PORTRAIT SIZING:
-            mobile  (<640px):  80% of content area — slightly smaller than before
-            sm      (640px+):  70%
-            md      (768px+):  60%
-            lg      (1024px+): 50%
-            xl cap:            580px max — prevents infinite growth on large screens
-
-          VERTICAL OFFSET (pt-*):
-            Controls how far the portrait slides down beneath PORTFOLIO.
-            Smaller values = tighter connection between text and portrait.
-        */}
+        {/* PORTRAIT + ICONS */}
         <div
           className="col-start-1 row-start-1 z-20 pointer-events-none
                      w-[58%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
                      justify-self-center self-start
                      pt-[18vw] sm:pt-[18vw] md:pt-[18vw] lg:pt-[19vw] xl:pt-[270px]"
         >
-          {/* Portrait Container */}
-          <div className="relative w-full scale-[1.11] origin-[50%_15%] sm:transform-none">
-
-            {/* Portrait image — renders at natural aspect ratio via h-auto. Width/Height attributes prevent layout shift. */}
+          {/* Portrait Container - ADDED badge-container class for bounds tracking */}
+          <div className="relative w-full scale-[1.11] origin-[50%_15%] sm:transform-none badge-container">
             <img
               src="/images/hero-portrait.webp"
               alt="Vansh Gupta"
@@ -131,101 +319,19 @@ export default function Hero() {
               draggable="false"
             />
 
-            {/*
-              ICON POSITIONS — anchored to portrait image anatomy:
-              
-              top: 22% → shoulder/head-transition zone (below face, at collar)
-              top: 72% → lower arm / hand zone
-              left/right: 10% → near the silhouette edges without face overlap
-
-              -translate-y-1/2 vertically centers each icon on its anchor row.
-
-              ICON SIZING — clamp():
-                mobile  (375px):  5vw = 18.75px → clamp min 36px applies
-                tablet  (768px):  5vw = 38.4px  → ~38px
-                desktop (1440px): 5vw = 72px    → clamp max 68px applies
-            */}
-
-            {/* ── MOBILE ONLY: ICONS ON SHOULDERS ── */}
-            {/* ChatGPT (Mobile) — upper-left / left shoulder */}
-            <img
-              src={chatgptIcon}
-              alt="ChatGPT"
-              className="sm:hidden absolute top-[38%] left-[-10%] -translate-y-1/2 -rotate-45 w-[31%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-
-            {/* Canva (Mobile) — upper-right / right shoulder */}
-            <img
-              src={canvaIcon}
-              alt="Canva"
-              className="sm:hidden absolute top-[35%] right-[6%] -translate-y-1/2 rotate-[22deg] w-[26%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-
-            {/* AI Text Pills (Mobile) */}
-            <div className="sm:hidden absolute top-[60%] left-[-25%] -mt-[4px] z-20 flex flex-col items-start gap-1.5 -translate-y-1/2 rotate-[3deg]">
-              <div className="-rotate-[4deg] translate-y-[2px] mb-2 flex items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
-                <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">AI-Assisted</span>
-              </div>
-              <div className="-ml-2 rotate-[3deg] flex items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
-                <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">Design Workflows</span>
-              </div>
-            </div>
-
-            {/* Canva Text Pills (Mobile) */}
-            <div className="sm:hidden absolute top-[52%] right-[-25%] z-20 flex flex-col items-end gap-[2px] -translate-y-1/2 -rotate-[3deg]">
-              <div className="rotate-[43deg] -mt-2 flex items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
-                <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">Canva Experienced</span>
-              </div>
-              <div className="rotate-[6deg] mr-6 flex items-center justify-center bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3 whitespace-nowrap">
-                <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">3+ Yrs</span>
-              </div>
-            </div>
-
-            {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
-            {/* ChatGPT — upper-left */}
-            <img
-              src={chatgptIcon}
-              alt="ChatGPT"
-              className="hidden sm:block absolute top-[22%] left-[10%] -translate-y-1/2 w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-            {/* Canva — upper-right */}
-            <img
-              src={canvaIcon}
-              alt="Canva"
-              className="hidden sm:block absolute top-[22%] right-[10%] -translate-y-1/2 w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-
-            {/* ── RESPONSIVE ICONS: PHOTOSHOP & ILLUSTRATOR ── */}
-            {/* Photoshop — lower-left, arm/hand region. Pushed further out and larger on mobile. */}
-            <img
-              src={photoshopIcon}
-              alt="Photoshop"
-              className="absolute top-[78%] sm:top-[72%] left-[-22%] sm:left-[10%] -translate-y-1/2 -rotate-[80deg]
-                         w-[25%] aspect-square sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)] sm:aspect-auto
-                         object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-
-            {/* Illustrator — lower-right, arm/hand region. Pushed further out and larger on mobile. */}
-            <img
-              src={illustratorIcon}
-              alt="Illustrator"
-              className="absolute top-[72%] right-[-22%] sm:right-[10%] -translate-y-1/2 rotate-[78deg]
-                         w-[25%] aspect-square sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)] sm:aspect-auto
-                         object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-
+            {/* DYNAMIC BADGES */}
+            {badges.map((badge) => (
+              <DraggableBadge 
+                key={badge.id}
+                badge={badge} 
+                isEditMode={isEditMode} 
+                onUpdate={handleUpdateBadge} 
+              />
+            ))}
           </div>
         </div>
 
-        {/*
-          ── YELLOW MARQUEE STRIP ── Layer z-30 ────────────────────────────────
-          Sits above portrait (z-20) at the bottom of the composition.
-          
-          h-[clamp(50px,8.5vw,90px)]:
-            min 50px (was 44px) — thicker on mobile for better readability
-            scale 8.5vw on tablet/desktop
-            max 90px for large screens
-        */}
+        {/* YELLOW MARQUEE STRIP */}
         <div className="absolute inset-x-0 bottom-[3%] translate-y-[28px] sm:translate-y-0 z-30 pointer-events-none">
           <div
             className="
@@ -247,7 +353,7 @@ export default function Hero() {
             </div>
           </div>
             
-          {/* DUPLICATE MARQUEE (-6deg, normal, shifted down more, reversed direction) */}
+          {/* DUPLICATE MARQUEE */}
           <div
             className="
               absolute left-1/2 -translate-x-1/2 top-[14.5vw]
