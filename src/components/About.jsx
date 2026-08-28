@@ -55,12 +55,12 @@ export default function About() {
           {/* Table-base shadow (left-center) */}
           <div 
             aria-hidden="true"
-            className="absolute bottom-[4%] left-[33%] -translate-x-1/2 w-[25%] h-[18px] rounded-[50%] blur-[7px] pointer-events-none z-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.40)_0%,rgba(0,0,0,0)_72%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.30)_0%,rgba(0,0,0,0)_72%)]"
+            className="absolute bottom-[6%] left-[26%] -translate-x-1/2 w-[25%] h-[18px] rounded-[50%] blur-[7px] pointer-events-none z-0 shadow-table"
           />
           {/* Shoes shadow (right side) */}
           <div 
             aria-hidden="true"
-            className="absolute bottom-[2%] left-[75%] -translate-x-1/2 w-[32%] h-[24px] rounded-[50%] blur-[7px] pointer-events-none z-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.42)_0%,rgba(0,0,0,0)_72%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.32)_0%,rgba(0,0,0,0)_72%)]"
+            className="absolute bottom-[1%] left-[78%] -translate-x-1/2 w-[32%] h-[24px] rounded-[50%] blur-[7px] pointer-events-none z-0 shadow-shoes"
           />
         </div>
 

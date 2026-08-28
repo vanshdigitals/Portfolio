@@ -445,3 +445,17 @@
 ::view-transition-old(root) {
   z-index: 0;
 }
+
+.shadow-table {
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0) 72%);
+}
+.dark .shadow-table {
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0) 72%);
+}
+
+.shadow-shoes {
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0) 72%);
+}
+.dark .shadow-shoes {
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0) 72%);
+}
