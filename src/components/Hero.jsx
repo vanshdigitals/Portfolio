@@ -17,13 +17,13 @@ const marqueeItems = [
 const MarqueeContent = ({ ariaHidden = false }) => (
   <span
     aria-hidden={ariaHidden}
-    className={`flex items-center whitespace-nowrap font-heading font-bold uppercase text-black tracking-wide text-[9vw] sm:text-[clamp(26px,4vw,50px)] ${ariaHidden ? 'motion-reduce:hidden' : ''}`}
+    className={`flex items-center whitespace-nowrap font-heading font-bold uppercase text-white dark:text-[#FFD722] tracking-wide text-[9vw] sm:text-[clamp(26px,4vw,50px)] ${ariaHidden ? 'motion-reduce:hidden' : ''}`}
   >
     {marqueeItems.map((item, idx) => (
       <Fragment key={idx}>
         <span>{item}</span>
         <svg 
-          className="w-[0.8em] h-[0.8em] text-[#0B7FF3] mx-[0.2em] shrink-0" 
+          className="w-[0.8em] h-[0.8em] text-[#FFD722] dark:text-white mx-[0.2em] shrink-0" 
           viewBox="0 0 24 24" 
           fill="currentColor"
         >
@@ -382,7 +382,7 @@ export default function Hero() {
               absolute left-1/2 -translate-x-1/2
               w-[120vw] max-w-none
               rotate-0
-              bg-[#FFD722]
+              bg-[#111214] dark:bg-[#1A1A1D]
               flex items-center
               h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
               mt-[1.2vw] sm:mt-0
@@ -403,7 +403,7 @@ export default function Hero() {
               absolute left-1/2 -translate-x-1/2 top-[14.5vw]
               w-[120vw] max-w-none
               -rotate-[9deg]
-              bg-[#FFD722]
+              bg-[#111214] dark:bg-[#1A1A1D]
               flex items-center
               h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
               mt-[1.2vw] sm:mt-0
