@@ -19,6 +19,7 @@
   --font-mono: "Inter Mono", "Roboto Mono", monospace;
 
   --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee-mobile: marquee 38s linear infinite;
   @keyframes marquee {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
