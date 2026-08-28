@@ -402,7 +402,7 @@ export default function Hero() {
             className="
               absolute left-1/2 -translate-x-1/2 top-[14.5vw]
               w-[120vw] max-w-none
-              -rotate-[6deg]
+              -rotate-[9deg]
               bg-[#FFD722]
               flex items-center
               h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
