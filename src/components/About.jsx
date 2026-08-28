@@ -50,12 +50,17 @@ export default function About() {
           <img 
             src={aboutStand} 
             alt="Vansh standing by desk" 
-            className="w-full h-auto object-contain relative z-10 drop-shadow-[0_12px_14px_rgba(0,0,0,0.12)]"
+            className="w-full h-auto object-contain relative z-10 drop-shadow-[0_10px_12px_rgba(0,0,0,0.14)]"
           />
-          {/* Ground Shadow */}
+          {/* Table-base shadow (left-center) */}
           <div 
             aria-hidden="true"
-            className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[60%] h-[22px] rounded-[50%] blur-[6px] pointer-events-none z-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.28)_0%,rgba(0,0,0,0)_70%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.15)_0%,rgba(0,0,0,0)_70%)]"
+            className="absolute bottom-[4%] left-[33%] -translate-x-1/2 w-[25%] h-[18px] rounded-[50%] blur-[7px] pointer-events-none z-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.40)_0%,rgba(0,0,0,0)_72%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.30)_0%,rgba(0,0,0,0)_72%)]"
+          />
+          {/* Shoes shadow (right side) */}
+          <div 
+            aria-hidden="true"
+            className="absolute bottom-[2%] left-[75%] -translate-x-1/2 w-[32%] h-[24px] rounded-[50%] blur-[7px] pointer-events-none z-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.42)_0%,rgba(0,0,0,0)_72%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.32)_0%,rgba(0,0,0,0)_72%)]"
           />
         </div>
 
