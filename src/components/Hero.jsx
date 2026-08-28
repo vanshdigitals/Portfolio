@@ -292,7 +292,7 @@ export default function Hero() {
               alt="Vansh Gupta"
               width="1377"
               height="2000"
-              fetchpriority="high"
+              fetchPriority="high"
               className="w-full h-auto object-contain block select-none pointer-events-none"
               draggable="false"
             />
