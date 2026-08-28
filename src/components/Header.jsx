@@ -85,11 +85,51 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const toggleTheme = () => {
-    const next = !isDark;
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('theme', next ? 'dark' : 'light');
-    setIsDark(next);
+  const toggleTheme = (e) => {
+    // 1. Capture click coordinates (fallback to center of screen)
+    const x = e?.clientX ?? window.innerWidth / 2;
+    const y = e?.clientY ?? window.innerHeight / 2;
+    
+    // 2. Compute end radius to farthest corner
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const applyTheme = () => {
+      const next = !isDark;
+      document.documentElement.classList.toggle('dark', next);
+      localStorage.setItem('theme', next ? 'dark' : 'light');
+      setIsDark(next);
+    };
+
+    // 3. Graceful fallback (unsupported or prefers-reduced-motion)
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || prefersReducedMotion) {
+      applyTheme();
+      return;
+    }
+
+    // 4. Start view transition
+    const transition = document.startViewTransition(() => {
+      applyTheme();
+    });
+
+    transition.ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`
+          ]
+        },
+        {
+          duration: 500,
+          easing: 'cubic-bezier(.4,0,.2,1)',
+          pseudoElement: '::view-transition-new(root)'
+        }
+      );
+    });
   };
 
   // ── Mobile Menu Effects (Scroll lock, Esc) ─────────────────────────────
