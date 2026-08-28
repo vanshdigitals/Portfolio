@@ -369,17 +369,15 @@ export default function Hero() {
           </div>
         </div>
 
-        {/*
-          ── YELLOW MARQUEE STRIP ── Layer z-30 ────────────────────────────────
-          Sits above portrait (z-20) at the bottom of the composition.
-          
-          h-[clamp(50px,8.5vw,90px)]:
-            min 50px (was 44px) — thicker on mobile for better readability
-            scale 8.5vw on tablet/desktop
-            max 90px for large screens
-        */}
-        <div className="absolute inset-x-0 bottom-[3%] translate-y-[28px] sm:translate-y-0 z-30 pointer-events-none">
-          <div
+      </div>
+
+      {/*
+        ── YELLOW MARQUEE STRIP ── Layer z-30 ────────────────────────────────
+        On mobile: positioned relative at the bottom of the section (acting as the top boundary of About).
+        On desktop: absolute positioned inside Hero.
+      */}
+      <div className="relative w-full h-[29vw] mt-12 mb-[50px] sm:absolute sm:w-auto sm:h-auto sm:mt-0 sm:mb-0 sm:inset-x-0 sm:bottom-[3%] sm:translate-y-0 z-30 pointer-events-none">
+        <div
             className="
               absolute left-1/2 -translate-x-1/2
               w-[120vw] max-w-none
@@ -420,8 +418,6 @@ export default function Hero() {
             </div>
           </div>
         </div>
-
-      </div>
     </section>
   );
 }
