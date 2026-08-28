@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, ChevronRight, Smartphone } from 'lucide-react';
 import { motion, useScroll, useSpring, useTransform, useReducedMotion } from 'framer-motion';
 import imgRanjeet from '../assets/card-ranjeet.jpg';
 import imgBuilders from '../assets/card-builders.jpg';
@@ -150,9 +151,160 @@ const BRANDS = [
   }
 ];
 
+// Inner Carousel Component (Phase 3 & 4)
+function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReducedMotion }) {
+  const containerRef = useRef(null);
+  const scrollRef = useRef(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const interactionTimeoutRef = useRef(null);
+
+  // Intersection observer to track visibility (Phase 4)
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      setIsVisible(entries[0].isIntersecting);
+    }, {
+      threshold: 0.6 // Card must be 60% visible to autoplay
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  const rafRef = useRef(null);
+
+  // Handle manual interaction to pause autoplay (Phase 4)
+  const handleInteraction = useCallback(() => {
+    setIsInteracting(true);
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
+    }
+    interactionTimeoutRef.current = setTimeout(() => {
+      setIsInteracting(false);
+    }, 5000); // Resume autoplay after 5 seconds idle
+  }, []);
+
+  const handleScroll = () => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      if (!scrollRef.current) return;
+      const scrollLeft = scrollRef.current.scrollLeft;
+      const width = scrollRef.current.clientWidth;
+      // Calculate the closest slide index based on scroll position
+      const newActive = Math.round(scrollLeft / width);
+      if (newActive !== activeSlide && newActive >= 0 && newActive < carousel.slides.length) {
+        setActiveSlide(newActive);
+      }
+    });
+  };
+
+  const scrollTo = (idx) => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollTo({
+      left: idx * scrollRef.current.clientWidth,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleBtnClick = (idx) => {
+    handleInteraction();
+    scrollTo(idx);
+  };
+
+  // Autoplay Effect (Phase 4)
+  useEffect(() => {
+    if (prefersReducedMotion || !isVisible || isInteracting) return;
+
+    const timer = setTimeout(() => {
+      if (activeSlide < carousel.slides.length - 1) {
+        scrollTo(activeSlide + 1);
+      } else {
+        if (onSequenceComplete) onSequenceComplete();
+      }
+    }, 3000); // Hold for 3 seconds
+
+    return () => clearTimeout(timer);
+  }, [activeSlide, isVisible, isInteracting, prefersReducedMotion, carousel.slides.length, onSequenceComplete]);
+
+  return (
+    <div ref={containerRef} className="snap-start shrink-0 relative flex flex-col group/card" onTouchStart={handleInteraction}>
+      {/* Card (FRONT) */}
+      <div className="relative w-[65vw] max-w-[260px] rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 flex flex-col shadow-sm z-10">
+        
+        {/* Swipable Artwork Area */}
+        <div className="aspect-[4/5] w-full relative bg-secondary-bg">
+          <div 
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="w-full h-full flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          >
+            {carousel.slides.map((slide, i) => (
+              <img 
+                key={i}
+                src={slide}
+                alt={`${carousel.title} slide ${i + 1}`}
+                className="w-full h-full object-cover shrink-0 snap-center"
+                loading="lazy"
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Text and Controls */}
+        <div className="p-4 flex-1 flex flex-col justify-center">
+          <div className="mb-4 flex flex-col items-start">
+            <p className="font-heading text-lg font-bold text-text-primary leading-tight mb-1">
+              {carousel.title}
+            </p>
+            <p className="font-heading font-normal text-[11px] text-text-muted mb-3">
+              {String(index + 1).padStart(2, '0')} &middot; Carousel
+            </p>
+            <button 
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary transition-colors"
+            >
+              <Smartphone size={12} />
+              Mobile Mockup View
+            </button>
+          </div>
+          
+          <div className="flex items-center justify-between border-t border-border/40 pt-3 mt-auto">
+            <div className="font-heading font-medium text-[11px] text-text-muted tracking-widest">
+              {String(activeSlide + 1).padStart(2, '0')} / {String(carousel.slides.length).padStart(2, '0')}
+            </div>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => handleBtnClick(activeSlide - 1)}
+                disabled={activeSlide === 0}
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-bg border border-border/60 text-text-primary disabled:opacity-30 transition-opacity"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft size={14} />
+              </button>
+              <button 
+                onClick={() => handleBtnClick(activeSlide + 1)}
+                disabled={activeSlide === carousel.slides.length - 1}
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-bg border border-border/60 text-text-primary disabled:opacity-30 transition-opacity"
+                aria-label="Next slide"
+              >
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  );
+}
+
 // Reusable component for each project node to track its own scroll progress
 function ProjectNode({ brand, index }) {
   const nodeRef = useRef(null);
+  const outerTrackRef = useRef(null);
   const prefersReducedMotion = useReducedMotion();
   
   // Track this specific node's intersection
@@ -167,14 +319,14 @@ function ProjectNode({ brand, index }) {
   const numberScale = useTransform(scrollYProgress, [0.8, 1], [1, 1.05]);
 
   return (
-    <div ref={nodeRef} className="relative group">
+    <div ref={nodeRef} className="relative group z-10 pl-[44px] md:pl-0">
       
       {/* --- DESKTOP NODE (Untouched) --- */}
       <div className="hidden md:block absolute -left-[54px] top-2 w-3 h-3 rounded-full bg-border group-hover:bg-[#007BFF] dark:group-hover:bg-[#FFD722] transition-colors duration-300 ring-4 ring-bg" />
 
       {/* --- MOBILE NODE (Numbered Circle) --- */}
       <motion.div 
-        className="md:hidden absolute -left-[40px] top-1 w-8 h-8 rounded-full bg-[#FFD722] shadow-sm flex items-center justify-center z-10 origin-center"
+        className="md:hidden absolute left-[20px] -translate-x-1/2 top-1 w-8 h-8 rounded-full bg-[#FFD722] shadow-sm flex items-center justify-center z-10 origin-center"
         style={prefersReducedMotion ? {} : { boxShadow: useTransform(scrollYProgress, [0.8, 1], ["0 0 0px rgba(0,123,255,0)", "0 0 8px rgba(0,123,255,0.4)"]) }}
       >
         {/* Subtle animated ring on active */}
@@ -243,39 +395,35 @@ function ProjectNode({ brand, index }) {
         </div>
 
         {/* Horizontal Scroll Track (MOBILE ONLY) */}
-        <div className="md:hidden relative -ml-10 -mr-6 mt-2">
-          {/* Timeline Mask Layer - softly hides the vertical line behind the track */}
-          <div className="absolute top-0 bottom-0 left-0 w-8 bg-bg z-0" />
-          <div className="absolute top-0 bottom-0 left-8 w-12 bg-gradient-to-r from-bg to-transparent z-0" />
+        <div className="md:hidden relative mt-2">
+          {/* Edge Fade Masks (Fix 2) */}
+          <div className="absolute left-0 top-0 bottom-0 w-[32px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+          <div className="absolute right-0 top-0 bottom-0 w-[32px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
           
-          <div className="relative flex overflow-x-auto snap-x snap-mandatory pb-6 gap-4 pl-10 pr-10 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div ref={outerTrackRef} className="relative flex overflow-x-auto snap-x snap-mandatory pb-6 gap-4 pr-6 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {brand.carousels ? (
               brand.carousels.map((carousel, idx) => (
-                <div key={carousel.id} className="snap-start shrink-0 w-[82vw] max-w-[320px] rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 flex flex-col shadow-sm">
-                  <div className="aspect-[4/5] w-full relative bg-secondary-bg">
-                    <img 
-                      src={carousel.slides[0]} 
-                      alt={carousel.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="absolute top-3 right-3 bg-bg/90 backdrop-blur-md px-2.5 py-1 rounded-full font-heading font-normal text-[10px] font-bold text-text-primary shadow-sm border border-border/50">
-                      1/{carousel.slides.length}
-                    </div>
-                  </div>
-                  <div className="p-5 flex-1 flex flex-col justify-center">
-                    <p className="font-heading text-lg font-bold text-text-primary leading-tight mb-1">
-                      {carousel.title}
-                    </p>
-                    <p className="font-heading font-normal text-[11px] text-text-muted">
-                      {String(idx + 1).padStart(2, '0')} &middot; Carousel
-                    </p>
-                  </div>
-                </div>
+                <MobileInnerCarousel 
+                  key={carousel.id} 
+                  carousel={carousel} 
+                  index={idx} 
+                  prefersReducedMotion={prefersReducedMotion}
+                  onSequenceComplete={() => {
+                    if (!outerTrackRef.current) return;
+                    const track = outerTrackRef.current;
+                    const children = track.children;
+                    if (idx + 1 < children.length) {
+                      children[idx + 1].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    }
+                  }}
+                />
               ))
             ) : (
-              <div className="snap-start shrink-0 w-[82vw] max-w-[320px] rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 aspect-[4/5] relative shadow-sm">
-                <img src={brand.image} alt={brand.name} className="w-full h-full object-cover" loading="lazy" />
+              <div className="snap-start shrink-0 relative flex flex-col group/card">
+                {/* Card (FRONT) */}
+                <div className="relative w-[65vw] max-w-[260px] rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 aspect-[4/5] shadow-sm z-10">
+                  <img src={brand.image} alt={brand.name} className="w-full h-full object-cover" loading="lazy" />
+                </div>
               </div>
             )}
           </div>
@@ -324,15 +472,14 @@ export default function SelectedWork() {
       </div>
 
       {/* Timeline Container */}
-      {/* Mobile: pl-10 to move it left and align with the heading. Desktop: keeps pl-12 and border-l */}
-      <div ref={containerRef} className="relative pl-10 md:pl-12 md:border-l md:border-border/60 pb-16 space-y-24 md:space-y-32">
+      <div ref={containerRef} className="relative z-0 md:pl-12 md:border-l md:border-border/60 pb-16 space-y-24 md:space-y-32">
         
         {/* --- MOBILE TIMELINE RAIL & LASER (Hidden on Desktop) --- */}
-        <div className="md:hidden absolute left-[15px] top-4 bottom-0 w-[1px] bg-border/40" />
+        <div className="md:hidden absolute left-[20px] top-4 bottom-0 w-[1px] bg-border/40 z-0" />
         
         {!prefersReducedMotion && (
           <motion.div 
-            className="md:hidden absolute left-[15px] top-4 bottom-0 w-[2px] -ml-[0.5px] bg-[#007BFF] shadow-[0_0_8px_rgba(0,123,255,0.4)] origin-top z-0"
+            className="md:hidden absolute left-[20px] top-4 bottom-0 w-[2px] -ml-[0.5px] bg-[#007BFF] shadow-[0_0_8px_rgba(0,123,255,0.4)] origin-top z-0"
             style={{ scaleY: smoothProgress }}
           />
         )}
