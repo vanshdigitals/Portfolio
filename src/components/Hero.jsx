@@ -391,7 +391,7 @@ export default function Hero() {
               overflow-hidden
             "
           >
-            <div className="flex w-max shrink-0 motion-safe:animate-marquee will-change-transform">
+            <div className="flex w-max shrink-0 motion-safe:animate-marquee will-change-transform" style={{ animationDirection: 'reverse' }}>
               <MarqueeContent />
               <MarqueeContent ariaHidden={true} />
             </div>
@@ -412,7 +412,7 @@ export default function Hero() {
               overflow-hidden
             "
           >
-            <div className="flex w-max shrink-0 motion-safe:animate-marquee will-change-transform" style={{ animationDirection: 'reverse' }}>
+            <div className="flex w-max shrink-0 motion-safe:animate-marquee will-change-transform">
               <MarqueeContent />
               <MarqueeContent ariaHidden={true} />
             </div>
