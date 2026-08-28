@@ -42,12 +42,26 @@ export default function ArchiveCategories() {
     if (tabIndex !== -1) setActiveTab(tabIndex);
   }, []);
 
-  const handleTabClick = (index, id) => {
+  const handleTabClick = (index, id, isMobileScroll = false) => {
     setActiveTab(index);
     setAnimatingTab(id);
     setTimeout(() => setAnimatingTab(null), 300);
     // Update hash without scrolling
     window.history.replaceState(null, '', `#${id}`);
+
+    if (isMobileScroll) {
+      const contentWrapper = document.getElementById('category-content-wrapper');
+      if (contentWrapper) {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // Small timeout ensures the DOM has processed the click before scrolling
+        setTimeout(() => {
+          contentWrapper.scrollIntoView({
+            behavior: prefersReducedMotion ? 'auto' : 'smooth',
+            block: 'start'
+          });
+        }, 10);
+      }
+    }
   };
 
   return (
@@ -172,7 +186,7 @@ export default function ArchiveCategories() {
               aria-selected={isActive}
               aria-controls={`panel-${tab.id}`}
               id={`mobile-tab-${tab.id}`}
-              onClick={() => handleTabClick(idx, tab.id)}
+              onClick={() => handleTabClick(idx, tab.id, true)}
               className={`
                 group text-left w-full rounded-[18px] p-[14px] flex flex-col h-full
                 transition-all duration-300
@@ -220,7 +234,7 @@ export default function ArchiveCategories() {
       </div>
 
       {/* ── CATEGORY CONTENT (Swipe Wrapper) ──────────────────────────────── */}
-      <div className="w-full overflow-hidden relative">
+      <div id="category-content-wrapper" className="w-full overflow-hidden relative scroll-mt-[120px] md:scroll-mt-0">
         <div 
           className="flex w-full transition-transform duration-[400ms] ease-[cubic-bezier(.65,0,.35,1)] motion-reduce:transition-none"
           style={{ transform: `translateX(-${activeTab * 100}%)` }}
