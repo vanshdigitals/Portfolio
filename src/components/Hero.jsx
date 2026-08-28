@@ -185,7 +185,7 @@ export default function Hero() {
   return (
     <section 
       id="hero" 
-      className="relative w-full mt-16 lg:mt-24 pt-0 pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] border-b border-hairline transition-colors duration-[320ms] overflow-x-clip"
+      className="relative w-full mt-16 lg:mt-24 pt-0 pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-[320ms] overflow-x-clip"
       style={{ scrollMarginTop: 'var(--header-h, 64px)' }}
     >
       {import.meta.env.DEV && (
