@@ -198,7 +198,9 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
   const [isVisible, setIsVisible] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  
+  const [isDragging, setIsDragging] = useState(false); // 1:1 finger tracking active
+  const [dragOffset, setDragOffset] = useState(0);      // live px offset during drag
+
   const interactionTimeoutRef = useRef(null);
   const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
 
@@ -238,10 +240,12 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
     setIsTransitioning(true);
     setTimeout(() => {
       setIsTransitioning(false);
-    }, 450); // match transition duration roughly
+    }, 300); // match snap transition duration
   }, [isTransitioning, carousel.slides.length, handleInteraction]);
 
-  // Touch Handlers for 1:1 Swipe
+  // Touch Handlers — 1:1 finger tracking, decide target only on release
+  const SWIPE_THRESHOLD = 50; // px of horizontal travel to advance exactly one slide
+
   const handleTouchStart = (e) => {
     handleInteraction();
     if (isTransitioning) return;
@@ -252,22 +256,27 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
     };
   };
 
-  const handleTouchEnd = (e) => {
+  const handleTouchMove = (e) => {
     if (isTransitioning) return;
-    
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
-    const deltaX = touchStartRef.current.x - touchEndX;
-    const deltaY = Math.abs(touchStartRef.current.y - touchEndY);
-    const timeElapsed = Date.now() - touchStartRef.current.time;
+    const dx = e.touches[0].clientX - touchStartRef.current.x;
+    const dy = e.touches[0].clientY - touchStartRef.current.y;
+    // Engage horizontal drag only when the gesture is primarily horizontal
+    // (lets vertical page scrolling pass through untouched).
+    if (!isDragging && Math.abs(dx) <= Math.abs(dy)) return;
+    if (!isDragging) setIsDragging(true);
+    setDragOffset(dx); // track follows finger 1:1
+  };
 
-    // Must be a primarily horizontal swipe of at least 40px within 600ms
-    if (Math.abs(deltaX) > 40 && deltaY < 50 && timeElapsed < 600) {
-      if (deltaX > 0) {
-        goToSlide(activeSlide + 1); // Swipe left -> Next slide
-      } else {
-        goToSlide(activeSlide - 1); // Swipe right -> Prev slide
-      }
+  const handleTouchEnd = () => {
+    if (isTransitioning) return;
+    const dx = dragOffset;
+    setIsDragging(false);
+    setDragOffset(0); // release drag; goToSlide/return snaps with ease-out
+    // One intentional swipe = exactly one slide, regardless of velocity/length.
+    if (dx <= -SWIPE_THRESHOLD) {
+      goToSlide(activeSlide + 1); // dragged left -> next
+    } else if (dx >= SWIPE_THRESHOLD) {
+      goToSlide(activeSlide - 1); // dragged right -> prev
     }
   };
 
@@ -295,12 +304,13 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
         <div 
           className="w-full pt-[14px] px-[14px] pb-[8px] bg-secondary-bg relative touch-pan-y"
           onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
           <div className={`${carousel.id === 'RR-07' ? 'aspect-[3/4]' : 'aspect-[4/5]'} w-full rounded-xl overflow-hidden relative shadow-sm border border-border/20 bg-bg`}>
-            <div 
-              className={`flex w-full h-full ${!prefersReducedMotion ? 'transition-transform duration-[400ms] ease-[cubic-bezier(.34,1.4,.5,1)]' : ''}`}
-              style={{ transform: `translateX(-${activeSlide * 100}%)` }}
+            <div
+              className={`flex w-full h-full ${!prefersReducedMotion && !isDragging ? 'transition-transform duration-[300ms] ease-[cubic-bezier(.22,1,.36,1)]' : ''}`}
+              style={{ transform: `translateX(calc(${activeSlide * -100}% + ${dragOffset}px))` }}
             >
               {carousel.slides.map((slide, i) => (
                 <div key={i} className="w-full h-full shrink-0 relative">
@@ -327,13 +337,12 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
             </p>
             
             <div className="w-full flex justify-center mb-1">
-              <button 
-                type="button"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary transition-colors"
+              <span
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary"
               >
                 <Smartphone size={12} />
                 Mobile Mockup View
-              </button>
+              </span>
             </div>
           </div>
           
@@ -571,13 +580,12 @@ function ProjectNode({ brand, index }) {
                         {brand.category}
                       </p>
                       <div className="w-full flex justify-center mb-1">
-                        <button 
-                          type="button"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary transition-colors"
+                        <span
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary"
                         >
                           <Smartphone size={12} />
                           Mobile Mockup View
-                        </button>
+                        </span>
                     </div>
                   </div>
                 </div>
@@ -625,13 +633,12 @@ function StaticMobileCard({ image, title, type, aspectRatio }) {
             </p>
             
             <div className="w-full flex justify-center mb-1">
-              <button 
-                type="button"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary transition-colors"
+              <span
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary"
               >
                 <Smartphone size={12} />
                 Mobile Mockup View
-              </button>
+              </span>
             </div>
           </div>
           

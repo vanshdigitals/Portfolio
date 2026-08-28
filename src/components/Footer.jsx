@@ -1,4 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, Mail, MapPin, Phone } from 'lucide-react';
 import Button from './Button';
 import arrowImage from '../assets/arrow-small-black.png';
@@ -120,8 +121,14 @@ export default function Footer() {
               Crafting visual experiences that connect and communicate.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              {[IconIg, IconIn, IconBe, IconX, IconYt].map((Icon, idx) => (
-                <a key={idx} href="#" className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-[#087EFF] dark:text-text-primary hover:text-[#087EFF] dark:hover:text-brand-yellow hover:border-brand-blue dark:hover:border-brand-yellow transition-colors group">
+              {[
+                { Icon: IconIg, url: 'https://www.instagram.com/vanshdigitals/' },
+                { Icon: IconIn, url: 'https://www.linkedin.com/in/vanshdigitals/' },
+                { Icon: IconBe, url: '#' },
+                { Icon: IconX, url: '#' },
+                { Icon: IconYt, url: '#' },
+              ].map(({ Icon, url }, idx) => (
+                <a key={idx} href={url} target={url !== '#' ? '_blank' : undefined} rel={url !== '#' ? 'noopener noreferrer' : undefined} className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-[#087EFF] dark:text-text-primary hover:text-[#087EFF] dark:hover:text-brand-yellow hover:border-brand-blue dark:hover:border-brand-yellow transition-colors group">
                   <span className="transition-colors group-hover:text-[#087EFF] dark:group-hover:text-brand-yellow">
                     <Icon />
                   </span>
@@ -151,10 +158,10 @@ export default function Footer() {
               NAVIGATION
             </h4>
             <nav className="flex flex-col gap-3">
-              {['Home', 'About', 'Work', 'Skills', 'Experience', 'Contact'].map((item) => (
-                <a key={item} href={`#${item.toLowerCase()}`} className="font-body text-sm text-text-muted hover:text-brand-blue dark:hover:text-brand-yellow transition-colors">
+              {[['Home','hero'],['About','about'],['Work','work'],['Skills','skills'],['Experience','experience'],['Contact','contact']].map(([item, id]) => (
+                <Link key={item} to={`/#${id}`} className="font-body text-sm text-text-muted hover:text-brand-blue dark:hover:text-brand-yellow transition-colors">
                   {item}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>
@@ -176,9 +183,9 @@ export default function Footer() {
           {/* Column 4: Let's Connect */}
           <div className="flex flex-col items-start">
             <div className="flex flex-col gap-[22px] w-full">
-              <Button 
-                label="Let's Talk" 
-                href="#contact" 
+              <Button
+                label="Let's Talk"
+                href="/#contact"
               />
               
               <div className="flex flex-col gap-3">
@@ -209,7 +216,7 @@ export default function Footer() {
         style={{ height: 'clamp(150px, 25vw, 600px)' }}
       >
         <div 
-          className="relative w-full select-none flex justify-center items-end px-[10px] translate-y-[115px]"
+          className="relative w-full select-none flex justify-center items-end px-[10px] translate-y-[75px] md:translate-y-[115px]"
           aria-hidden="true"
         >
         <div 

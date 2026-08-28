@@ -70,7 +70,7 @@ function ProjectCard({ project, index }) {
         dark:hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)]
         focus-within:border-border-strong focus-within:shadow-[0_4px_24px_rgba(0,0,0,0.07)]
         ${project.tint} ${project.tintDark}
-        ${isWide ? 'md:col-span-2' : ''}
+        ${isWide ? 'sm:col-span-2 md:col-span-2' : ''}
       `}
     >
       {/* Artwork — dominant top section */}

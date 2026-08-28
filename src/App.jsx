@@ -46,7 +46,8 @@ function LandingPage() {
 
 // ── App with routing ────────────────────────────────────────────────────────────
 function App() {
-  const [isPreloading, setIsPreloading] = useState(true);
+  // Start the preloader only on the home route so other routes never paint it for a frame.
+  const [isPreloading, setIsPreloading] = useState(() => (typeof window === 'undefined' ? true : window.location.pathname === '/'));
   const location = useLocation();
 
   // Only show preloader on initial load of the home page

@@ -23,12 +23,12 @@ export default function SampleWork() {
       </div>
 
       {/* Masonry-like Grid */}
-      <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6 pb-16">
+      <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 pb-16">
         {tiles.map((tile) => (
           <div
             key={tile.id}
             className={`
-              w-full ${tile.aspect} rounded-2xl bg-secondary-bg 
+              w-full ${tile.aspect} mb-6 rounded-2xl bg-secondary-bg
               border border-dashed border-border flex items-center justify-center 
               p-6 text-center text-text-muted font-heading font-normal text-[10px] uppercase tracking-widest
               relative break-inside-avoid

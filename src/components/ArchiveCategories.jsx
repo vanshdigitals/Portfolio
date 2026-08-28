@@ -246,6 +246,7 @@ export default function ArchiveCategories() {
             id={`panel-${TABS[0].id}`}
             aria-labelledby={`tab-${TABS[0].id}`}
             aria-hidden={activeTab !== 0}
+            inert={activeTab !== 0}
           >
             <SelectedWork />
           </div>
@@ -256,6 +257,7 @@ export default function ArchiveCategories() {
             id={`panel-${TABS[1].id}`}
             aria-labelledby={`tab-${TABS[1].id}`}
             aria-hidden={activeTab !== 1}
+            inert={activeTab !== 1}
           >
             <SampleWork />
           </div>
@@ -266,6 +268,7 @@ export default function ArchiveCategories() {
             id={`panel-${TABS[2].id}`}
             aria-labelledby={`tab-${TABS[2].id}`}
             aria-hidden={activeTab !== 2}
+            inert={activeTab !== 2}
           >
             <PracticeWork />
           </div>

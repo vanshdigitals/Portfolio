@@ -318,12 +318,12 @@ export default function WorkCollections() {
           {/* Mobile-only "Select My Type of Work" Pill */}
           <div className="flex md:hidden items-center justify-center mt-[40px] md:mt-0">
             <span className="
-              font-heading font-semibold text-[20px] sm:text-[21px] uppercase tracking-wider
-              w-[302px] h-[44px] flex items-center justify-center
+              font-heading font-semibold text-[clamp(15px,4.8vw,21px)] uppercase tracking-wider
+              w-auto px-6 h-[44px] flex items-center justify-center
               rounded-full border-[1.5px] bg-transparent
               text-[#007BFF] border-[#007BFF]
               dark:text-[#FFD722] dark:border-[#FFD722]
-              max-w-[90vw] overflow-hidden whitespace-nowrap text-ellipsis
+              max-w-[90vw] whitespace-nowrap
             ">
               SELECT MY TYPE OF WORK
             </span>
