@@ -13,7 +13,19 @@
   --color-border: var(--border);
   --color-divider: var(--divider);
   --color-hairline: var(--hairline);
-  
+
+  /* Migrated from the legacy (unloaded) tailwind.config.js so these existing
+     utilities generate CSS under Tailwind v4's CSS-first config.
+     - brand-blue / brand-yellow: static brand hues (unchanged values).
+     - secondary-text: maps to the existing --text-secondary token.
+     - secondary-bg: the config pointed at var(--bg-secondary), which has never
+       existed in this project's CSS; aliased to the existing theme-aware
+       --surface token so cards/tiles get a visible fill in light and dark. */
+  --color-brand-blue: #007BFF;
+  --color-brand-yellow: #FFD722;
+  --color-secondary-bg: var(--surface);
+  --color-secondary-text: var(--text-secondary);
+
   --font-heading: "DM Sans", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-mono: "Inter Mono", "Roboto Mono", monospace;

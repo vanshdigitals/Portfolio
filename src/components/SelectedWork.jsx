@@ -117,6 +117,33 @@ const RANJEET_CAROUSELS = [
   }
 ];
 
+const BUILDERS_PLAYGROUND_DATA = {
+  "Event-Carousel": [
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/1.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/2.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/3.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/4.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/5.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/6.webp"
+  ],
+  "Highlight-Covers": [
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/bts-v2.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/about-us.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/event-v2.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/community-v2.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/football-baithek.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/upcoming-events.webp"
+  ],
+  "Reel-Covers": [
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-1st-reel-cover-launching-v2.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-2nd-reel-cover-join-cummunity.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-3rd-reel-cover-join-cummunity-about-bp.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-4th-reel-cover-foot-ball-event-01.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-5th-reel-cover-foot-ball-event-02.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-6th-reel-cover-foot-ball-event-03.webp"
+  ]
+};
+
 const BRANDS = [
   {
     id: 'ranjeet',
@@ -135,9 +162,22 @@ const BRANDS = [
     role: 'Freelance Graphic Designer | Short-Term Project',
     date: 'July 2026',
     category: 'Brand Content',
-    deliverables: ['5+ reel covers', '1 event poster', '1 carousel', '5 highlight covers'],
+    deliverables: [
+      `${BUILDERS_PLAYGROUND_DATA['Reel-Covers'].length} Reel Covers`,
+      `${BUILDERS_PLAYGROUND_DATA['Highlight-Covers'].length} Highlight Covers`,
+      `1 Carousel`
+    ],
     detail: "Created reel covers, an event poster, a social carousel and highlight covers for the brand's event; followed the existing brand theme while adapting layouts; completed within a 4–5 day engagement.",
     image: imgBuilders,
+    reelCovers: BUILDERS_PLAYGROUND_DATA['Reel-Covers'],
+    highlightCovers: BUILDERS_PLAYGROUND_DATA['Highlight-Covers'],
+    carousels: [
+      {
+        id: "BP-01",
+        title: "Event Carousel",
+        slides: BUILDERS_PLAYGROUND_DATA['Event-Carousel']
+      }
+    ]
   },
   {
     id: 'keshvi',
@@ -427,7 +467,47 @@ function ProjectNode({ brand, index }) {
           <div className="absolute right-0 top-0 bottom-0 w-[32px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
           
           <div ref={outerTrackRef} className="relative flex overflow-x-auto snap-x snap-mandatory pb-6 gap-4 pr-6 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {brand.carousels ? (
+            {brand.id === 'builders' ? (
+              <>
+                {brand.reelCovers.map((img, idx) => (
+                  <StaticMobileCard 
+                    key={`reel-${idx}`} 
+                    image={img} 
+                    title={`Reel Cover ${String(idx + 1).padStart(2, '0')}`} 
+                    type="Reel Cover" 
+                    aspectRatio="aspect-[9/16]" 
+                  />
+                ))}
+                {brand.highlightCovers.map((img, idx) => (
+                  <StaticMobileCard 
+                    key={`highlight-${idx}`} 
+                    image={img} 
+                    title={`Highlight Cover ${String(idx + 1).padStart(2, '0')}`} 
+                    type="Highlight Cover" 
+                    aspectRatio="aspect-square" 
+                  />
+                ))}
+                {brand.carousels.map((carousel, idx) => {
+                  const domIndex = brand.reelCovers.length + brand.highlightCovers.length + idx;
+                  return (
+                    <MobileInnerCarousel 
+                      key={carousel.id} 
+                      carousel={carousel} 
+                      index={idx} 
+                      prefersReducedMotion={prefersReducedMotion}
+                      onSequenceComplete={() => {
+                        if (!outerTrackRef.current) return;
+                        const track = outerTrackRef.current;
+                        const children = track.children;
+                        if (domIndex + 1 < children.length) {
+                          children[domIndex + 1].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                        }
+                      }}
+                    />
+                  );
+                })}
+              </>
+            ) : brand.carousels ? (
               brand.carousels.map((carousel, idx) => (
                 <MobileInnerCarousel 
                   key={carousel.id} 
@@ -486,6 +566,50 @@ function ProjectNode({ brand, index }) {
         <p className="font-body text-[15px] leading-relaxed text-text-secondary max-w-[800px] mt-4">
           {brand.detail}
         </p>
+      </div>
+    </div>
+  );
+}
+
+function StaticMobileCard({ image, title, type, aspectRatio }) {
+  return (
+    <div className="snap-start shrink-0 relative flex flex-col group/card h-full">
+      <div className="relative w-[65vw] max-w-[260px] h-full rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 flex flex-col shadow-sm z-10">
+        <div className="w-full pt-[14px] px-[14px] pb-[8px] bg-secondary-bg relative">
+          <div className={`${aspectRatio} w-full rounded-xl overflow-hidden relative shadow-sm border border-border/20 bg-bg`}>
+            <div className="w-full h-full relative">
+              <img 
+                src={image}
+                alt={title}
+                className="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="px-4 pb-4 flex-1 flex flex-col justify-center">
+          <div className="mb-4 flex flex-col items-start">
+            <p className="font-heading text-lg font-bold text-text-primary leading-tight mb-1 line-clamp-2">
+              {title}
+            </p>
+            <p className="font-heading font-normal text-[11px] text-text-muted mb-3">
+              {type}
+            </p>
+            
+            <div className="w-full flex justify-center mb-1">
+              <button 
+                type="button"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary transition-colors"
+              >
+                <Smartphone size={12} />
+                Mobile Mockup View
+              </button>
+            </div>
+          </div>
+          
+          <div className="border-t border-border/40 pt-3 mt-auto w-full" />
+        </div>
       </div>
     </div>
   );

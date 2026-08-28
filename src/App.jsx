@@ -67,14 +67,27 @@ function App() {
     };
   }, [isPreloading]);
 
-  // Scroll to top instantly on route change
+  // On route/hash change: scroll to the hash target section if one is present
+  // (e.g. navigating from /work-collections to /#about), otherwise scroll to top.
+  // The fixed-header offset is handled by the existing `scroll-padding-top` in
+  // index.css, which scrollIntoView honours — no hardcoded offset needed.
   useEffect(() => {
+    if (isPreloading) return; // wait until the intro preloader releases the scroll lock
+    if (location.hash) {
+      // The target section is already mounted here (effects run after commit),
+      // including after a cross-route change from /work-collections.
+      const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+    }
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: 'instant'
     });
-  }, [location.pathname]);
+  }, [location.pathname, location.hash, isPreloading]);
 
   return (
     <>
