@@ -376,7 +376,7 @@ export default function Hero() {
         On mobile: positioned relative at the bottom of the section (acting as the top boundary of About).
         On desktop: absolute positioned inside Hero.
       */}
-      <div className="relative w-full h-[29vw] mt-12 mb-[50px] sm:absolute sm:w-auto sm:h-auto sm:mt-0 sm:mb-0 sm:inset-x-0 sm:bottom-[3%] sm:translate-y-0 z-30 pointer-events-none">
+      <div className="relative w-full h-[29vw] mt-0 mb-[50px] sm:absolute sm:w-auto sm:h-auto sm:mt-0 sm:mb-0 sm:inset-x-0 sm:bottom-[3%] sm:translate-y-0 z-30 pointer-events-none">
         <div
             className="
               absolute left-1/2 -translate-x-1/2
