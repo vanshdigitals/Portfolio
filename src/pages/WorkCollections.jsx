@@ -262,7 +262,7 @@ export default function WorkCollections() {
       <div className="w-full max-w-[1200px] mx-auto px-5 md:px-8 lg:px-12 xl:px-16">
 
         {/* ── Intro block (Hero Energy) ───────────────────────────────────── */}
-        <div className="relative mb-24 md:mb-32 mt-0 md:mt-12 max-w-[800px] mx-auto text-center">
+        <div className="relative mb-[20px] md:mb-32 mt-0 md:mt-12 max-w-[800px] mx-auto text-center">
 
           {/* LEFT FRAMING: Huge Arrow */}
           <img
@@ -315,16 +315,17 @@ export default function WorkCollections() {
             A curated archive of graphic design work created across real projects, visual explorations and ongoing practice. The collection brings together social media designs, carousel systems, brand visuals, and digital content designed to turn ideas into clear, engaging visual communication.
           </p>
           
-          {/* Mobile-only "Choose My Type of Work" Pill */}
-          <div className="flex md:hidden items-center justify-center mt-6 md:mt-0">
+          {/* Mobile-only "Select My Type of Work" Pill */}
+          <div className="flex md:hidden items-center justify-center mt-[40px] md:mt-0">
             <span className="
-              font-heading font-semibold text-[11.5px] sm:text-[12px] uppercase tracking-wider
-              px-3.5 py-[3px] rounded-full border-[1.5px] bg-transparent
+              font-heading font-semibold text-[20px] sm:text-[21px] uppercase tracking-wider
+              w-[300px] h-[44px] flex items-center justify-center
+              rounded-full border-[1.5px] bg-transparent
               text-[#007BFF] border-[#007BFF]
               dark:text-[#FFD722] dark:border-[#FFD722]
-              inline-block w-fit max-w-[90vw] overflow-hidden whitespace-nowrap text-ellipsis
+              max-w-[90vw] overflow-hidden whitespace-nowrap text-ellipsis
             ">
-              Choose My Type of Work
+              SELECT MY TYPE OF WORK
             </span>
           </div>
           

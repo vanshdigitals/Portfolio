@@ -33,6 +33,7 @@ const TABS = [
 
 export default function ArchiveCategories() {
   const [activeTab, setActiveTab] = useState(0);
+  const [animatingTab, setAnimatingTab] = useState(null);
 
   // Sync with URL hash on mount
   useEffect(() => {
@@ -43,16 +44,18 @@ export default function ArchiveCategories() {
 
   const handleTabClick = (index, id) => {
     setActiveTab(index);
+    setAnimatingTab(id);
+    setTimeout(() => setAnimatingTab(null), 300);
     // Update hash without scrolling
     window.history.replaceState(null, '', `#${id}`);
   };
 
   return (
-    <div className="w-full flex flex-col pt-12 md:pt-16">
+    <div className="w-full flex flex-col pt-0 md:pt-16">
       
-      {/* ── CATEGORY SELECTOR ────────────────────────────────────────────── */}
+      {/* ── DESKTOP CATEGORY SELECTOR ────────────────────────────────────── */}
       <div 
-        className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-24 md:mb-32"
+        className="hidden md:grid grid-cols-3 gap-6 mb-32"
         role="tablist"
         aria-label="Work Categories"
       >
@@ -74,10 +77,7 @@ export default function ArchiveCategories() {
                 transition-all duration-300 ease-[cubic-bezier(.65,0,.35,1)]
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
                 overflow-hidden
-                ${isSelected
-                  ? 'col-span-2 md:col-span-1 min-h-[240px] md:min-h-[260px] p-6 md:p-8'
-                  : 'col-span-1 min-h-[210px] md:min-h-[260px] p-4 sm:p-5 md:p-8'
-                }
+                col-span-1 min-h-[260px] p-8
                 ${isActive 
                   ? 'border border-[#007BFF] dark:border-[#FFD722] shadow-[0_4px_24px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_24px_rgba(255,255,255,0.02)]' 
                   : 'border border-border/40 hover:border-border hover:-translate-y-1'
@@ -96,7 +96,7 @@ export default function ArchiveCategories() {
               />
 
               {/* Top Row: Index + Icon */}
-              <div className={`relative flex justify-between items-start w-full z-10 ${isSelected ? 'mb-8' : 'mb-5 md:mb-8'}`}>
+              <div className="relative flex justify-between items-start w-full z-10 mb-8">
                 <span className={`
                   font-heading font-normal text-sm font-medium transition-colors duration-300
                   ${isActive ? 'text-[#007BFF] dark:text-[#FFD722]' : 'text-text-muted'}
@@ -109,34 +109,31 @@ export default function ArchiveCategories() {
                   className={`
                     transition-colors duration-300
                     ${isActive ? 'text-[#007BFF] dark:text-[#FFD722]' : 'text-border'}
-                    ${isSelected ? '' : 'scale-90 md:scale-100 origin-top-right'}
                   `}
                 />
               </div>
 
               {/* Middle: Title & Accent */}
-              <div className={`relative z-10 ${isSelected ? 'mb-6' : 'mb-4 md:mb-6'}`}>
-                <h2 className={`font-heading font-[800] leading-tight text-text-primary ${isSelected ? 'text-2xl md:text-3xl' : 'text-[20px] sm:text-[22px] md:text-3xl'}`}>
+              <div className="relative z-10 mb-6">
+                <h2 className="font-heading font-[800] leading-tight text-text-primary text-3xl">
                   {tab.titleLine1}<br />
                   {tab.titleLine2}
                 </h2>
                 {/* Accent Underline */}
                 <div className={`
-                  mt-4 h-[3px] rounded-full transition-colors duration-300
-                  ${isSelected ? 'w-12' : 'w-8 md:w-12'}
+                  mt-4 h-[3px] rounded-full transition-colors duration-300 w-12
                   ${isActive ? 'bg-[#007BFF] dark:bg-[#FFD722]' : 'bg-border'}
                 `} />
               </div>
 
               {/* Bottom: Description & Arrow */}
               <div className="relative flex-grow flex flex-col justify-between z-10 mt-auto">
-                <p className={`font-body text-text-secondary leading-relaxed max-w-[90%] ${isSelected ? 'text-sm mb-8' : 'text-[13px] md:text-sm mb-6 md:mb-8'}`}>
+                <p className="font-body text-text-secondary leading-relaxed max-w-[90%] text-sm mb-8">
                   {tab.desc}
                 </p>
                 <div className={`
                   rounded-full border flex items-center justify-center
-                  transition-all duration-300
-                  ${isSelected ? 'w-11 h-11' : 'w-9 h-9 md:w-11 md:h-11'}
+                  transition-all duration-300 w-11 h-11
                   ${isActive 
                     ? 'border-[#007BFF] text-[#007BFF] dark:border-[#FFD722] dark:text-[#FFD722]' 
                     : 'border-border text-text-muted'
@@ -144,8 +141,77 @@ export default function ArchiveCategories() {
                 `}>
                   <ArrowRight 
                     size={18} 
-                    className={`transition-transform duration-300 ${!isActive && 'group-hover:translate-x-0.5'} ${isSelected ? '' : 'scale-75 md:scale-100'}`} 
+                    className={`transition-transform duration-300 ${!isActive && 'group-hover:translate-x-0.5'}`} 
                   />
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── MOBILE CATEGORY SELECTOR ─────────────────────────────────────── */}
+      <div 
+        className="grid md:hidden grid-cols-2 gap-[12px] mb-[25px]"
+        role="tablist"
+        aria-label="Work Categories (Mobile)"
+      >
+        {TABS.map((tab, idx) => {
+          const isActive = activeTab === idx;
+          const isSelected = idx === 0;
+          
+          let bgClass = '';
+          if (idx === 0) bgClass = 'bg-[#C6E2FF] dark:bg-[#1A365D] border-[#C6E2FF] dark:border-[#1A365D] text-text-primary';
+          if (idx === 1) bgClass = 'bg-[#FFF4B3] dark:bg-[#332A00] border-[#FFF4B3] dark:border-[#332A00] text-text-primary';
+          if (idx === 2) bgClass = 'bg-[#E5E5E5] dark:bg-[#202226] border-[#E5E5E5] dark:border-[#202226] text-text-primary';
+
+          return (
+            <button
+              key={tab.id}
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`panel-${tab.id}`}
+              id={`mobile-tab-${tab.id}`}
+              onClick={() => handleTabClick(idx, tab.id)}
+              className={`
+                group text-left w-full rounded-[18px] p-[14px] flex flex-col h-full
+                transition-all duration-300
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
+                ${isSelected ? 'col-span-2' : 'col-span-1'}
+                ${bgClass}
+                border
+                ${isActive ? 'shadow-sm ring-1 ring-black/5 dark:ring-white/5' : 'hover:-translate-y-0.5'}
+              `}
+            >
+              <h2 className={`font-heading font-medium leading-[1.1] mb-[6px] ${isSelected ? 'text-[30px]' : 'text-[24px]'}`}>
+                {isSelected ? (
+                  <>{tab.titleLine1} {tab.titleLine2}</>
+                ) : (
+                  <>{tab.titleLine1}<br />{tab.titleLine2}</>
+                )}
+              </h2>
+              
+              <div className="flex justify-between gap-[12px] w-full flex-1">
+                <p className="font-body text-[13px] leading-[1.5] text-text-secondary self-start pr-[8px]">
+                  {tab.desc}
+                </p>
+                <div 
+                  className={`
+                    w-[42px] h-[42px] shrink-0 self-end mt-auto rounded-full bg-white dark:bg-[#111214] flex items-center justify-center
+                    shadow-[0_1px_4px_rgba(0,0,0,0.08)] dark:shadow-[0_1px_4px_rgba(255,255,255,0.04)]
+                    transition-all duration-300
+                  `}
+                >
+                    <ArrowRight 
+                      size={18} 
+                      className={`
+                        text-text-primary 
+                        transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
+                        motion-reduce:transition-none
+                        ${animatingTab === tab.id ? 'rotate-0' : '-rotate-45 group-hover:rotate-0'}
+                      `}
+                      aria-hidden="true"
+                    />
                 </div>
               </div>
             </button>
