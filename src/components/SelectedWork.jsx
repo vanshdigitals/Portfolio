@@ -127,12 +127,12 @@ const BUILDERS_PLAYGROUND_DATA = {
     "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/6.webp"
   ],
   "Highlight-Covers": [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/bts-v2.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/about-us.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/event-v2.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/community-v2.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/football-baithek.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/upcoming-events.webp"
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/01-about-us.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/02-bts-v2.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/03-community-v2.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/04-event-v2.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/05-football-baithek.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/06-upcoming-events.webp"
   ],
   "Reel-Covers": [
     "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-1st-reel-cover-launching-v2.webp",
