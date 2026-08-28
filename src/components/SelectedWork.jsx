@@ -257,7 +257,7 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          <div className="aspect-[3/4] w-full rounded-xl overflow-hidden relative shadow-sm border border-border/20 bg-bg">
+          <div className={`${carousel.id === 'RR-07' ? 'aspect-[3/4]' : 'aspect-[4/5]'} w-full rounded-xl overflow-hidden relative shadow-sm border border-border/20 bg-bg`}>
             <div 
               className={`flex w-full h-full ${!prefersReducedMotion ? 'transition-transform duration-[400ms] ease-[cubic-bezier(.34,1.4,.5,1)]' : ''}`}
               style={{ transform: `translateX(-${activeSlide * 100}%)` }}
