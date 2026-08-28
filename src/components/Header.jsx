@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { flushSync } from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Sun, Moon, ArrowRight, Menu, X, 
@@ -90,11 +91,11 @@ export default function Header() {
     const x = e?.clientX ?? window.innerWidth / 2;
     const y = e?.clientY ?? window.innerHeight / 2;
     
-    // 2. Compute end radius to farthest corner
+    // 2. Compute end radius to farthest corner (with safety margin)
     const endRadius = Math.hypot(
       Math.max(x, window.innerWidth - x),
       Math.max(y, window.innerHeight - y)
-    );
+    ) * 1.05;
 
     const applyTheme = () => {
       const next = !isDark;
@@ -111,8 +112,13 @@ export default function Header() {
     }
 
     // 4. Start view transition
+    // Globally disable CSS transitions to prevent snapshotting midway through crossfades
+    document.documentElement.classList.add('theme-transitioning');
+
     const transition = document.startViewTransition(() => {
-      applyTheme();
+      flushSync(() => {
+        applyTheme();
+      });
     });
 
     transition.ready.then(() => {
@@ -124,11 +130,15 @@ export default function Header() {
           ]
         },
         {
-          duration: 500,
+          duration: 480,
           easing: 'cubic-bezier(.4,0,.2,1)',
           pseudoElement: '::view-transition-new(root)'
         }
       );
+    });
+
+    transition.finished.finally(() => {
+      document.documentElement.classList.remove('theme-transitioning');
     });
   };
 

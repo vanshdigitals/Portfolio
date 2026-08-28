@@ -434,6 +434,11 @@
   ── THEME REVEAL VIEW TRANSITIONS ── 
   Disable default cross-fade and set stacking order so circular clip-path works
 */
+html.theme-transitioning,
+html.theme-transitioning * {
+  transition: none !important;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
