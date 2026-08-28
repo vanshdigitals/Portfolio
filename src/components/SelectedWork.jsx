@@ -383,6 +383,8 @@ function ProjectNode({ brand, index }) {
   const ringColor = useTransform(scrollYProgress, [0.8, 1], ["rgba(255, 215, 34, 0)", "rgba(0, 123, 255, 0.3)"]);
   const numberColor = useTransform(scrollYProgress, [0.8, 1], ["#000000", "#007BFF"]);
   const numberScale = useTransform(scrollYProgress, [0.8, 1], [1, 1.05]);
+  // Called unconditionally (Rules of Hooks); applied only when motion is allowed (below).
+  const nodeBoxShadow = useTransform(scrollYProgress, [0.8, 1], ["0 0 0px rgba(0,123,255,0)", "0 0 8px rgba(0,123,255,0.4)"]);
 
   return (
     <div ref={nodeRef} className="relative group z-10 pl-[44px] md:pl-0">
@@ -393,7 +395,7 @@ function ProjectNode({ brand, index }) {
       {/* --- MOBILE NODE (Numbered Circle) --- */}
       <motion.div 
         className="md:hidden absolute left-[20px] -translate-x-1/2 top-1 w-8 h-8 rounded-full bg-[#FFD722] shadow-sm flex items-center justify-center z-10 origin-center"
-        style={prefersReducedMotion ? {} : { boxShadow: useTransform(scrollYProgress, [0.8, 1], ["0 0 0px rgba(0,123,255,0)", "0 0 8px rgba(0,123,255,0.4)"]) }}
+        style={prefersReducedMotion ? {} : { boxShadow: nodeBoxShadow }}
       >
         {/* Subtle animated ring on active */}
         <motion.div 
@@ -462,34 +464,76 @@ function ProjectNode({ brand, index }) {
 
         {/* Horizontal Scroll Track (MOBILE ONLY) */}
         <div className="md:hidden relative mt-2">
-          {/* Edge Fade Masks (Fix 2) */}
-          <div className="absolute left-0 top-0 bottom-0 w-[32px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-          <div className="absolute right-0 top-0 bottom-0 w-[32px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-          
-          <div ref={outerTrackRef} className="relative flex overflow-x-auto snap-x snap-mandatory pb-6 gap-4 pr-6 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {brand.id === 'builders' ? (
-              <>
-                {brand.reelCovers.map((img, idx) => (
-                  <StaticMobileCard 
-                    key={`reel-${idx}`} 
-                    image={img} 
-                    title={`Reel Cover ${String(idx + 1).padStart(2, '0')}`} 
-                    type="Reel Cover" 
-                    aspectRatio="aspect-[9/16]" 
-                  />
-                ))}
-                {brand.highlightCovers.map((img, idx) => (
-                  <StaticMobileCard 
-                    key={`highlight-${idx}`} 
-                    image={img} 
-                    title={`Highlight Cover ${String(idx + 1).padStart(2, '0')}`} 
-                    type="Highlight Cover" 
-                    aspectRatio="aspect-square" 
-                  />
-                ))}
-                {brand.carousels.map((carousel, idx) => {
-                  const domIndex = brand.reelCovers.length + brand.highlightCovers.length + idx;
-                  return (
+          {brand.id === 'builders' ? (
+            <div className="flex flex-col gap-10 pb-4">
+              {/* Reel Covers */}
+              <div className="flex flex-col gap-3">
+                <p className="font-heading text-[11px] font-bold text-text-primary uppercase tracking-[0.2em] pl-1 opacity-80">Reel Covers</p>
+                <div className="relative -mx-5 px-5">
+                  <div className="absolute left-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+                  <div className="absolute right-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+                  <div className="relative flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 pr-10 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    {brand.reelCovers.map((img, idx) => (
+                      <StaticMobileCard 
+                        key={`reel-${idx}`} 
+                        image={img} 
+                        title={`Reel Cover ${String(idx + 1).padStart(2, '0')}`} 
+                        type="Reel Cover" 
+                        aspectRatio="aspect-[9/16]" 
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Highlight Covers */}
+              <div className="flex flex-col gap-3">
+                <p className="font-heading text-[11px] font-bold text-text-primary uppercase tracking-[0.2em] pl-1 opacity-80">Highlight Covers</p>
+                <div className="relative -mx-5 px-5">
+                  <div className="absolute left-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+                  <div className="absolute right-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+                  <div className="relative flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 pr-10 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    {brand.highlightCovers.map((img, idx) => (
+                      <StaticMobileCard 
+                        key={`highlight-${idx}`} 
+                        image={img} 
+                        title={`Highlight Cover ${String(idx + 1).padStart(2, '0')}`} 
+                        type="Highlight Cover" 
+                        aspectRatio="aspect-square" 
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Event Carousel */}
+              <div className="flex flex-col gap-3">
+                <p className="font-heading text-[11px] font-bold text-text-primary uppercase tracking-[0.2em] pl-1 opacity-80">Event Carousel</p>
+                <div className="relative -mx-5 px-5">
+                  <div className="absolute left-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+                  <div className="absolute right-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+                  <div className="relative flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 pr-10 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    {brand.carousels.map((carousel, idx) => (
+                      <MobileInnerCarousel 
+                        key={carousel.id} 
+                        carousel={carousel} 
+                        index={idx} 
+                        prefersReducedMotion={prefersReducedMotion}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="relative">
+              {/* Edge Fade Masks for existing logic */}
+              <div className="absolute left-0 top-0 bottom-0 w-[32px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+              <div className="absolute right-0 top-0 bottom-0 w-[32px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+              
+              <div ref={outerTrackRef} className="relative flex overflow-x-auto snap-x snap-mandatory pb-6 gap-4 pr-6 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                {brand.carousels ? (
+                  brand.carousels.map((carousel, idx) => (
                     <MobileInnerCarousel 
                       key={carousel.id} 
                       carousel={carousel} 
@@ -499,32 +543,13 @@ function ProjectNode({ brand, index }) {
                         if (!outerTrackRef.current) return;
                         const track = outerTrackRef.current;
                         const children = track.children;
-                        if (domIndex + 1 < children.length) {
-                          children[domIndex + 1].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                        if (idx + 1 < children.length) {
+                          children[idx + 1].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                         }
                       }}
                     />
-                  );
-                })}
-              </>
-            ) : brand.carousels ? (
-              brand.carousels.map((carousel, idx) => (
-                <MobileInnerCarousel 
-                  key={carousel.id} 
-                  carousel={carousel} 
-                  index={idx} 
-                  prefersReducedMotion={prefersReducedMotion}
-                  onSequenceComplete={() => {
-                    if (!outerTrackRef.current) return;
-                    const track = outerTrackRef.current;
-                    const children = track.children;
-                    if (idx + 1 < children.length) {
-                      children[idx + 1].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                    }
-                  }}
-                />
-              ))
-            ) : (
+                  ))
+                ) : (
               <div className="snap-start shrink-0 relative flex flex-col group/card h-full">
                 {/* Card (FRONT) */}
                 <div className="relative w-[65vw] max-w-[260px] h-full rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 flex flex-col shadow-sm z-10">
@@ -553,16 +578,18 @@ function ProjectNode({ brand, index }) {
                           <Smartphone size={12} />
                           Mobile Mockup View
                         </button>
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
             )}
           </div>
         </div>
+      )}
+    </div>
 
-        {/* Detail sentence */}
+    {/* Detail sentence */}
         <p className="font-body text-[15px] leading-relaxed text-text-secondary max-w-[800px] mt-4">
           {brand.detail}
         </p>
