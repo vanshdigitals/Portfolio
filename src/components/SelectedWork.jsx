@@ -453,7 +453,7 @@ export default function SelectedWork() {
   return (
     <div className="w-full">
       {/* Header */}
-      <div className="mb-12 md:mb-16">
+      <div className="mb-[30px] md:mb-16">
         <div className="mb-4 md:mb-3 flex">
           <h3 className="
             inline-flex items-center justify-center rounded-full

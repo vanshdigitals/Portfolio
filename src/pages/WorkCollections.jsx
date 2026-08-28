@@ -319,7 +319,7 @@ export default function WorkCollections() {
           <div className="flex md:hidden items-center justify-center mt-[40px] md:mt-0">
             <span className="
               font-heading font-semibold text-[20px] sm:text-[21px] uppercase tracking-wider
-              w-[300px] h-[44px] flex items-center justify-center
+              w-[302px] h-[44px] flex items-center justify-center
               rounded-full border-[1.5px] bg-transparent
               text-[#007BFF] border-[#007BFF]
               dark:text-[#FFD722] dark:border-[#FFD722]
