@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import aboutStand from '../assets/about-stand.png';
 
 export default function About() {
   const [isVisible, setIsVisible] = useState(false);
@@ -32,7 +33,46 @@ export default function About() {
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
     >
-      <div className="flex flex-col gap-16 md:gap-20">
+      {/* MOBILE LAYOUT */}
+      <div className="flex md:hidden flex-col gap-8 w-full">
+        {/* Label & Heading */}
+        <div className="flex flex-col gap-5">
+          <div className="font-heading font-medium text-[11px] text-text-muted tracking-[0.06em] uppercase flex items-center gap-2">
+            <span className="text-[#007BFF] dark:text-[#FFD722]">[01]</span> ABOUT ME
+          </div>
+          <h2 className="font-heading text-[32px] font-medium leading-[1.1] tracking-tight text-text-primary uppercase">
+            The person<br />behind the work.
+          </h2>
+        </div>
+
+        {/* Portrait */}
+        <div className="w-full relative py-2">
+          <img 
+            src={aboutStand} 
+            alt="Vansh standing by desk" 
+            className="w-full h-auto object-contain drop-shadow-sm"
+          />
+        </div>
+
+        {/* Bio */}
+        <div className="flex flex-col gap-6 font-body text-[16px] leading-[1.65] text-text-muted pt-2">
+          <p>
+            I'm Vansh, a graphic designer focused on creating visual content for social media and digital platforms. My work revolves around turning ideas and information into clear, engaging visuals, from social media posts and carousels to reel covers, promotional creatives and brand-led content.
+          </p>
+          <p>
+            Canva has been the tool I have worked with most extensively for over 3 years, and it remains the foundation of my design workflow. I am also developing my skills in Photoshop and Illustrator while exploring how AI can support different parts of the creative process.
+          </p>
+          <p>
+            Alongside design, I explore web development, AI tools and small technical projects. These interests help me understand not only how visuals look, but also how they work within digital experiences.
+          </p>
+          <p>
+            I am currently building my skills and portfolio toward professional graphic design opportunities, with a particular interest in social media design, visual communication and brand-focused digital content.
+          </p>
+        </div>
+      </div>
+
+      {/* DESKTOP / TABLET LAYOUT */}
+      <div className="hidden md:flex flex-col gap-16 md:gap-20">
         
         {/* Narrative Block */}
         <div className="flex flex-col gap-6">
