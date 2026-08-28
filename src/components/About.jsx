@@ -46,11 +46,16 @@ export default function About() {
         </div>
 
         {/* Portrait */}
-        <div className="w-full relative py-2">
+        <div className="w-full relative py-2 flex flex-col items-center">
           <img 
             src={aboutStand} 
             alt="Vansh standing by desk" 
-            className="w-full h-auto object-contain drop-shadow-sm"
+            className="w-full h-auto object-contain relative z-10 drop-shadow-[0_12px_14px_rgba(0,0,0,0.12)]"
+          />
+          {/* Ground Shadow */}
+          <div 
+            aria-hidden="true"
+            className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[60%] h-[22px] rounded-[50%] blur-[6px] pointer-events-none z-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.28)_0%,rgba(0,0,0,0)_70%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.15)_0%,rgba(0,0,0,0)_70%)]"
           />
         </div>
 
