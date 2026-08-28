@@ -154,13 +154,15 @@ const BRANDS = [
 // Inner Carousel Component (Phase 3 & 4)
 function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReducedMotion }) {
   const containerRef = useRef(null);
-  const scrollRef = useRef(null);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
   const interactionTimeoutRef = useRef(null);
+  const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
 
-  // Intersection observer to track visibility (Phase 4)
+  // Intersection observer to track visibility
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       setIsVisible(entries[0].isIntersecting);
@@ -174,9 +176,7 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
     return () => observer.disconnect();
   }, []);
 
-  const rafRef = useRef(null);
-
-  // Handle manual interaction to pause autoplay (Phase 4)
+  // Handle manual interaction to pause autoplay
   const handleInteraction = useCallback(() => {
     setIsInteracting(true);
     if (interactionTimeoutRef.current) {
@@ -187,40 +187,57 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
     }, 5000); // Resume autoplay after 5 seconds idle
   }, []);
 
-  const handleScroll = () => {
-    if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    rafRef.current = requestAnimationFrame(() => {
-      if (!scrollRef.current) return;
-      const scrollLeft = scrollRef.current.scrollLeft;
-      const width = scrollRef.current.clientWidth;
-      // Calculate the closest slide index based on scroll position
-      const newActive = Math.round(scrollLeft / width);
-      if (newActive !== activeSlide && newActive >= 0 && newActive < carousel.slides.length) {
-        setActiveSlide(newActive);
-      }
-    });
-  };
-
-  const scrollTo = (idx) => {
-    if (!scrollRef.current) return;
-    scrollRef.current.scrollTo({
-      left: idx * scrollRef.current.clientWidth,
-      behavior: 'smooth'
-    });
-  };
-
-  const handleBtnClick = (idx) => {
+  const goToSlide = useCallback((idx) => {
+    if (isTransitioning) return; // lock gesture during transition
+    if (idx < 0 || idx >= carousel.slides.length) return;
+    
     handleInteraction();
-    scrollTo(idx);
+    setActiveSlide(idx);
+    
+    // Lock interactions while CSS transition plays
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 450); // match transition duration roughly
+  }, [isTransitioning, carousel.slides.length, handleInteraction]);
+
+  // Touch Handlers for 1:1 Swipe
+  const handleTouchStart = (e) => {
+    handleInteraction();
+    if (isTransitioning) return;
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+      time: Date.now()
+    };
   };
 
-  // Autoplay Effect (Phase 4)
+  const handleTouchEnd = (e) => {
+    if (isTransitioning) return;
+    
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchStartRef.current.x - touchEndX;
+    const deltaY = Math.abs(touchStartRef.current.y - touchEndY);
+    const timeElapsed = Date.now() - touchStartRef.current.time;
+
+    // Must be a primarily horizontal swipe of at least 40px within 600ms
+    if (Math.abs(deltaX) > 40 && deltaY < 50 && timeElapsed < 600) {
+      if (deltaX > 0) {
+        goToSlide(activeSlide + 1); // Swipe left -> Next slide
+      } else {
+        goToSlide(activeSlide - 1); // Swipe right -> Prev slide
+      }
+    }
+  };
+
+  // Autoplay Effect
   useEffect(() => {
     if (prefersReducedMotion || !isVisible || isInteracting) return;
 
     const timer = setTimeout(() => {
       if (activeSlide < carousel.slides.length - 1) {
-        scrollTo(activeSlide + 1);
+        setActiveSlide(activeSlide + 1);
       } else {
         if (onSequenceComplete) onSequenceComplete();
       }
@@ -230,31 +247,37 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
   }, [activeSlide, isVisible, isInteracting, prefersReducedMotion, carousel.slides.length, onSequenceComplete]);
 
   return (
-    <div ref={containerRef} className="snap-start shrink-0 relative flex flex-col group/card" onTouchStart={handleInteraction}>
+    <div ref={containerRef} className="snap-start shrink-0 relative flex flex-col group/card h-full" onTouchStart={handleInteraction}>
       {/* Card (FRONT) */}
-      <div className="relative w-[65vw] max-w-[260px] rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 flex flex-col shadow-sm z-10">
+      <div className="relative w-[65vw] max-w-[260px] h-full rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 flex flex-col shadow-sm z-10">
         
-        {/* Swipable Artwork Area */}
-        <div className="aspect-[4/5] w-full relative bg-secondary-bg">
-          <div 
-            ref={scrollRef}
-            onScroll={handleScroll}
-            className="w-full h-full flex overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          >
-            {carousel.slides.map((slide, i) => (
-              <img 
-                key={i}
-                src={slide}
-                alt={`${carousel.title} slide ${i + 1}`}
-                className="w-full h-full object-cover shrink-0 snap-center"
-                loading="lazy"
-              />
-            ))}
+        {/* Swipable Artwork Area (Padded Frame) */}
+        <div 
+          className="w-full pt-[14px] px-[14px] pb-[8px] bg-secondary-bg relative touch-pan-y"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="aspect-[4/5] w-full rounded-xl overflow-hidden relative shadow-sm border border-border/20 bg-bg">
+            <div 
+              className={`flex w-full h-full ${!prefersReducedMotion ? 'transition-transform duration-[400ms] ease-[cubic-bezier(.34,1.4,.5,1)]' : ''}`}
+              style={{ transform: `translateX(-${activeSlide * 100}%)` }}
+            >
+              {carousel.slides.map((slide, i) => (
+                <div key={i} className="w-full h-full shrink-0 relative">
+                  <img 
+                    src={slide}
+                    alt={`${carousel.title} slide ${i + 1}`}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Text and Controls */}
-        <div className="p-4 flex-1 flex flex-col justify-center">
+        <div className="px-4 pb-4 flex-1 flex flex-col justify-center">
           <div className="mb-4 flex flex-col items-start">
             <p className="font-heading text-lg font-bold text-text-primary leading-tight mb-1">
               {carousel.title}
@@ -262,31 +285,34 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
             <p className="font-heading font-normal text-[11px] text-text-muted mb-3">
               {String(index + 1).padStart(2, '0')} &middot; Carousel
             </p>
-            <button 
-              type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary transition-colors"
-            >
-              <Smartphone size={12} />
-              Mobile Mockup View
-            </button>
+            
+            <div className="w-full flex justify-center mb-1">
+              <button 
+                type="button"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary transition-colors"
+              >
+                <Smartphone size={12} />
+                Mobile Mockup View
+              </button>
+            </div>
           </div>
           
-          <div className="flex items-center justify-between border-t border-border/40 pt-3 mt-auto">
-            <div className="font-heading font-medium text-[11px] text-text-muted tracking-widest">
+          <div className="flex items-center justify-between border-t border-border/40 pt-3 mt-auto w-full">
+            <div className="font-heading font-medium text-[11px] text-text-muted tracking-widest pl-1">
               {String(activeSlide + 1).padStart(2, '0')} / {String(carousel.slides.length).padStart(2, '0')}
             </div>
             <div className="flex gap-2">
               <button 
-                onClick={() => handleBtnClick(activeSlide - 1)}
-                disabled={activeSlide === 0}
+                onClick={() => goToSlide(activeSlide - 1)}
+                disabled={activeSlide === 0 || isTransitioning}
                 className="w-7 h-7 flex items-center justify-center rounded-full bg-bg border border-border/60 text-text-primary disabled:opacity-30 transition-opacity"
                 aria-label="Previous slide"
               >
                 <ChevronLeft size={14} />
               </button>
               <button 
-                onClick={() => handleBtnClick(activeSlide + 1)}
-                disabled={activeSlide === carousel.slides.length - 1}
+                onClick={() => goToSlide(activeSlide + 1)}
+                disabled={activeSlide === carousel.slides.length - 1 || isTransitioning}
                 className="w-7 h-7 flex items-center justify-center rounded-full bg-bg border border-border/60 text-text-primary disabled:opacity-30 transition-opacity"
                 aria-label="Next slide"
               >
@@ -419,10 +445,37 @@ function ProjectNode({ brand, index }) {
                 />
               ))
             ) : (
-              <div className="snap-start shrink-0 relative flex flex-col group/card">
+              <div className="snap-start shrink-0 relative flex flex-col group/card h-full">
                 {/* Card (FRONT) */}
-                <div className="relative w-[65vw] max-w-[260px] rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 aspect-[4/5] shadow-sm z-10">
-                  <img src={brand.image} alt={brand.name} className="w-full h-full object-cover" loading="lazy" />
+                <div className="relative w-[65vw] max-w-[260px] h-full rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 flex flex-col shadow-sm z-10">
+                  <div className="w-full pt-[14px] px-[14px] pb-[8px] bg-secondary-bg relative touch-pan-y">
+                    <div className="aspect-[4/5] w-full rounded-xl overflow-hidden relative shadow-sm border border-border/20 bg-bg">
+                      <img 
+                        src={brand.image} 
+                        alt={`${brand.name} mobile view`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                  <div className="px-4 pb-4 flex-1 flex flex-col justify-center">
+                    <div className="mb-4 flex flex-col items-start">
+                      <p className="font-heading text-lg font-bold text-text-primary leading-tight mb-1">
+                        {brand.name}
+                      </p>
+                      <p className="font-heading font-normal text-[11px] text-text-muted mb-3">
+                        {brand.category}
+                      </p>
+                      <div className="w-full flex justify-center mb-1">
+                        <button 
+                          type="button"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary transition-colors"
+                        >
+                          <Smartphone size={12} />
+                          Mobile Mockup View
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
