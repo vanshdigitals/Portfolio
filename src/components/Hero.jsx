@@ -245,7 +245,7 @@ export default function Hero() {
           */}
           <div style={{ transform: 'translateX(0.8%)' }}>
             <h1
-              className="font-furgatorio portfolio-wordmark portfolio-gradient leading-[1.1] m-0 select-none whitespace-nowrap animate-portfolio-init motion-safe:animate-portfolio-flicker"
+              className="font-furgatorio portfolio-wordmark text-[#007BFF] leading-[1.1] m-0 select-none whitespace-nowrap animate-portfolio-init motion-safe:animate-portfolio-flicker"
             >
               PORTFOLIO
             </h1>
