@@ -37,7 +37,7 @@ export default function About() {
       <div className="flex md:hidden flex-col gap-8 w-full">
         {/* Heading */}
         <div className="flex flex-col gap-3 items-center text-center">
-          <h2 className="font-heading text-3xl font-normal text-[#007BFF]">
+          <h2 className="font-heading text-4xl font-normal text-[#007BFF]">
             About Me
           </h2>
           <p className="font-heading text-[20px] font-medium leading-tight text-text-primary">
