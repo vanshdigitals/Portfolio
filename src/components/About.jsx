@@ -35,14 +35,14 @@ export default function About() {
     >
       {/* MOBILE LAYOUT */}
       <div className="flex md:hidden flex-col gap-8 w-full">
-        {/* Label & Heading */}
-        <div className="flex flex-col gap-5 items-center text-center">
-          <div className="font-heading font-normal text-sm text-[#007BFF] tracking-[0.06em] uppercase">
-            ABOUT ME
-          </div>
-          <h2 className="font-heading text-[32px] font-medium leading-[1.1] tracking-tight text-text-primary uppercase">
-            The person<br />behind the work.
+        {/* Heading */}
+        <div className="flex flex-col gap-3 items-center text-center">
+          <h2 className="font-heading text-3xl font-normal text-[#007BFF]">
+            About Me
           </h2>
+          <p className="font-heading text-[20px] font-medium leading-tight text-text-primary">
+            The person behind the work.
+          </p>
         </div>
 
         {/* Portrait */}
