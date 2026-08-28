@@ -39,7 +39,6 @@ const defaultPills = [
   { id: 'design-workflows', content: 'Design Workflows', x: 1.68, y: 63.92, rotation: 3 },
   { id: 'canva-experienced', content: 'Canva Experienced', x: 94.55, y: 59.19, rotation: 0 },
   { id: '5-brands', content: '5+ BRANDS', x: 1.03, y: 50.19, rotation: 10 },
-  { id: 'internships', content: 'OPEN TO INTERNSHIPS', x: 49.1, y: 89.14, rotation: 0 },
   { id: 'chatgpt-icon', type: 'image', content: chatgptIcon, x: 12.8, y: 36.23, rotation: -45, width: 31 }
 ];
 
