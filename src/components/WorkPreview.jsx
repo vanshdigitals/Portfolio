@@ -93,8 +93,8 @@ function ProjectCard({ project, index }) {
         <div className="flex flex-col gap-1.5 min-w-0">
           {/* Index + category on one line */}
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[11px] text-text-muted shrink-0">{project.num}</span>
-            <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-text-muted truncate">
+            <span className="font-heading font-normal text-[11px] text-text-muted shrink-0">{project.num}</span>
+            <span className="font-heading font-normal text-[11px] uppercase tracking-[0.06em] text-text-muted truncate">
               {project.category}
             </span>
           </div>
@@ -103,7 +103,7 @@ function ProjectCard({ project, index }) {
             {project.name}
           </h3>
           {/* Deliverables */}
-          <p className="font-mono text-[11px] text-text-muted leading-relaxed mt-0.5">
+          <p className="font-heading font-normal text-[11px] text-text-muted leading-relaxed mt-0.5">
             {project.deliverables}
           </p>
         </div>
@@ -145,7 +145,7 @@ export default function WorkPreview() {
 
           {/* Left: eyebrow + heading + sub */}
           <div className="flex flex-col gap-3 max-w-[580px]">
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-text-muted">
+            <p className="font-heading font-normal text-[11px] uppercase tracking-[0.14em] text-text-muted">
               Featured Work
             </p>
             <h2 className="font-heading text-[34px] md:text-[42px] font-bold leading-[1.1] tracking-[-0.02em] text-text-primary">

@@ -14,7 +14,7 @@ export default function SampleWork() {
     <div className="w-full">
       {/* Header */}
       <div className="mb-16">
-        <h3 className="font-mono text-sm tracking-[0.1em] text-[#007BFF] dark:text-[#FFD722] mb-3">
+        <h3 className="font-heading font-normal text-sm tracking-[0.1em] text-[#007BFF] dark:text-[#FFD722] mb-3">
           02 &middot; SAMPLE WORK
         </h3>
         <p className="font-heading text-2xl md:text-3xl font-bold text-text-primary">
@@ -30,7 +30,7 @@ export default function SampleWork() {
             className={`
               w-full ${tile.aspect} rounded-2xl bg-secondary-bg 
               border border-dashed border-border flex items-center justify-center 
-              p-6 text-center text-text-muted font-mono text-[10px] uppercase tracking-widest
+              p-6 text-center text-text-muted font-heading font-normal text-[10px] uppercase tracking-widest
               relative break-inside-avoid
               transition-colors hover:bg-black/5 dark:hover:bg-white/5
             `}
@@ -43,7 +43,7 @@ export default function SampleWork() {
 
       {/* Footer Note */}
       <div className="pt-8 border-t border-border/50 text-center">
-        <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-text-muted">
+        <p className="font-heading font-normal text-[11px] uppercase tracking-[0.1em] text-text-muted">
           More coming soon
         </p>
       </div>

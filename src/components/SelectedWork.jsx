@@ -197,7 +197,7 @@ function ProjectNode({ brand, index }) {
           <h4 className="font-heading text-2xl md:text-4xl font-bold text-text-primary mb-2">
             {brand.name}
           </h4>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 font-mono text-xs md:text-sm text-text-muted mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 font-heading font-normal text-xs md:text-sm text-text-muted mb-6">
             <span>{brand.role}</span>
             <span className="hidden sm:inline">&middot;</span>
             <span>{brand.date}</span>
@@ -228,13 +228,13 @@ function ProjectNode({ brand, index }) {
           
           <div className="md:col-span-4 grid grid-cols-2 md:grid-cols-1 grid-rows-2 gap-4 md:gap-6">
             <div 
-              className="rounded-2xl bg-secondary-bg border border-dashed border-border flex items-center justify-center p-6 text-center text-text-muted font-mono text-[10px] uppercase tracking-widest relative"
+              className="rounded-2xl bg-secondary-bg border border-dashed border-border flex items-center justify-center p-6 text-center text-text-muted font-heading font-normal text-[10px] uppercase tracking-widest relative"
               aria-label="Format placeholder: Social post"
             >
               Social Post Format
             </div>
             <div 
-              className="rounded-2xl bg-secondary-bg border border-dashed border-border flex items-center justify-center p-6 text-center text-text-muted font-mono text-[10px] uppercase tracking-widest relative"
+              className="rounded-2xl bg-secondary-bg border border-dashed border-border flex items-center justify-center p-6 text-center text-text-muted font-heading font-normal text-[10px] uppercase tracking-widest relative"
               aria-label="Format placeholder: Detail shot"
             >
               Detail Shot
@@ -259,7 +259,7 @@ function ProjectNode({ brand, index }) {
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
-                    <div className="absolute top-3 right-3 bg-bg/90 backdrop-blur-md px-2.5 py-1 rounded-full font-mono text-[10px] font-bold text-text-primary shadow-sm border border-border/50">
+                    <div className="absolute top-3 right-3 bg-bg/90 backdrop-blur-md px-2.5 py-1 rounded-full font-heading font-normal text-[10px] font-bold text-text-primary shadow-sm border border-border/50">
                       1/{carousel.slides.length}
                     </div>
                   </div>
@@ -267,7 +267,7 @@ function ProjectNode({ brand, index }) {
                     <p className="font-heading text-lg font-bold text-text-primary leading-tight mb-1">
                       {carousel.title}
                     </p>
-                    <p className="font-mono text-[11px] text-text-muted">
+                    <p className="font-heading font-normal text-[11px] text-text-muted">
                       {String(idx + 1).padStart(2, '0')} &middot; Carousel
                     </p>
                   </div>
@@ -310,7 +310,7 @@ export default function SelectedWork() {
           <h3 className="
             inline-flex items-center justify-center rounded-full
             bg-[#007BFF] text-white px-3.5 py-1.5 font-sans text-xs font-bold tracking-wider
-            md:bg-transparent md:text-[#007BFF] md:dark:text-[#FFD722] md:p-0 md:font-mono md:text-sm md:tracking-[0.1em] md:rounded-none
+            md:bg-transparent md:text-[#007BFF] md:dark:text-[#FFD722] md:p-0 md:font-heading font-normal md:text-sm md:tracking-[0.1em] md:rounded-none
           ">
             01 &middot; SELECTED WORK
           </h3>

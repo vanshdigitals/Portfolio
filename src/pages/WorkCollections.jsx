@@ -117,7 +117,7 @@ function PlaceholderTile({ label, aspect, tintLight, tintDark }) {
         transition-colors duration-300
       `}
     >
-      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-text-muted select-none">
+      <span className="font-heading font-normal text-[10px] uppercase tracking-[0.12em] text-text-muted select-none">
         {label}
       </span>
       <div className="w-6 h-px bg-border" />
@@ -149,7 +149,7 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
         {/* Left */}
         <div className="flex flex-col gap-2 min-w-0">
           <div className="flex items-baseline gap-3">
-            <span className="font-mono text-[11px] text-text-muted shrink-0">{brand.index}</span>
+            <span className="font-heading font-normal text-[11px] text-text-muted shrink-0">{brand.index}</span>
             <h2
               id={`brand-${brand.index}`}
               className="font-heading text-[26px] md:text-[32px] font-bold tracking-[-0.02em] text-text-primary leading-tight"
@@ -157,7 +157,7 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
               {brand.name}
             </h2>
           </div>
-          <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-text-muted ml-[26px]">
+          <span className="font-heading font-normal text-[11px] uppercase tracking-[0.1em] text-text-muted ml-[26px]">
             {brand.category}
           </span>
         </div>
@@ -168,7 +168,7 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
             <span
               key={d}
               className="
-                font-mono text-[11px] tracking-[0.04em] text-text-secondary
+                font-heading font-normal text-[11px] tracking-[0.04em] text-text-secondary
                 border border-border px-3 py-1.5 rounded-full
                 bg-bg-subtle dark:bg-surface
                 whitespace-nowrap
@@ -222,7 +222,7 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
           </div>
           {/* Small label bar */}
           <div className="flex items-center justify-between px-3 py-2.5">
-            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-text-muted">
+            <span className="font-heading font-normal text-[10px] uppercase tracking-[0.1em] text-text-muted">
               {brand.category}
             </span>
             <ArrowUpRight
@@ -262,7 +262,7 @@ export default function WorkCollections() {
       <div className="w-full max-w-[1200px] mx-auto px-5 md:px-8 lg:px-12 xl:px-16">
 
         {/* ── Intro block (Hero Energy) ───────────────────────────────────── */}
-        <div className="relative mb-24 md:mb-32 mt-8 md:mt-12 max-w-[800px] mx-auto text-center">
+        <div className="relative mb-24 md:mb-32 mt-0 md:mt-12 max-w-[800px] mx-auto text-center">
 
           {/* LEFT FRAMING: Huge Arrow */}
           <img
@@ -290,10 +290,10 @@ export default function WorkCollections() {
           />
 
           {/* Pill Eyebrow */}
-          <div className="flex items-center justify-center mb-6 mt-4 md:mt-0">
+          <div className="flex items-center justify-center mb-5 md:mb-6 mt-0">
             <span className="
-              font-body font-bold text-[15px] md:text-[22px] uppercase tracking-wider
-              px-3 py-1.5 md:px-5 md:py-2.5 rounded-full border-[2.5px] bg-transparent
+              font-heading font-semibold md:font-body md:font-bold text-[11.5px] sm:text-[12px] md:text-[22px] uppercase tracking-wider
+              px-3.5 py-[3px] md:px-5 md:py-2.5 rounded-full border-[1.5px] md:border-[2.5px] bg-transparent
               text-[#007BFF] border-[#007BFF]
               dark:text-[#FFD722] dark:border-[#FFD722]
               inline-block w-fit max-w-[80vw] overflow-hidden whitespace-nowrap text-ellipsis
@@ -303,7 +303,7 @@ export default function WorkCollections() {
           </div>
 
           {/* Oversized Heading */}
-          <h1 className="relative font-heading text-[clamp(40px,13vw,96px)] md:text-[160px] font-bold leading-[0.8] tracking-[-0.03em] text-text-primary mb-6">
+          <h1 className="relative font-heading text-[clamp(64px,19vw,96px)] md:text-[160px] font-bold leading-[0.8] tracking-[-0.04em] text-text-primary mb-4 md:mb-6">
             Work <br />
             <span className="relative inline-block text-[#007BFF] dark:text-[#FFD722] z-10 animate-sheen mt-[-19px] md:mt-[-43px] pr-2 md:pr-4">
               Collections
@@ -311,10 +311,22 @@ export default function WorkCollections() {
           </h1>
 
           {/* Sub-copy */}
-          <p className="font-body text-[18px] md:text-[22px] leading-[1.6] text-text-secondary max-w-[640px] mx-auto">
-            A curated archive of graphic design work created across
-            real projects, visual explorations and ongoing practice.
+          <p className="font-body text-[14px] sm:text-[15px] md:text-[22px] leading-[1.6] text-text-secondary max-w-[720px] mx-auto px-2 md:px-0">
+            A curated archive of graphic design work created across real projects, visual explorations and ongoing practice. The collection brings together social media designs, carousel systems, brand visuals, and digital content designed to turn ideas into clear, engaging visual communication.
           </p>
+          
+          {/* Mobile-only "Choose My Type of Work" Pill */}
+          <div className="flex md:hidden items-center justify-center mt-6 md:mt-0">
+            <span className="
+              font-heading font-semibold text-[11.5px] sm:text-[12px] uppercase tracking-wider
+              px-3.5 py-[3px] rounded-full border-[1.5px] bg-transparent
+              text-[#007BFF] border-[#007BFF]
+              dark:text-[#FFD722] dark:border-[#FFD722]
+              inline-block w-fit max-w-[90vw] overflow-hidden whitespace-nowrap text-ellipsis
+            ">
+              Choose My Type of Work
+            </span>
+          </div>
           
         </div>
 

@@ -98,7 +98,7 @@ export default function ArchiveCategories() {
               {/* Top Row: Index + Icon */}
               <div className={`relative flex justify-between items-start w-full z-10 ${isSelected ? 'mb-8' : 'mb-5 md:mb-8'}`}>
                 <span className={`
-                  font-mono text-sm font-medium transition-colors duration-300
+                  font-heading font-normal text-sm font-medium transition-colors duration-300
                   ${isActive ? 'text-[#007BFF] dark:text-[#FFD722]' : 'text-text-muted'}
                 `}>
                   {tab.num}

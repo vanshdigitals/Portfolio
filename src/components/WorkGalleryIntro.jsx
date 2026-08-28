@@ -7,7 +7,7 @@ export default function WorkGalleryIntro() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 items-start mb-24 md:mb-32">
           
           <div className="md:col-span-12 lg:col-span-8 animate-slide-up">
-            <p className="font-mono text-[11.5px] uppercase tracking-[0.1em] text-text-secondary mb-6 md:mb-8">
+            <p className="font-heading font-normal text-[11.5px] uppercase tracking-[0.1em] text-text-secondary mb-6 md:mb-8">
               Selected Work / Visual Archive
             </p>
             <h2 className="font-heading text-4xl md:text-5xl lg:text-[56px] font-bold leading-[1.05] tracking-[-0.02em] text-text-primary mb-8 md:mb-10 max-w-[720px]">
@@ -19,7 +19,7 @@ export default function WorkGalleryIntro() {
           </div>
           
           <div className="md:col-span-12 lg:col-span-4 lg:text-right pt-2 lg:pt-0 animate-slide-up animation-delay-100 flex flex-col lg:items-end">
-            <p className="font-mono text-[11px] md:text-[12px] tracking-[0.04em] text-text-muted">
+            <p className="font-heading font-normal text-[11px] md:text-[12px] tracking-[0.04em] text-text-muted">
               Social Media · Brand Content · Digital Design
             </p>
             {/* Minimal visual indicator */}
@@ -33,7 +33,7 @@ export default function WorkGalleryIntro() {
           
           {/* Category 01 */}
           <div className="group cursor-default">
-            <div className="font-mono text-primary text-[12px] mb-4">01</div>
+            <div className="font-heading font-normal text-primary text-[12px] mb-4">01</div>
             <h3 className="font-heading text-lg font-bold text-text-primary mb-3 group-hover:text-primary transition-colors duration-200">
               SELECTED WORK
             </h3>
@@ -45,7 +45,7 @@ export default function WorkGalleryIntro() {
           
           {/* Category 02 */}
           <div className="group cursor-default">
-            <div className="font-mono text-primary text-[12px] mb-4">02</div>
+            <div className="font-heading font-normal text-primary text-[12px] mb-4">02</div>
             <h3 className="font-heading text-lg font-bold text-text-primary mb-3 group-hover:text-primary transition-colors duration-200">
               SAMPLE WORK
             </h3>
@@ -57,7 +57,7 @@ export default function WorkGalleryIntro() {
           
           {/* Category 03 */}
           <div className="group cursor-default">
-            <div className="font-mono text-primary text-[12px] mb-4">03</div>
+            <div className="font-heading font-normal text-primary text-[12px] mb-4">03</div>
             <h3 className="font-heading text-lg font-bold text-text-primary mb-3 group-hover:text-primary transition-colors duration-200">
               PRACTICE WORK
             </h3>

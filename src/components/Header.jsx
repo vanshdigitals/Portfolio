@@ -6,7 +6,7 @@ import {
   MessageCircle 
 } from 'lucide-react';
 import AnimatedNavIndicator from './AnimatedNavIndicator';
-
+import Button from './Button';
 
 // ── Nav data ──────────────────────────────────────────────────────────────────
 const NAV_LINKS = [

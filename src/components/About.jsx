@@ -60,7 +60,7 @@ export default function About() {
           
           {/* Block 1 */}
           <div className="flex flex-col gap-3">
-            <div className="font-mono text-[11px] text-text-muted tracking-[0.06em] uppercase flex items-center gap-2">
+            <div className="font-heading font-normal text-[11px] text-text-muted tracking-[0.06em] uppercase flex items-center gap-2">
               <span className="text-[#007BFF] dark:text-[#FFD722]">01</span> — DESIGN
             </div>
             <ul className="font-body text-[15px] leading-relaxed text-text-primary space-y-1">
@@ -72,7 +72,7 @@ export default function About() {
 
           {/* Block 2 */}
           <div className="flex flex-col gap-3">
-            <div className="font-mono text-[11px] text-text-muted tracking-[0.06em] uppercase flex items-center gap-2">
+            <div className="font-heading font-normal text-[11px] text-text-muted tracking-[0.06em] uppercase flex items-center gap-2">
               <span className="text-[#007BFF] dark:text-[#FFD722]">02</span> — CURRENTLY
             </div>
             <ul className="font-body text-[15px] leading-relaxed text-text-primary space-y-1">
@@ -84,7 +84,7 @@ export default function About() {
 
           {/* Block 3 */}
           <div className="flex flex-col gap-3">
-            <div className="font-mono text-[11px] text-text-muted tracking-[0.06em] uppercase flex items-center gap-2">
+            <div className="font-heading font-normal text-[11px] text-text-muted tracking-[0.06em] uppercase flex items-center gap-2">
               <span className="text-[#007BFF] dark:text-[#FFD722]">03</span> — BASED IN
             </div>
             <ul className="font-body text-[15px] leading-relaxed text-text-primary space-y-1">

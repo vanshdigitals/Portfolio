@@ -8,7 +8,7 @@ export default function PracticeWork() {
     <div className="w-full">
       {/* Header */}
       <div className="mb-16">
-        <h3 className="font-mono text-sm tracking-[0.1em] text-[#007BFF] dark:text-[#FFD722] mb-3">
+        <h3 className="font-heading font-normal text-sm tracking-[0.1em] text-[#007BFF] dark:text-[#FFD722] mb-3">
           03 &middot; PRACTICE WORK
         </h3>
         <p className="font-heading text-2xl md:text-3xl font-bold text-text-primary">
@@ -30,7 +30,7 @@ export default function PracticeWork() {
             >
               {/* No text inside the tile for practice work, keeping it clean */}
             </div>
-            <p className="text-center font-mono text-[10px] uppercase tracking-widest text-text-muted">
+            <p className="text-center font-heading font-normal text-[10px] uppercase tracking-widest text-text-muted">
               {tile.label} {String(tile.id).padStart(2, '0')}
             </p>
           </div>
@@ -39,7 +39,7 @@ export default function PracticeWork() {
 
       {/* Footer Note */}
       <div className="pt-8 border-t border-border/50 text-center">
-        <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-text-muted">
+        <p className="font-heading font-normal text-[11px] uppercase tracking-[0.1em] text-text-muted">
           More coming soon
         </p>
       </div>

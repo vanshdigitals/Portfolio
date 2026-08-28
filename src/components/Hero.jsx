@@ -101,7 +101,7 @@ const DraggableTextPill = ({ pill, isEditMode, onUpdate, isSelected, onSelect })
       )}
       {isEditMode && isSelected && (
         <div className="absolute top-[120%] left-1/2 -translate-x-1/2 mt-2 bg-black/90 text-white text-[10px] p-2 rounded shadow-xl pointer-events-auto flex flex-col gap-2 z-50 cursor-default">
-          <div className="text-center font-mono opacity-80 border-b border-white/20 pb-1">
+          <div className="text-center font-heading font-normal opacity-80 border-b border-white/20 pb-1">
             x:{pill.x} y:{pill.y} r:{pill.rotation}° {pill.type === 'image' && `w:${pill.width}%`}
           </div>
           <div className="flex gap-2 justify-center">

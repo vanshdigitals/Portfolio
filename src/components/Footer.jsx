@@ -1,5 +1,6 @@
 import { useRef, useEffect, useCallback } from 'react';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { ArrowRight, Mail, MapPin, Phone } from 'lucide-react';
+import Button from './Button';
 import arrowImage from '../assets/arrow-small-black.png';
 import creditLight from '../assets/blue-credit-light-mode.png';
 import creditDark from '../assets/yellow-credit-dark-mode.png';
@@ -175,19 +176,10 @@ export default function Footer() {
           {/* Column 4: Let's Connect */}
           <div className="flex flex-col items-start">
             <div className="flex flex-col gap-[22px] w-full">
-              <a 
+              <Button 
+                label="Let's Talk" 
                 href="#contact" 
-                className="group inline-flex h-[44px] items-center justify-center gap-3 self-start rounded-full pl-5 pr-1.5 font-heading text-[15px] font-medium transition-colors duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg dark:bg-[#FFD722] dark:hover:bg-[#E6C200] dark:text-[#111214] bg-[#007BFF] hover:bg-[#006AE0] text-white"
-              >
-                <span>Let's Talk</span>
-                <div className="flex items-center justify-center w-[32px] h-[32px] rounded-full transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)] group-hover:scale-[1.03] bg-white dark:bg-[#111214] flex-shrink-0">
-                  <img 
-                    src={arrowImage} 
-                    alt="" 
-                    className="w-[16px] h-[16px] -rotate-45 group-hover:rotate-0 transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)] motion-reduce:transition-none dark:invert" 
-                  />
-                </div>
-              </a>
+              />
               
               <div className="flex flex-col gap-3">
                 <a href="mailto:vanshdigitalsiscreative@gmail.com" className="group flex items-center gap-1.5 font-body text-[14px] text-text-muted hover:text-brand-blue dark:hover:text-brand-yellow transition-colors">
