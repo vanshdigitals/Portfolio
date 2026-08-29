@@ -210,7 +210,7 @@ export default function Hero() {
               absolute left-1/2 -translate-x-1/2
               w-[120vw] max-w-none
               rotate-0
-              bg-[#111214] dark:bg-[#1A1A1D]
+              bg-[#007BFF]
               flex items-center
               h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
               mt-[1.2vw] sm:mt-0
@@ -231,7 +231,7 @@ export default function Hero() {
               absolute left-1/2 -translate-x-1/2 top-[14.5vw]
               w-[120vw] max-w-none
               -rotate-[12deg]
-              bg-[#111214] dark:bg-[#1A1A1D]
+              bg-[#007BFF]
               flex items-center
               h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
               mt-[1.2vw] sm:mt-0
