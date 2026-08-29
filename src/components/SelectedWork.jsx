@@ -146,6 +146,61 @@ const BUILDERS_PLAYGROUND_DATA = {
   ]
 };
 
+const KESHVI_DATA = {
+  logo: [
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Keshvi-Beauty-Lounge-Logo/1.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Keshvi-Beauty-Lounge-Logo/2.webp"
+  ],
+  posters: [
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/15.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/16.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/17.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/18.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/19.webp"
+  ],
+  carousel1: [
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/1.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/2.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/3.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/4.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/5.webp"
+  ],
+  carousel2: [
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-2-PartyGlam-Portfolio/6.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-2-PartyGlam-Portfolio/7.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-2-PartyGlam-Portfolio/8.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-2-PartyGlam-Portfolio/9.webp"
+  ],
+  carousel3: [
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-3-Heritage-Bride-Portfolio/10.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-3-Heritage-Bride-Portfolio/11.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-3-Heritage-Bride-Portfolio/12.webp",
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-3-Heritage-Bride-Portfolio/13.webp"
+  ],
+  reel: "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Reel-Cover/KBL-Mehendi-Portfolio-Reel-Cover-01.webp"
+};
+
+const KESHVI_CAROUSELS = [
+  {
+    id: "KBL-C1",
+    title: "Texture Vs Cakey — Bridal Authority",
+    ratio: "4/5",
+    slides: KESHVI_DATA.carousel1
+  },
+  {
+    id: "KBL-C2",
+    title: "Party Glam Portfolio",
+    ratio: "4/5",
+    slides: KESHVI_DATA.carousel2
+  },
+  {
+    id: "KBL-C3",
+    title: "Heritage Bride Portfolio",
+    ratio: "4/5",
+    slides: KESHVI_DATA.carousel3
+  }
+];
+
 const BRANDS = [
   {
     id: 'ranjeet',
@@ -184,12 +239,58 @@ const BRANDS = [
   {
     id: 'keshvi',
     name: 'Keshvi Beauty Lounge',
-    role: 'Freelance Graphic Designer | As-Needed Project Work',
+    role: 'Freelance Graphic Designer | Project-Based Work',
     date: 'February 2026',
-    category: 'Beauty / Branding',
-    deliverables: ['3 social posts', '1 educational carousel', '2 makeup carousels', '5+ festival creatives', 'logo + palette + typography'],
-    detail: "Created social media carousel posts (educational + makeup portfolio) and festival/combo-offer creatives; contributed to the brand's visual setup by creating the logo and defining colour palette and typography direction.",
+    category: 'Beauty / Personal Brand',
+    deliverables: [
+      `${KESHVI_DATA.logo.length} Logo Designs`,
+      `${KESHVI_DATA.posters.length} Posters`,
+      `${KESHVI_CAROUSELS.length} Carousels`,
+      `1 Reel Cover`
+    ],
+    detail: "Designed a cohesive visual collection for Keshvi Beauty Lounge across brand identity, promotional posters, Instagram carousels and reel covers, maintaining a consistent beauty-focused visual direction across formats.",
     image: imgKeshvi,
+    collections: [
+      {
+        title: "Logo",
+        items: KESHVI_DATA.logo.map((img, i) => ({
+          type: 'Static',
+          image: img,
+          title: `Keshvi Beauty Lounge Logo`,
+          typeLabel: "Logo",
+          ratio: "1/1"
+        }))
+      },
+      {
+        title: "Posters",
+        items: KESHVI_DATA.posters.map((img, i) => ({
+          type: 'Static',
+          image: img,
+          title: `Signature Packages`,
+          typeLabel: "Poster",
+          ratio: "4/5"
+        }))
+      },
+      {
+        title: "Carousels",
+        items: KESHVI_CAROUSELS.map(c => ({
+          type: 'Carousel',
+          ...c
+        }))
+      },
+      {
+        title: "Reel Cover",
+        items: [
+          {
+            type: 'Static',
+            image: KESHVI_DATA.reel,
+            title: "Mehendi Portfolio",
+            typeLabel: "Reel Cover",
+            ratio: "9/16"
+          }
+        ]
+      }
+    ]
   }
 ];
 
@@ -462,7 +563,43 @@ function ProjectNode({ brand, index }) {
 
         {/* Horizontal Scroll Track (MOBILE ONLY) */}
         <div className="md:hidden relative mt-2">
-          {brand.id === 'builders' ? (
+          {brand.collections ? (
+            <div className="flex flex-col gap-10 pb-4">
+              {brand.collections.map((collection, cIdx) => (
+                <div key={cIdx} className="flex flex-col gap-3">
+                  <p className="font-heading text-[11px] font-bold text-text-primary uppercase tracking-[0.2em] pl-1 opacity-80">{collection.title}</p>
+                  <div className="relative -mx-5 px-5">
+                    <div className="absolute left-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+                    <div className="absolute right-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+                    <div className="relative flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 pr-10 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                      {collection.items.map((item, idx) => {
+                        if (item.type === 'Carousel') {
+                          return (
+                            <MobileInnerCarousel 
+                              key={item.id || idx} 
+                              carousel={item} 
+                              index={idx} 
+                              prefersReducedMotion={prefersReducedMotion}
+                            />
+                          );
+                        } else {
+                          return (
+                            <StaticMobileCard 
+                              key={`${collection.title}-${idx}`} 
+                              image={item.image} 
+                              title={item.title}
+                              type={item.typeLabel || collection.title}
+                              ratio={item.ratio}
+                            />
+                          );
+                        }
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : brand.id === 'builders' ? (
             <div className="flex flex-col gap-10 pb-4">
               {/* Reel Covers */}
               <div className="flex flex-col gap-3">
