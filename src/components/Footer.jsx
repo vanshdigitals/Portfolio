@@ -226,14 +226,14 @@ export default function Footer() {
           {/* Base Layer */}
           <div 
             ref={baseTextRef}
-            className="font-heading font-[800] tracking-tighter whitespace-nowrap text-[#111214]/[0.04] dark:text-white/[0.05] text-[32vw] md:text-[clamp(200px,34vw,850px)]"
+            className="font-heading font-[800] tracking-tighter whitespace-nowrap text-[#111214]/[0.04] dark:text-white/[0.05] text-[34vw] md:text-[clamp(200px,34vw,850px)]"
           >
             VANSH
           </div>
 
           {/* Light Mode Fluid Ink Layer (Blue) */}
           <div 
-            className="absolute inset-0 font-heading font-[800] tracking-tighter whitespace-nowrap text-transparent bg-clip-text pointer-events-none dark:hidden animate-ink-fluid text-[32vw] md:text-[clamp(200px,34vw,850px)]"
+            className="absolute inset-0 font-heading font-[800] tracking-tighter whitespace-nowrap text-transparent bg-clip-text pointer-events-none dark:hidden animate-ink-fluid text-[34vw] md:text-[clamp(200px,34vw,850px)]"
             style={{ 
               backgroundSize: '250% 250%, 300% 300%, 200% 200%, 350% 350%',
               backgroundImage: `
@@ -249,7 +249,7 @@ export default function Footer() {
 
           {/* Dark Mode Fluid Ink Layer (Yellow) */}
           <div 
-            className="absolute inset-0 font-heading font-[800] tracking-tighter whitespace-nowrap text-transparent bg-clip-text pointer-events-none hidden dark:block animate-ink-fluid text-[32vw] md:text-[clamp(200px,34vw,850px)]"
+            className="absolute inset-0 font-heading font-[800] tracking-tighter whitespace-nowrap text-transparent bg-clip-text pointer-events-none hidden dark:block animate-ink-fluid text-[34vw] md:text-[clamp(200px,34vw,850px)]"
             style={{ 
               backgroundSize: '250% 250%, 300% 300%, 200% 200%, 350% 350%',
               backgroundImage: `
