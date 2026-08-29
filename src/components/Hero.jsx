@@ -189,7 +189,7 @@ export default function Hero() {
             <img
               src={illustratorIcon}
               alt="Illustrator"
-              className="absolute top-[72%] right-[-22%] sm:right-[10%] -translate-y-1/2 rotate-[78deg]
+              className="absolute top-[72%] right-[-28%] sm:right-[5%] -translate-y-1/2 rotate-[78deg]
                          w-[25%] aspect-square sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)] sm:aspect-auto
                          object-contain drop-shadow-md z-10 pointer-events-auto"
             />
