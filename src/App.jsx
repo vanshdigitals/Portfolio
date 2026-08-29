@@ -9,6 +9,7 @@ import WorkCollections from './pages/WorkCollections';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Preloader from './components/Preloader';
+import MobileOnlyGate from './components/MobileOnlyGate';
 
 // ── Landing page (all sections stacked) ────────────────────────────────────────
 function LandingPage() {
@@ -91,7 +92,7 @@ function App() {
   }, [location.pathname, location.hash, isPreloading]);
 
   return (
-    <>
+    <MobileOnlyGate>
       {isPreloading && <Preloader onComplete={() => setIsPreloading(false)} />}
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -108,7 +109,7 @@ function App() {
           }
         />
       </Routes>
-    </>
+    </MobileOnlyGate>
   );
 }
 
