@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { usePageTransition } from '../context/TransitionContext';
 
 export default function Button({ 
   label, 
@@ -10,6 +11,7 @@ export default function Button({
   className = '' 
 }) {
   const isExternal = href && (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:') || href.endsWith('.pdf'));
+  const { navigateWithTransition } = usePageTransition();
 
   const Tag = href ? (isExternal ? 'a' : Link) : 'button';
   const tagProps = {
@@ -17,6 +19,12 @@ export default function Button({
     ...(target && { target }),
     ...(rel && { rel }),
     ...(onClick && { onClick }),
+    ...(!isExternal && href && !onClick ? { 
+      onClick: (e) => { 
+        e.preventDefault(); 
+        navigateWithTransition(href); 
+      } 
+    } : {}),
   };
 
   return (

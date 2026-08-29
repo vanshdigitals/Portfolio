@@ -2,6 +2,7 @@ import { useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Mail, MapPin, Phone } from 'lucide-react';
 import Button from './Button';
+import { usePageTransition } from '../context/TransitionContext';
 import arrowImage from '../assets/arrow-small-black.png';
 import creditLight from '../assets/blue-credit-light-mode.png';
 import creditDark from '../assets/yellow-credit-dark-mode.png';
@@ -37,6 +38,7 @@ export default function Footer() {
   const textWrapperRef = useRef(null);
   const baseTextRef = useRef(null);
   const hitCanvasRef = useRef(null);
+  const { navigateWithTransition } = usePageTransition();
   
   // The user requested to keep the canvas-to-HTML mapping logic intact
   // (the hitCanvasRef generation below) for future architectural use, 
@@ -159,7 +161,12 @@ export default function Footer() {
             </h4>
             <nav className="flex flex-col gap-3">
               {[['Home','hero'],['About','about'],['Work','work'],['Skills','skills'],['Experience','experience'],['Contact','contact']].map(([item, id]) => (
-                <Link key={item} to={`/#${id}`} className="font-body text-sm text-text-muted hover:text-brand-blue dark:hover:text-brand-yellow transition-colors">
+                <Link 
+                  key={item} 
+                  to={`/#${id}`} 
+                  onClick={(e) => { e.preventDefault(); navigateWithTransition(`/#${id}`); }}
+                  className="font-body text-sm text-text-muted hover:text-brand-blue dark:hover:text-brand-yellow transition-colors"
+                >
                   {item}
                 </Link>
               ))}
@@ -173,9 +180,14 @@ export default function Footer() {
             </h4>
             <nav className="flex flex-col gap-3">
               {['Selected Work', 'Sample Work', 'Practice Work'].map((item) => (
-                <a key={item} href="/work-collections" className="font-body text-sm text-text-muted hover:text-brand-blue dark:hover:text-brand-yellow transition-colors">
+                <Link 
+                  key={item} 
+                  to="/work-collections"
+                  onClick={(e) => { e.preventDefault(); navigateWithTransition('/work-collections'); }}
+                  className="font-body text-sm text-text-muted hover:text-brand-blue dark:hover:text-brand-yellow transition-colors"
+                >
                   {item}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>

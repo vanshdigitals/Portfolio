@@ -8,7 +8,7 @@ import { PlaceholderSection } from './components/SectionPlaceholders';
 import WorkCollections from './pages/WorkCollections';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Preloader from './components/Preloader';
+import { TransitionProvider } from './context/TransitionContext';
 import MobileOnlyGate from './components/MobileOnlyGate';
 
 // ── Landing page (all sections stacked) ────────────────────────────────────────
@@ -47,34 +47,13 @@ function LandingPage() {
 
 // ── App with routing ────────────────────────────────────────────────────────────
 function App() {
-  // Start the preloader only on the home route so other routes never paint it for a frame.
-  const [isPreloading, setIsPreloading] = useState(() => (typeof window === 'undefined' ? true : window.location.pathname === '/'));
   const location = useLocation();
-
-  // Only show preloader on initial load of the home page
-  useEffect(() => {
-    if (location.pathname !== '/') {
-      setIsPreloading(false);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (isPreloading) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isPreloading]);
 
   // On route/hash change: scroll to the hash target section if one is present
   // (e.g. navigating from /work-collections to /#about), otherwise scroll to top.
   // The fixed-header offset is handled by the existing `scroll-padding-top` in
   // index.css, which scrollIntoView honours — no hardcoded offset needed.
   useEffect(() => {
-    if (isPreloading) return; // wait until the intro preloader releases the scroll lock
     if (location.hash) {
       // The target section is already mounted here (effects run after commit),
       // including after a cross-route change from /work-collections.
@@ -89,13 +68,13 @@ function App() {
       left: 0,
       behavior: 'instant'
     });
-  }, [location.pathname, location.hash, isPreloading]);
+  }, [location.pathname, location.hash]);
 
   return (
     <MobileOnlyGate>
-      {isPreloading && <Preloader onComplete={() => setIsPreloading(false)} />}
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
+      <TransitionProvider>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
         <Route
           path="/work-collections"
           element={
@@ -108,7 +87,8 @@ function App() {
             </div>
           }
         />
-      </Routes>
+        </Routes>
+      </TransitionProvider>
     </MobileOnlyGate>
   );
 }

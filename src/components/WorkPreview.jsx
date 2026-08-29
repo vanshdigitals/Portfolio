@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { usePageTransition } from '../context/TransitionContext';
 
 import imgCutsCurves  from '../assets/card-cuts-curves.jpg';
 import imgWaterplane  from '../assets/card-waterplane.jpg';
@@ -58,7 +59,7 @@ const PROJECTS = [
 ];
 
 // ── Individual Card ─────────────────────────────────────────────────────────────
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index, navigateWithTransition }) {
   const isWide = index === 0; // first card spans 2 columns on md+
 
   return (
@@ -126,6 +127,7 @@ function ProjectCard({ project, index }) {
       {/* Invisible anchor covers the whole card for keyboard + screen-reader access */}
       <Link
         to="/work-collections"
+        onClick={(e) => { e.preventDefault(); navigateWithTransition('/work-collections'); }}
         className="absolute inset-0 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-label={`View ${project.name} — ${project.category}`}
         tabIndex={0}
@@ -136,6 +138,8 @@ function ProjectCard({ project, index }) {
 
 // ── Section ─────────────────────────────────────────────────────────────────────
 export default function WorkPreview() {
+  const { navigateWithTransition } = usePageTransition();
+
   return (
     <section id="work" className="py-20 md:py-28 border-b border-border bg-bg">
       <div className="w-full max-w-[1200px] mx-auto px-5 md:px-8 lg:px-12 xl:px-16">
@@ -161,6 +165,7 @@ export default function WorkPreview() {
           <div className="shrink-0">
             <Link
               to="/work-collections"
+              onClick={(e) => { e.preventDefault(); navigateWithTransition('/work-collections'); }}
               className="
                 group inline-flex items-center gap-2
                 font-heading text-[14px] font-medium text-text-primary
@@ -198,7 +203,7 @@ export default function WorkPreview() {
         */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
           {PROJECTS.map((project, i) => (
-            <ProjectCard key={project.num} project={project} index={i} />
+            <ProjectCard key={project.num} project={project} index={i} navigateWithTransition={navigateWithTransition} />
           ))}
         </div>
 

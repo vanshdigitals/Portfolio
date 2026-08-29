@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import AnimatedNavIndicator from './AnimatedNavIndicator';
 import Button from './Button';
+import { usePageTransition } from '../context/TransitionContext';
 
 // ── Nav data ──────────────────────────────────────────────────────────────────
 const NAV_LINKS = [
@@ -25,7 +26,7 @@ const POINT_COUNTS = [4, 4, 4, 4, 7, 7, 6];
 
 export default function Header() {
   const location = useLocation();
-  const navigate = useNavigate();
+  const { navigateWithTransition } = usePageTransition();
 
   const [isDark,         setIsDark]         = useState(false);
   const [scrolled,       setScrolled]       = useState(false);
@@ -229,7 +230,7 @@ export default function Header() {
   const handleNavClick = useCallback((e, link, index) => {
     e.preventDefault();
     setActiveIndex(index);
-    navigate(link.href, { replace: true });
+    navigateWithTransition(link.href);
     
     isClickScrolling.current = true;
     const target = document.getElementById(link.sectionId);
@@ -241,7 +242,7 @@ export default function Header() {
     setTimeout(() => {
       isClickScrolling.current = false;
     }, 800);
-  }, [navigate]);
+  }, [navigateWithTransition]);
 
   return (
     <header className="fixed top-0 left-0 w-full z-50">

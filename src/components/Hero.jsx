@@ -204,17 +204,13 @@ export default function Hero() {
         On mobile: positioned relative at the bottom of the section (acting as the top boundary of About).
         On desktop: absolute positioned inside Hero.
       */}
-      <div className="relative w-full h-[29vw] mt-0 mb-[50px] sm:absolute sm:w-auto sm:h-auto sm:mt-0 sm:mb-0 sm:inset-x-0 sm:bottom-[3%] sm:translate-y-0 z-30 pointer-events-none">
+      <div className="relative w-full mt-0 mb-[50px] sm:absolute sm:w-auto sm:h-auto sm:mt-0 sm:mb-0 sm:inset-x-0 sm:bottom-[3%] sm:translate-y-0 z-30 pointer-events-none flex flex-col items-center gap-[5px]">
         <div
             className="
-              absolute left-1/2 -translate-x-1/2
               w-[120vw] max-w-none
-              rotate-0
               bg-[#007BFF]
               flex items-center
               h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
-              mt-[1.2vw] sm:mt-0
-              border-y-2 border-black
               pointer-events-auto
               overflow-hidden
             "
@@ -225,17 +221,13 @@ export default function Hero() {
             </div>
           </div>
             
-          {/* DUPLICATE MARQUEE (-6deg, normal, shifted down more, reversed direction) */}
+          {/* DUPLICATE MARQUEE */}
           <div
             className="
-              absolute left-1/2 -translate-x-1/2 top-[14.5vw]
               w-[120vw] max-w-none
-              -rotate-[12deg]
               bg-[#007BFF]
               flex items-center
               h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
-              mt-[1.2vw] sm:mt-0
-              border-y-2 border-black
               pointer-events-auto
               overflow-hidden
             "
