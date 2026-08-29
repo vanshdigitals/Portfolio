@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Smartphone } from 'lucide-react';
 import { motion, useScroll, useSpring, useTransform, useReducedMotion } from 'framer-motion';
+import WorkMediaCard from './WorkMediaCard';
 import imgRanjeet from '../assets/card-ranjeet.jpg';
 import imgBuilders from '../assets/card-builders.jpg';
 import imgKeshvi from '../assets/card-keshvi.jpg';
@@ -101,6 +102,7 @@ const RANJEET_CAROUSELS = [
   {
     id: "RR-07",
     title: "The Carousel Anatomy Guide",
+    ratio: "3/4",
     slides: [
       "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/01.webp",
       "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/02.webp",
@@ -297,61 +299,18 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
 
   return (
     <div ref={containerRef} className="snap-start shrink-0 relative flex flex-col group/card h-full" onTouchStart={handleInteraction}>
-      {/* Card (FRONT) */}
-      <div className="relative w-[65vw] max-w-[260px] h-full rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 flex flex-col shadow-sm z-10">
-        
-        {/* Swipable Artwork Area (Padded Frame) */}
-        <div 
-          className="w-full pt-[14px] px-[14px] pb-[8px] bg-secondary-bg relative touch-pan-y"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div className={`${carousel.id === 'RR-07' ? 'aspect-[3/4]' : 'aspect-[4/5]'} w-full rounded-xl overflow-hidden relative shadow-sm border border-border/20 bg-bg`}>
-            <div
-              className={`flex w-full h-full ${!prefersReducedMotion && !isDragging ? 'transition-transform duration-[300ms] ease-[cubic-bezier(.22,1,.36,1)]' : ''}`}
-              style={{ transform: `translateX(calc(${activeSlide * -100}% + ${dragOffset}px))` }}
-            >
-              {carousel.slides.map((slide, i) => (
-                <div key={i} className="w-full h-full shrink-0 relative">
-                  <img 
-                    src={slide}
-                    alt={`${carousel.title} slide ${i + 1}`}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Text and Controls */}
-        <div className="px-4 pb-4 flex-1 flex flex-col justify-center">
-          <div className="mb-4 flex flex-col items-start">
-            <p className="font-heading text-lg font-bold text-text-primary leading-tight mb-1">
-              {carousel.title}
-            </p>
-            <p className="font-heading font-normal text-[11px] text-text-muted mb-3">
-              {String(index + 1).padStart(2, '0')} &middot; Carousel
-            </p>
-            
-            <div className="w-full flex justify-center mb-1">
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary"
-              >
-                <Smartphone size={12} />
-                Mobile Mockup View
-              </span>
-            </div>
-          </div>
-          
-          <div className="flex items-center justify-between border-t border-border/40 pt-3 mt-auto w-full">
+      <WorkMediaCard
+        ratio={carousel.ratio ?? '4/5'}
+        type="Carousel"
+        title={carousel.title}
+        media={carousel.slides}
+        controls={
+          <>
             <div className="font-heading font-medium text-[11px] text-text-muted tracking-widest pl-1">
               {String(activeSlide + 1).padStart(2, '0')} / {String(carousel.slides.length).padStart(2, '0')}
             </div>
             <div className="flex gap-2">
-              <button 
+              <button
                 onClick={() => goToSlide(activeSlide - 1)}
                 disabled={activeSlide === 0 || isTransitioning}
                 className="w-7 h-7 flex items-center justify-center rounded-full bg-bg border border-border/60 text-text-primary disabled:opacity-30 transition-opacity"
@@ -359,7 +318,7 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
               >
                 <ChevronLeft size={14} />
               </button>
-              <button 
+              <button
                 onClick={() => goToSlide(activeSlide + 1)}
                 disabled={activeSlide === carousel.slides.length - 1 || isTransitioning}
                 className="w-7 h-7 flex items-center justify-center rounded-full bg-bg border border-border/60 text-text-primary disabled:opacity-30 transition-opacity"
@@ -368,10 +327,33 @@ function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReduc
                 <ChevronRight size={14} />
               </button>
             </div>
+          </>
+        }
+      >
+        {/* Swipable media track (physics unchanged) */}
+        <div
+          className="absolute inset-0 w-full h-full touch-pan-y"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div
+            className={`flex w-full h-full ${!prefersReducedMotion && !isDragging ? 'transition-transform duration-[300ms] ease-[cubic-bezier(.22,1,.36,1)]' : ''}`}
+            style={{ transform: `translateX(calc(${activeSlide * -100}% + ${dragOffset}px))` }}
+          >
+            {carousel.slides.map((slide, i) => (
+              <div key={i} className="w-full h-full shrink-0 relative">
+                <img
+                  src={slide}
+                  alt={`${carousel.title} slide ${i + 1}`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            ))}
           </div>
         </div>
-        
-      </div>
+      </WorkMediaCard>
     </div>
   );
 }
@@ -423,19 +405,26 @@ function ProjectNode({ brand, index }) {
       <div className="flex flex-col gap-6">
         {/* Brand Meta */}
         <div>
-          <h4 className="font-heading text-2xl md:text-4xl font-bold text-text-primary mb-2">
+          {/* Brand title — primary identifier */}
+          <h4 className="font-heading text-2xl md:text-4xl font-bold text-text-primary leading-tight">
             {brand.name}
           </h4>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 font-heading font-normal text-xs md:text-sm text-text-muted mb-6">
+          {/* Metadata — secondary */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-x-3 gap-y-0.5 font-heading font-normal text-[13px] md:text-sm text-text-muted mt-2.5">
             <span>{brand.role}</span>
             <span className="hidden sm:inline">&middot;</span>
             <span>{brand.date}</span>
             <span className="hidden sm:inline">&middot;</span>
             <span className="text-text-secondary">{brand.category}</span>
           </div>
-          
-          {/* Deliverable Chips */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          {/* Description — before pills */}
+          {brand.detail && (
+            <p className="font-body text-[13px] md:text-sm leading-relaxed text-text-secondary max-w-[640px] mt-4">
+              {brand.detail}
+            </p>
+          )}
+          {/* Deliverable Chips — dynamic counts, wrap naturally */}
+          <div className="flex flex-wrap gap-2 mt-5">
             {brand.deliverables.map((chip, idx) => (
               <span key={idx} className="px-3 py-1 text-xs font-body text-text-secondary border border-border/80 rounded-full bg-transparent">
                 {chip}
@@ -486,9 +475,9 @@ function ProjectNode({ brand, index }) {
                       <StaticMobileCard 
                         key={`reel-${idx}`} 
                         image={img} 
-                        title={`Reel Cover ${String(idx + 1).padStart(2, '0')}`} 
-                        type="Reel Cover" 
-                        aspectRatio="aspect-[9/16]" 
+                        title={`Reel Cover ${String(idx + 1).padStart(2, '0')}`}
+                        type="Reel Cover"
+                        ratio="9/16"
                       />
                     ))}
                   </div>
@@ -506,9 +495,9 @@ function ProjectNode({ brand, index }) {
                       <StaticMobileCard 
                         key={`highlight-${idx}`} 
                         image={img} 
-                        title={`Highlight Cover ${String(idx + 1).padStart(2, '0')}`} 
-                        type="Highlight Cover" 
-                        aspectRatio="aspect-square" 
+                        title={`Highlight Cover ${String(idx + 1).padStart(2, '0')}`}
+                        type="Highlight Cover"
+                        ratio="1/1"
                       />
                     ))}
                   </div>
@@ -559,93 +548,33 @@ function ProjectNode({ brand, index }) {
                     />
                   ))
                 ) : (
-              <div className="snap-start shrink-0 relative flex flex-col group/card h-full">
-                {/* Card (FRONT) */}
-                <div className="relative w-[65vw] max-w-[260px] h-full rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 flex flex-col shadow-sm z-10">
-                  <div className="w-full pt-[14px] px-[14px] pb-[8px] bg-secondary-bg relative touch-pan-y">
-                    <div className="aspect-[3/4] w-full rounded-xl overflow-hidden relative shadow-sm border border-border/20 bg-bg">
-                      <img 
-                        src={brand.image} 
-                        alt={`${brand.name} mobile view`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="px-4 pb-4 flex-1 flex flex-col justify-center">
-                    <div className="mb-4 flex flex-col items-start">
-                      <p className="font-heading text-lg font-bold text-text-primary leading-tight mb-1">
-                        {brand.name}
-                      </p>
-                      <p className="font-heading font-normal text-[11px] text-text-muted mb-3">
-                        {brand.category}
-                      </p>
-                      <div className="w-full flex justify-center mb-1">
-                        <span
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary"
-                        >
-                          <Smartphone size={12} />
-                          Mobile Mockup View
-                        </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            )}
+                  <StaticMobileCard
+                    image={brand.image}
+                    title={brand.name}
+                    type={brand.category}
+                    ratio="3/4"
+                  />
+                )}
           </div>
         </div>
       )}
     </div>
 
-    {/* Detail sentence */}
-        <p className="font-body text-[15px] leading-relaxed text-text-secondary max-w-[800px] mt-4">
-          {brand.detail}
-        </p>
       </div>
     </div>
   );
 }
 
-function StaticMobileCard({ image, title, type, aspectRatio }) {
+function StaticMobileCard({ image, title, type, ratio }) {
   return (
-    <div className="snap-start shrink-0 relative flex flex-col group/card h-full">
-      <div className="relative w-[65vw] max-w-[260px] h-full rounded-2xl overflow-hidden bg-secondary-bg border border-border/40 flex flex-col shadow-sm z-10">
-        <div className="w-full pt-[14px] px-[14px] pb-[8px] bg-secondary-bg relative">
-          <div className={`${aspectRatio} w-full rounded-xl overflow-hidden relative shadow-sm border border-border/20 bg-bg`}>
-            <div className="w-full h-full relative">
-              <img 
-                src={image}
-                alt={title}
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="px-4 pb-4 flex-1 flex flex-col justify-center">
-          <div className="mb-4 flex flex-col items-start">
-            <p className="font-heading text-lg font-bold text-text-primary leading-tight mb-1 line-clamp-2">
-              {title}
-            </p>
-            <p className="font-heading font-normal text-[11px] text-text-muted mb-3">
-              {type}
-            </p>
-            
-            <div className="w-full flex justify-center mb-1">
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/60 bg-bg/50 text-[11px] font-heading font-medium text-text-secondary"
-              >
-                <Smartphone size={12} />
-                Mobile Mockup View
-              </span>
-            </div>
-          </div>
-          
-          <div className="border-t border-border/40 pt-3 mt-auto w-full" />
-        </div>
-      </div>
-    </div>
+    <WorkMediaCard ratio={ratio} type={type} title={title} media={[image]}>
+      <img
+        src={image}
+        alt={title}
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="lazy"
+      />
+    </WorkMediaCard>
   );
 }
 
