@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment } from 'react';
 import chatgptIcon from '../assets/chatgpt-icon.png';
 import canvaIcon from '../assets/canva-icon.png';
 import photoshopIcon from '../assets/photoshop-icon.png';
@@ -34,178 +34,13 @@ const MarqueeContent = ({ ariaHidden = false }) => (
   </span>
 );
 
-const defaultPills = [
-  { id: 'ai-assisted', content: 'AI-Assisted', x: 101.75, y: 46.36, rotation: -11 },
-  { id: 'design-workflows', content: 'Design Workflows', x: 1.68, y: 63.92, rotation: 3 },
-  { id: 'canva-experienced', content: 'Canva Experienced', x: 94.55, y: 59.19, rotation: 0 },
-  { id: '5-brands', content: '5+ BRANDS', x: 1.03, y: 50.19, rotation: 10 },
-  { id: 'chatgpt-icon', type: 'image', content: chatgptIcon, x: 12.8, y: 36.23, rotation: -45, width: 31 }
-];
-
-const DraggableTextPill = ({ pill, isEditMode, onUpdate, isSelected, onSelect }) => {
-  const [isDragging, setIsDragging] = useState(false);
-  
-  const handlePointerDown = (e) => {
-    if (!isEditMode) return;
-    e.preventDefault();
-    e.stopPropagation();
-    onSelect(pill.id);
-    setIsDragging(true);
-    e.target.setPointerCapture(e.pointerId);
-  };
-
-  const handlePointerMove = (e) => {
-    if (!isDragging || !isEditMode) return;
-    
-    const container = e.target.closest('.badge-container');
-    if (!container) return;
-    
-    const rect = container.getBoundingClientRect();
-    const newX = ((e.clientX - rect.left) / rect.width) * 100;
-    const newY = ((e.clientY - rect.top) / rect.height) * 100;
-    
-    onUpdate(pill.id, {
-      x: Number(newX.toFixed(2)),
-      y: Number(newY.toFixed(2))
-    });
-  };
-
-  const handlePointerUp = (e) => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    e.target.releasePointerCapture(e.pointerId);
-  };
-
-  return (
-    <div
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      className={`sm:hidden absolute z-20 flex items-center justify-center whitespace-nowrap ${
-        pill.type === 'image' ? '' : 'bg-white/95 border border-black/5 shadow-sm rounded-full py-1.5 px-3'
-      } ${isEditMode ? 'cursor-move touch-none ring-1 ring-blue-500/50 hover:ring-2 hover:ring-blue-500 pointer-events-auto' : 'pointer-events-none'}`}
-      style={{
-        left: `${pill.x}%`,
-        top: `${pill.y}%`,
-        transform: `translate(-50%, -50%) rotate(${pill.rotation}deg)`,
-        width: pill.type === 'image' ? `${pill.width}%` : 'auto'
-      }}
-    >
-      {pill.type === 'image' ? (
-        <img src={pill.content} alt={pill.id} className="w-full aspect-square object-contain drop-shadow-md pointer-events-none" draggable={false} />
-      ) : (
-        <span className="font-heading font-bold text-black text-[10px] leading-none tracking-tight">
-          {pill.content}
-        </span>
-      )}
-      {isEditMode && isSelected && (
-        <div className="absolute top-[120%] left-1/2 -translate-x-1/2 mt-2 bg-black/90 text-white text-[10px] p-2 rounded shadow-xl pointer-events-auto flex flex-col gap-2 z-50 cursor-default">
-          <div className="text-center font-heading font-normal opacity-80 border-b border-white/20 pb-1">
-            x:{pill.x} y:{pill.y} r:{pill.rotation}° {pill.type === 'image' && `w:${pill.width}%`}
-          </div>
-          <div className="flex gap-2 justify-center">
-            {pill.type === 'image' && (
-              <>
-                <button 
-                  onPointerDown={(e) => { e.stopPropagation(); onUpdate(pill.id, { width: Math.max(5, pill.width - 2) }); }}
-                  className="bg-white/20 hover:bg-white/30 px-2 py-1 rounded font-bold"
-                >
-                  -
-                </button>
-                <button 
-                  onPointerDown={(e) => { e.stopPropagation(); onUpdate(pill.id, { width: pill.width + 2 }); }}
-                  className="bg-white/20 hover:bg-white/30 px-2 py-1 rounded font-bold"
-                >
-                  +
-                </button>
-              </>
-            )}
-            <button 
-              onPointerDown={(e) => { e.stopPropagation(); onUpdate(pill.id, { rotation: pill.rotation - 5 }); }}
-              className="bg-white/20 hover:bg-white/30 px-2 py-1 rounded"
-            >
-              ↺ -5°
-            </button>
-            <button 
-              onPointerDown={(e) => { e.stopPropagation(); onUpdate(pill.id, { rotation: pill.rotation + 5 }); }}
-              className="bg-white/20 hover:bg-white/30 px-2 py-1 rounded"
-            >
-              ↻ +5°
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
 export default function Hero() {
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedPillId, setSelectedPillId] = useState(null);
-  const [pills, setPills] = useState(defaultPills);
-
-  useEffect(() => {
-    if (import.meta.env.DEV) {
-      const saved = localStorage.getItem('heroTextPillsConfigV4');
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          const merged = defaultPills.map(def => {
-            const found = parsed.find(p => p.id === def.id);
-            return found ? { ...def, x: found.x, y: found.y, rotation: found.rotation, ...(found.width && {width: found.width}) } : def;
-          });
-          setPills(merged);
-        } catch (e) {
-          console.error("Failed to parse saved pills", e);
-        }
-      }
-    }
-  }, []);
-
-  const handleUpdatePill = (id, updates) => {
-    setPills(prev => {
-      const next = prev.map(p => p.id === id ? { ...p, ...updates } : p);
-      if (import.meta.env.DEV) {
-        localStorage.setItem('heroTextPillsConfigV4', JSON.stringify(next));
-      }
-      return next;
-    });
-  };
-
-  const handleExport = () => {
-    const cleanData = pills.map(({ id, x, y, rotation, width }) => ({ id, x, y, rotation, ...(width && {width}) }));
-    const json = JSON.stringify(cleanData, null, 2);
-    console.log("=== HERO TEXT PILLS EXPORT ===");
-    console.log(json);
-    navigator.clipboard.writeText(json).then(() => {
-      alert("Copied to clipboard! Paste this into the defaultPills array.");
-    });
-  };
-
   return (
     <section 
       id="hero" 
       className="relative w-full mt-16 lg:mt-24 pt-0 pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-[320ms] overflow-x-clip"
       style={{ scrollMarginTop: 'var(--header-h, 64px)' }}
     >
-      {import.meta.env.DEV && (
-        <div className="absolute top-4 left-4 z-50 flex gap-2">
-          <button 
-            onClick={() => setIsEditMode(!isEditMode)}
-            className={`px-3 py-1.5 text-xs font-bold rounded ${isEditMode ? 'bg-blue-600 text-white' : 'bg-white/80 text-black border border-black/10'}`}
-          >
-            {isEditMode ? 'Finish Editing Pills' : 'Edit Text Pills'}
-          </button>
-          {isEditMode && (
-            <button 
-              onClick={handleExport}
-              className="px-3 py-1.5 text-xs font-bold rounded bg-green-600 text-white"
-            >
-              Export JSON
-            </button>
-          )}
-        </div>
-      )}
 
       {/*
         ── COMPOSITION GROUP ──────────────────────────────────────────────────────
@@ -279,12 +114,12 @@ export default function Hero() {
         */}
         <div
           className="col-start-1 row-start-1 z-20 pointer-events-none
-                     w-[58%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
+                     w-[68%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
                      justify-self-center self-start
                      pt-[18vw] sm:pt-[18vw] md:pt-[18vw] lg:pt-[19vw] xl:pt-[270px]"
         >
           {/* Portrait Container */}
-          <div className="relative w-full scale-[1.11] origin-[50%_15%] sm:transform-none badge-container">
+          <div className="relative w-full">
 
             {/* Portrait image — renders at natural aspect ratio via h-auto. Width/Height attributes prevent layout shift. */}
             <img
@@ -313,24 +148,18 @@ export default function Hero() {
             */}
 
             {/* ── MOBILE ONLY: ICONS ON SHOULDERS ── */}
+            {/* ChatGPT (Mobile) — upper-left / left shoulder */}
+            <img
+              src={chatgptIcon}
+              alt="ChatGPT"
+              className="sm:hidden absolute top-[36%] left-[13%] -translate-x-1/2 -translate-y-1/2 -rotate-[45deg] w-[31%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
+            />
             {/* Canva (Mobile) — upper-right / right shoulder */}
             <img
               src={canvaIcon}
               alt="Canva"
               className="sm:hidden absolute top-[35%] right-[6%] -translate-y-1/2 rotate-[22deg] w-[26%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
             />
-
-            {/* MOBILE TEXT PILLS (DRAGGABLE IN DEV) */}
-            {pills.map(pill => (
-              <DraggableTextPill 
-                key={pill.id} 
-                pill={pill} 
-                isEditMode={isEditMode} 
-                onUpdate={handleUpdatePill} 
-                isSelected={selectedPillId === pill.id}
-                onSelect={setSelectedPillId}
-              />
-            ))}
 
             {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
             {/* ChatGPT — upper-left */}
