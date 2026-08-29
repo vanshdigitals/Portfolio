@@ -216,7 +216,7 @@ export default function Footer() {
         style={{ height: 'clamp(150px, 25vw, 600px)' }}
       >
         <div 
-          className="relative w-full select-none flex justify-center items-end px-[10px] translate-y-0 md:translate-y-[115px]"
+          className="relative w-full select-none flex justify-center items-end px-0 md:px-[10px] translate-y-[8%] md:translate-y-[115px]"
           aria-hidden="true"
         >
         <div 
@@ -226,14 +226,14 @@ export default function Footer() {
           {/* Base Layer */}
           <div 
             ref={baseTextRef}
-            className="font-heading font-[800] tracking-tighter whitespace-nowrap text-[#111214]/[0.04] dark:text-white/[0.05] text-[24vw] md:text-[clamp(200px,34vw,850px)]"
+            className="font-heading font-[800] tracking-tighter whitespace-nowrap text-[#111214]/[0.04] dark:text-white/[0.05] text-[27.5vw] md:text-[clamp(200px,34vw,850px)]"
           >
             VANSH
           </div>
 
           {/* Light Mode Fluid Ink Layer (Blue) */}
           <div 
-            className="absolute inset-0 font-heading font-[800] tracking-tighter whitespace-nowrap text-transparent bg-clip-text pointer-events-none dark:hidden animate-ink-fluid text-[24vw] md:text-[clamp(200px,34vw,850px)]"
+            className="absolute inset-0 font-heading font-[800] tracking-tighter whitespace-nowrap text-transparent bg-clip-text pointer-events-none dark:hidden animate-ink-fluid text-[27.5vw] md:text-[clamp(200px,34vw,850px)]"
             style={{ 
               backgroundSize: '250% 250%, 300% 300%, 200% 200%, 350% 350%',
               backgroundImage: `
@@ -249,7 +249,7 @@ export default function Footer() {
 
           {/* Dark Mode Fluid Ink Layer (Yellow) */}
           <div 
-            className="absolute inset-0 font-heading font-[800] tracking-tighter whitespace-nowrap text-transparent bg-clip-text pointer-events-none hidden dark:block animate-ink-fluid text-[24vw] md:text-[clamp(200px,34vw,850px)]"
+            className="absolute inset-0 font-heading font-[800] tracking-tighter whitespace-nowrap text-transparent bg-clip-text pointer-events-none hidden dark:block animate-ink-fluid text-[27.5vw] md:text-[clamp(200px,34vw,850px)]"
             style={{ 
               backgroundSize: '250% 250%, 300% 300%, 200% 200%, 350% 350%',
               backgroundImage: `
