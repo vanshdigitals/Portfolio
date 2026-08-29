@@ -49,6 +49,35 @@ function LandingPage() {
 function App() {
   const location = useLocation();
 
+  // Casual Content Protection: Only active in production (Vercel) and not on localhost
+  // "Production-only casual-copy deterrence. Cannot stop screenshots or DevTools. Real protection = watermarks + low-res public previews."
+  useEffect(() => {
+    const isProd = import.meta.env.PROD;
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    if (!isProd || isLocalhost) {
+      return; // Do nothing in local development
+    }
+
+    // Add .protected class to body for scoped CSS rules
+    document.body.classList.add('protected');
+
+    const handleContextMenu = (e) => {
+      // Allow right-click on inputs and textareas (e.g., for pasting into the contact form)
+      const tagName = e.target.tagName.toUpperCase();
+      if (tagName === 'INPUT' || tagName === 'TEXTAREA' || e.target.isContentEditable) {
+        return;
+      }
+      e.preventDefault();
+    };
+
+    document.addEventListener('contextmenu', handleContextMenu);
+    return () => {
+      document.body.classList.remove('protected');
+      document.removeEventListener('contextmenu', handleContextMenu);
+    };
+  }, []);
+
   // On route/hash change: scroll to the hash target section if one is present
   // (e.g. navigating from /work-collections to /#about), otherwise scroll to top.
   // The fixed-header offset is handled by the existing `scroll-padding-top` in

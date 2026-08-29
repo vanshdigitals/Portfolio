@@ -100,6 +100,28 @@
     transition-timing-function: cubic-bezier(.4,0,.2,1);
   }
 
+  /* Casual Content Protection: Only active when .protected class is applied (Prod only) */
+  .protected {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Re-enable selection where appropriate */
+  .protected input, 
+  .protected textarea, 
+  .protected [contenteditable="true"], 
+  .protected .selectable {
+    -webkit-user-select: auto;
+    user-select: auto;
+  }
+
+  /* Casual Content Protection: Disable image drag and iOS long-press */
+  .protected img {
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     letter-spacing: -0.02em;
