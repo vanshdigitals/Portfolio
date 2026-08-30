@@ -1,226 +1,360 @@
-import { useRef, useState, useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
-import { useReducedMotion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, ChevronRight, Smartphone } from 'lucide-react';
+import { motion, useScroll, useSpring, useTransform, useReducedMotion } from 'framer-motion';
+import WorkMediaCard from './WorkMediaCard';
+import { PROJECTS, getDeliverablesString } from '../data/projects';
 
-const RANJEET_CAROUSELS = [
-  {
-    slides: [
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/01.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/02.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/03.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/04.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/05.webp",
-    ]
-  }
-];
-
-const BUILDERS_PLAYGROUND_DATA = {
-  "Event-Carousel": [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/1.webp"
-  ],
-  "Highlight-Covers": [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/01-about-us.webp"
-  ],
-  "Reel-Covers": [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-1st-reel-cover-launching-v2.webp"
-  ]
-};
-
-const KESHVI_DATA = {
-  logo: [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Keshvi-Beauty-Lounge-Logo/1.webp"
-  ],
-  posters: [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/15.webp"
-  ],
-  carousel1: [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/1.webp"
-  ]
-};
-
-const BRANDS = [
-  {
-    id: 'ranjeet',
-    title: 'Ranjeet Raj Official',
-    label: 'Brand Content',
-    meta: '8 Carousels · view all →',
-    workCollectionsRoute: '/work-collections',
-    totalCount: 8,
-    media: {
-      style: 'cycle',
-      items: RANJEET_CAROUSELS[0].slides.slice(0, 5)
-    }
-  },
-  {
-    id: 'builders',
-    title: 'Builders Playground',
-    label: 'Brand Content',
-    meta: '1 Reel · 6 Highlights · 1 Carousel · view all →',
-    workCollectionsRoute: '/work-collections',
-    totalCount: 13,
-    media: {
-      style: 'collage',
-      items: [
-        BUILDERS_PLAYGROUND_DATA['Event-Carousel'][0],
-        BUILDERS_PLAYGROUND_DATA['Highlight-Covers'][0],
-        BUILDERS_PLAYGROUND_DATA['Reel-Covers'][0]
-      ]
-    }
-  },
-  {
-    id: 'keshvi',
-    title: 'Keshvi Beauty Lounge',
-    label: 'Beauty / Personal Brand',
-    meta: '2 Logos · 5 Posters · 3 Carousels · 1 Reel · view all →',
-    workCollectionsRoute: '/work-collections',
-    totalCount: 11,
-    media: {
-      style: 'collage',
-      items: [
-        KESHVI_DATA.posters[0],
-        KESHVI_DATA.carousel1[0],
-        KESHVI_DATA.logo[0]
-      ]
-    }
-  }
-];
-
-function FeaturedWorkCard({ brand }) {
-  const prefersReducedMotion = useReducedMotion();
+// Inner Carousel Component
+function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReducedMotion }) {
+  const containerRef = useRef(null);
   const [activeSlide, setActiveSlide] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isInView, setIsInView] = useState(false);
-  const cardRef = useRef(null);
-  
-  const { label, title, meta, workCollectionsRoute, totalCount, media } = brand;
-  const isCycle = media.style === 'cycle';
-  
-  useEffect(() => {
-    if (!isCycle || prefersReducedMotion) return;
-    
-    const canHover = window.matchMedia('(hover: hover)').matches;
-    
-    if (!canHover) {
-      const observer = new IntersectionObserver((entries) => {
-        setIsInView(entries[0].isIntersecting);
-      }, { threshold: 0.6 });
-      
-      if (cardRef.current) {
-        observer.observe(cardRef.current);
-      }
-      return () => observer.disconnect();
-    }
-  }, [isCycle, prefersReducedMotion]);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isDragging, setIsDragging] = useState(false); // 1:1 finger tracking active
+  const [dragOffset, setDragOffset] = useState(0);      // live px offset during drag
 
-  useEffect(() => {
-    if (!isCycle || prefersReducedMotion) return;
-    
-    const canHover = window.matchMedia('(hover: hover)').matches;
-    const shouldCycle = canHover ? isHovered : isInView;
-    
-    let timer;
-    if (shouldCycle) {
-      timer = setInterval(() => {
-        setActiveSlide(prev => (prev + 1) % media.items.length);
-      }, 1000);
-    } else {
-      if (canHover) {
-        setActiveSlide(0);
-      }
-    }
-    
-    return () => clearInterval(timer);
-  }, [isHovered, isInView, isCycle, prefersReducedMotion, media.items.length]);
+  const interactionTimeoutRef = useRef(null);
+  const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
 
-  const overlayCount = totalCount - 3;
+  // Intersection observer to track visibility
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      setIsVisible(entries[0].isIntersecting);
+    }, {
+      threshold: 0.6 // Card must be 60% visible to autoplay
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  // Handle manual interaction to pause autoplay
+  const handleInteraction = useCallback(() => {
+    setIsInteracting(true);
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
+    }
+    interactionTimeoutRef.current = setTimeout(() => {
+      setIsInteracting(false);
+    }, 5000); // Resume autoplay after 5 seconds idle
+  }, []);
+
+  const goToSlide = useCallback((idx) => {
+    if (isTransitioning) return; // lock gesture during transition
+    if (idx < 0 || idx >= carousel.slides.length) return;
+    
+    handleInteraction();
+    setActiveSlide(idx);
+    
+    // Lock interactions while CSS transition plays
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 300); // match snap transition duration
+  }, [isTransitioning, carousel.slides?.length, handleInteraction]);
+
+  // Touch Handlers — 1:1 finger tracking, decide target only on release
+  const SWIPE_THRESHOLD = 50; // px of horizontal travel to advance exactly one slide
+
+  const handleTouchStart = (e) => {
+    handleInteraction();
+    if (isTransitioning) return;
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+      time: Date.now()
+    };
+  };
+
+  const handleTouchMove = (e) => {
+    if (isTransitioning) return;
+    const dx = e.touches[0].clientX - touchStartRef.current.x;
+    const dy = e.touches[0].clientY - touchStartRef.current.y;
+    // Engage horizontal drag only when the gesture is primarily horizontal
+    // (lets vertical page scrolling pass through untouched).
+    if (!isDragging && Math.abs(dx) <= Math.abs(dy)) return;
+    if (!isDragging) setIsDragging(true);
+    setDragOffset(dx); // track follows finger 1:1
+  };
+
+  const handleTouchEnd = () => {
+    if (isTransitioning) return;
+    const dx = dragOffset;
+    setIsDragging(false);
+    setDragOffset(0); // release drag; goToSlide/return snaps with ease-out
+    // One intentional swipe = exactly one slide, regardless of velocity/length.
+    if (dx <= -SWIPE_THRESHOLD) {
+      goToSlide(activeSlide + 1); // dragged left -> next
+    } else if (dx >= SWIPE_THRESHOLD) {
+      goToSlide(activeSlide - 1); // dragged right -> prev
+    }
+  };
+
+  // Autoplay Effect
+  useEffect(() => {
+    if (prefersReducedMotion || !isVisible || isInteracting || !carousel.slides) return;
+
+    const timer = setTimeout(() => {
+      if (activeSlide < carousel.slides.length - 1) {
+        setActiveSlide(activeSlide + 1);
+      } else {
+        if (onSequenceComplete) onSequenceComplete();
+      }
+    }, 3000); // Hold for 3 seconds
+
+    return () => clearTimeout(timer);
+  }, [activeSlide, isVisible, isInteracting, prefersReducedMotion, carousel.slides?.length, onSequenceComplete]);
+
+  const ratio = carousel.aspect?.replace('aspect-[', '')?.replace(']', '') ?? '4/5';
 
   return (
-    <Link 
-      to={workCollectionsRoute}
-      ref={cardRef}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      aria-label={`View ${title} in Work Collections`}
-      className="group block relative w-full rounded-[20px] bg-secondary-bg border border-border/40 hover:border-[#007BFF] dark:hover:border-[#FFD722] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg overflow-hidden flex flex-col"
-    >
-      {/* MEDIA AREA */}
-      <div className="relative w-full aspect-[4/5] bg-black overflow-hidden shrink-0">
-        {/* Badge */}
-        <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/60 backdrop-blur-md text-white text-[10px] font-heading font-bold uppercase tracking-widest rounded-full border border-white/10" aria-hidden="true">
-          {isCycle ? `${totalCount} carousels` : `${totalCount} designs`}
-        </div>
-        
-        {isCycle ? (
+    <div ref={containerRef} className="snap-start shrink-0 relative flex flex-col group/card h-full" onTouchStart={handleInteraction}>
+      <WorkMediaCard
+        ratio={ratio}
+        type={carousel.label || "Carousel"}
+        title={carousel.title}
+        media={carousel.slides}
+        controls={
           <>
-            <div 
-              className="flex w-full h-full transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${activeSlide * 100}%)` }}
-            >
-              {media.items.map((src, i) => (
-                <img 
-                  key={i}
-                  src={src} 
-                  alt=""
-                  loading={i === 0 ? "eager" : "lazy"}
-                  className="w-full h-full object-cover shrink-0 min-w-full"
-                />
-              ))}
+            <div className="font-heading font-medium text-[11px] text-text-muted tracking-widest pl-1">
+              {String(activeSlide + 1).padStart(2, '0')} / {String(carousel.slides?.length || 0).padStart(2, '0')}
             </div>
-            {/* Dots */}
-            {!prefersReducedMotion && (
-              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-20" aria-hidden="true">
-                {media.items.map((_, i) => (
-                  <div 
-                    key={i}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${activeSlide === i ? 'w-4 bg-[#007BFF] dark:bg-[#FFD722]' : 'w-1.5 bg-white/40'}`}
-                  />
-                ))}
-              </div>
-            )}
+            <div className="flex gap-2">
+              <button
+                onClick={() => goToSlide(activeSlide - 1)}
+                disabled={activeSlide === 0 || isTransitioning}
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-bg border border-border/60 text-text-primary disabled:opacity-30 transition-opacity"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft size={14} />
+              </button>
+              <button
+                onClick={() => goToSlide(activeSlide + 1)}
+                disabled={activeSlide === (carousel.slides?.length || 1) - 1 || isTransitioning}
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-bg border border-border/60 text-text-primary disabled:opacity-30 transition-opacity"
+                aria-label="Next slide"
+              >
+                <ChevronRight size={14} />
+              </button>
+            </div>
           </>
-        ) : (
-          <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-[3px] bg-black">
-            <div className="col-span-1 row-span-2 relative">
-              <img src={media.items[0]} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+        }
+      >
+        {/* Swipable media track (physics unchanged) */}
+        <div
+          className="absolute inset-0 w-full h-full touch-pan-y"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div
+            className={`flex w-full h-full ${!prefersReducedMotion && !isDragging ? 'transition-transform duration-[300ms] ease-[cubic-bezier(.22,1,.36,1)]' : ''}`}
+            style={{ transform: `translateX(calc(${activeSlide * -100}% + ${dragOffset}px))` }}
+          >
+            {carousel.slides?.map((slide, i) => (
+              <div key={i} className="w-full h-full shrink-0 relative">
+                <img
+                  src={slide}
+                  alt={`${carousel.title} slide ${i + 1}`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </WorkMediaCard>
+    </div>
+  );
+}
+
+function StaticMobileCard({ image, title, type, ratio }) {
+  return (
+    <WorkMediaCard ratio={ratio} type={type} title={title} media={[image]}>
+      <img
+        src={image}
+        alt={title}
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="lazy"
+      />
+    </WorkMediaCard>
+  );
+}
+
+// Reusable component for each project node to track its own scroll progress
+function ProjectNode({ project, index }) {
+  const nodeRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
+  
+  // Track this specific node's intersection
+  const { scrollYProgress } = useScroll({
+    target: nodeRef,
+    offset: ["start center", "center center"]
+  });
+  
+  // When the node reaches the center of the viewport, it becomes active
+  const ringColor = useTransform(scrollYProgress, [0.8, 1], ["rgba(255, 215, 34, 0)", "rgba(0, 123, 255, 0.3)"]);
+  const numberColor = useTransform(scrollYProgress, [0.8, 1], ["#000000", "#007BFF"]);
+  const numberScale = useTransform(scrollYProgress, [0.8, 1], [1, 1.05]);
+  // Called unconditionally (Rules of Hooks); applied only when motion is allowed (below).
+  const nodeBoxShadow = useTransform(scrollYProgress, [0.8, 1], ["0 0 0px rgba(0,123,255,0)", "0 0 8px rgba(0,123,255,0.4)"]);
+
+  const getAssetCollections = (assets) => {
+    const collections = [];
+    if (assets.branding) collections.push({ title: 'Branding', items: assets.branding, type: 'Static' });
+    if (assets.posters) collections.push({ title: 'Posters', items: assets.posters, type: 'Static' });
+    if (assets.festivalCreatives) collections.push({ title: 'Festival Creatives', items: assets.festivalCreatives, type: 'Static' });
+    if (assets.reelCovers) collections.push({ title: 'Reel Covers', items: assets.reelCovers, type: 'Static' });
+    if (assets.highlightCovers) collections.push({ title: 'Highlight Covers', items: assets.highlightCovers, type: 'Static' });
+    if (assets.carousels) collections.push({ title: 'Carousels', items: assets.carousels, type: 'Carousel' });
+    return collections;
+  };
+
+  const collections = getAssetCollections(project.assets);
+  const deliverablesPills = getDeliverablesString(project.assets).split(' · ');
+
+  return (
+    <div ref={nodeRef} className="relative group z-10 pl-[44px] md:pl-0">
+      
+      {/* --- DESKTOP NODE (Untouched) --- */}
+      <div className="hidden md:block absolute -left-[54px] top-2 w-3 h-3 rounded-full bg-border group-hover:bg-[#007BFF] dark:group-hover:bg-[#FFD722] transition-colors duration-300 ring-4 ring-bg" />
+
+      {/* --- MOBILE NODE (Numbered Circle) --- */}
+      <motion.div 
+        className="md:hidden absolute left-[20px] -translate-x-1/2 top-1 w-8 h-8 rounded-full bg-[#FFD722] shadow-sm flex items-center justify-center z-10 origin-center"
+        style={prefersReducedMotion ? {} : { boxShadow: nodeBoxShadow }}
+      >
+        {/* Subtle animated ring on active */}
+        <motion.div 
+          className="absolute inset-0 rounded-full border-2" 
+          style={prefersReducedMotion ? { borderColor: 'transparent' } : { borderColor: ringColor }}
+        />
+        <motion.span 
+          className="font-sans text-[14px] font-bold tracking-tight"
+          style={prefersReducedMotion ? { color: '#000000' } : { color: numberColor, scale: numberScale }}
+        >
+          {String(index + 1).padStart(2, '0')}
+        </motion.span>
+      </motion.div>
+
+      {/* --- PROJECT CONTENT --- */}
+      <div className="flex flex-col gap-6">
+        {/* Brand Meta */}
+        <div>
+          {/* Brand title — primary identifier */}
+          <h4 className="font-heading text-2xl md:text-4xl font-bold text-text-primary leading-tight">
+            {project.name}
+          </h4>
+          {/* Metadata — secondary */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-x-3 gap-y-0.5 font-heading font-normal text-[13px] md:text-sm text-text-muted mt-2.5">
+            {project.role && <span>{project.role}</span>}
+            {project.role && <span className="hidden sm:inline">&middot;</span>}
+            {project.date && <span>{project.date}</span>}
+            {project.date && <span className="hidden sm:inline">&middot;</span>}
+            <span className="text-text-secondary">{project.category}</span>
+          </div>
+          {/* Description — before pills */}
+          {project.detail && (
+            <p className="font-body text-[13px] md:text-sm leading-relaxed text-text-secondary max-w-[640px] mt-4">
+              {project.detail}
+            </p>
+          )}
+          {/* Deliverable Chips — dynamic counts, wrap naturally */}
+          <div className="flex flex-wrap gap-2 mt-5">
+            {deliverablesPills.map((chip, idx) => (
+              <span key={idx} className="px-3 py-1 text-xs font-body text-text-secondary border border-border/80 rounded-full bg-transparent">
+                {chip}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Asymmetric Images Layout (DESKTOP ONLY) */}
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+          <div className="md:col-span-8 rounded-2xl overflow-hidden aspect-[4/3] md:aspect-auto md:h-[480px] bg-secondary-bg border border-border/40 relative group/img cursor-crosshair">
+            <img 
+              src={project.featuredImage.url} 
+              alt={project.featuredImage.alt} 
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/img:scale-105"
+              loading="lazy"
+            />
+          </div>
+          
+          <div className="md:col-span-4 grid grid-cols-2 md:grid-cols-1 grid-rows-2 gap-4 md:gap-6">
+            <div 
+              className="rounded-2xl bg-secondary-bg border border-dashed border-border flex items-center justify-center p-6 text-center text-text-muted font-heading font-normal text-[10px] uppercase tracking-widest relative"
+              aria-label="Format placeholder: Social post"
+            >
+              Social Post Format
             </div>
-            <div className="col-span-1 row-span-1 relative">
-              <img src={media.items[1]} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
-            </div>
-            <div className="col-span-1 row-span-1 relative">
-              <img src={media.items[2]} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
-              {overlayCount > 0 && (
-                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center" aria-hidden="true">
-                  <span className="text-white font-body font-bold text-lg md:text-xl">+{overlayCount} more</span>
-                </div>
-              )}
+            <div 
+              className="rounded-2xl bg-secondary-bg border border-dashed border-border flex items-center justify-center p-6 text-center text-text-muted font-heading font-normal text-[10px] uppercase tracking-widest relative"
+              aria-label="Format placeholder: Detail shot"
+            >
+              Detail Shot
             </div>
           </div>
-        )}
-      </div>
-      
-      {/* FOOTER */}
-      <div className="p-5 flex justify-between items-start gap-4 grow bg-bg border-t border-border/40 transition-colors duration-300">
-        <div className="flex flex-col gap-1.5">
-          <span className="text-[10px] md:text-xs font-heading font-bold uppercase tracking-widest text-[#007BFF] dark:text-[#FFD722]">
-            {label}
-          </span>
-          <h4 className="font-body font-bold text-lg md:text-xl text-text-primary leading-tight">
-            {title}
-          </h4>
-          <span className="text-xs md:text-sm text-text-muted mt-1 font-body">
-            {meta}
-          </span>
         </div>
-        <div className="shrink-0 w-10 h-10 rounded-full border border-border/60 flex items-center justify-center text-text-primary group-hover:bg-[#007BFF] group-hover:border-[#007BFF] dark:group-hover:bg-[#FFD722] dark:group-hover:border-[#FFD722] group-hover:text-white dark:group-hover:text-black transition-all duration-300">
-          <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+
+        {/* Horizontal Scroll Track (MOBILE ONLY) */}
+        <div className="md:hidden relative mt-2 pb-4">
+          <div className="flex flex-col gap-10">
+            {collections.map((collection, cIdx) => (
+              <div key={cIdx} className="flex flex-col gap-3">
+                <p className="font-heading text-[11px] font-bold text-text-primary uppercase tracking-[0.2em] pl-1 opacity-80">{collection.title}</p>
+                <div className="relative -mx-5 px-5">
+                  <div className="absolute left-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+                  <div className="absolute right-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
+                  <div className="relative flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 pr-10 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    {collection.items.map((item, idx) => {
+                      if (collection.type === 'Carousel') {
+                        return (
+                          <MobileInnerCarousel 
+                            key={item.id || idx} 
+                            carousel={item} 
+                            index={idx} 
+                            prefersReducedMotion={prefersReducedMotion}
+                          />
+                        );
+                      } else {
+                        const ratio = item.aspect?.replace('aspect-[', '')?.replace(']', '') ?? '1/1';
+                        return (
+                          <StaticMobileCard 
+                            key={`${collection.title}-${idx}`} 
+                            image={item.url} 
+                            title={item.title || item.label}
+                            type={item.label || collection.title}
+                            ratio={ratio}
+                          />
+                        );
+                      }
+                    })}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
 export default function SelectedWork() {
+  const containerRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
+  
+  // Track entire timeline for the laser beam
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+  
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 25, mass: 0.5 });
+  
   return (
     <div className="w-full">
       {/* Header */}
@@ -242,10 +376,21 @@ export default function SelectedWork() {
         </p>
       </div>
 
-      {/* Grid of Featured Work Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 relative z-0">
-        {BRANDS.map((brand) => (
-          <FeaturedWorkCard key={brand.id} brand={brand} />
+      {/* Timeline Container */}
+      <div ref={containerRef} className="relative z-0 md:pl-12 md:border-l md:border-border/60 pb-16 space-y-24 md:space-y-32">
+        
+        {/* --- MOBILE TIMELINE RAIL & LASER (Hidden on Desktop) --- */}
+        <div className="md:hidden absolute left-[20px] top-4 bottom-0 w-[1px] bg-border/40 z-0" />
+        
+        {!prefersReducedMotion && (
+          <motion.div 
+            className="md:hidden absolute left-[20px] top-4 bottom-0 w-[2px] -ml-[0.5px] bg-[#007BFF] shadow-[0_0_8px_rgba(0,123,255,0.4)] origin-top z-0"
+            style={{ scaleY: smoothProgress }}
+          />
+        )}
+
+        {PROJECTS.map((project, index) => (
+          <ProjectNode key={project.id} project={project} index={index} />
         ))}
       </div>
     </div>
