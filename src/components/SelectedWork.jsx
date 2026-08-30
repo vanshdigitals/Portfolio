@@ -1,732 +1,226 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, Smartphone } from 'lucide-react';
-import { motion, useScroll, useSpring, useTransform, useReducedMotion } from 'framer-motion';
-import WorkMediaCard from './WorkMediaCard';
-import imgRanjeet from '../assets/card-ranjeet.webp';
-import imgBuilders from '../assets/card-builders.webp';
-import imgKeshvi from '../assets/card-keshvi.webp';
+import { useRef, useState, useEffect } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { useReducedMotion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const RANJEET_CAROUSELS = [
   {
-    id: "RR-01",
-    title: "Pro Designer Vocabulary",
     slides: [
       "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/01.webp",
       "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/02.webp",
       "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/03.webp",
       "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/04.webp",
       "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/05.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/06.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/07.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-01-Pro-Designer-Vocabulary-Carousel/08.webp"
-    ]
-  },
-  {
-    id: "RR-02",
-    title: "Attractive Brand Colors",
-    slides: [
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-02-Attractive-Brand-Colors-Carousel/01.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-02-Attractive-Brand-Colors-Carousel/02.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-02-Attractive-Brand-Colors-Carousel/03.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-02-Attractive-Brand-Colors-Carousel/04.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-02-Attractive-Brand-Colors-Carousel/05.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-02-Attractive-Brand-Colors-Carousel/06.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-02-Attractive-Brand-Colors-Carousel/07.webp"
-    ]
-  },
-  {
-    id: "RR-03",
-    title: "The Batching System",
-    slides: [
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-03-The-Batching-System-Carousel/01.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-03-The-Batching-System-Carousel/02.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-03-The-Batching-System-Carousel/03.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-03-The-Batching-System-Carousel/04.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-03-The-Batching-System-Carousel/05.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-03-The-Batching-System-Carousel/06.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-03-The-Batching-System-Carousel/07.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-03-The-Batching-System-Carousel/08.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-03-The-Batching-System-Carousel/09.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-03-The-Batching-System-Carousel/10.webp"
-    ]
-  },
-  {
-    id: "RR-04",
-    title: "Top Canva Background Keywords",
-    slides: [
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/01.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/02.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/03.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/04.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/05.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/06.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/07.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/08.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/09.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/10.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/11.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/12.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/13.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/14.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/15.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/16.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/17.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/18.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-04-Top-Canva-Background-Keywords-Carousel/19.webp"
-    ]
-  },
-  {
-    id: "RR-05",
-    title: "Flat to 3D Logos AI Trick",
-    slides: [
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-05-Flat-to-3D-Logos-AI-Trick-Carousel/01.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-05-Flat-to-3D-Logos-AI-Trick-Carousel/02.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-05-Flat-to-3D-Logos-AI-Trick-Carousel/03.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-05-Flat-to-3D-Logos-AI-Trick-Carousel/04.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-05-Flat-to-3D-Logos-AI-Trick-Carousel/05.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-05-Flat-to-3D-Logos-AI-Trick-Carousel/06.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-05-Flat-to-3D-Logos-AI-Trick-Carousel/07.webp"
-    ]
-  },
-  {
-    id: "RR-06",
-    title: "ChatGPT Image 2.0 Prompts",
-    slides: [
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-06-ChatGPT-Image-2.0-Prompts-Carousel/01.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-06-ChatGPT-Image-2.0-Prompts-Carousel/02.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-06-ChatGPT-Image-2.0-Prompts-Carousel/03.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-06-ChatGPT-Image-2.0-Prompts-Carousel/04.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-06-ChatGPT-Image-2.0-Prompts-Carousel/05.webp"
-    ]
-  },
-  {
-    id: "RR-07",
-    title: "The Carousel Anatomy Guide",
-    ratio: "3/4",
-    slides: [
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/01.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/02.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/03.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/04.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/05.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/06.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/07.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/08.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/09.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/10.webp",
-      "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/RanjeetRaj/RR-07-The-Carousel-Anatomy-Guide/11.webp"
     ]
   }
 ];
 
 const BUILDERS_PLAYGROUND_DATA = {
   "Event-Carousel": [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/1.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/2.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/3.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/4.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/5.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/6.webp"
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Event-Carousel/1.webp"
   ],
   "Highlight-Covers": [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/01-about-us.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/02-bts-v2.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/03-community-v2.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/04-event-v2.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/05-football-baithek.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/06-upcoming-events.webp"
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Highlight-Covers/01-about-us.webp"
   ],
   "Reel-Covers": [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-1st-reel-cover-launching-v2.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-2nd-reel-cover-join-cummunity.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-3rd-reel-cover-join-cummunity-about-bp.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-4th-reel-cover-foot-ball-event-01.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-5th-reel-cover-foot-ball-event-02.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-6th-reel-cover-foot-ball-event-03.webp"
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Builders-Playground/Reel-Covers/builders-playground-1st-reel-cover-launching-v2.webp"
   ]
 };
 
 const KESHVI_DATA = {
   logo: [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Keshvi-Beauty-Lounge-Logo/1.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Keshvi-Beauty-Lounge-Logo/2.webp"
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Keshvi-Beauty-Lounge-Logo/1.webp"
   ],
   posters: [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/15.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/16.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/17.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/18.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/19.webp"
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/KBL-Signature-Packages-Collection-Posters/15.webp"
   ],
   carousel1: [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/1.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/2.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/3.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/4.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/5.webp"
-  ],
-  carousel2: [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-2-PartyGlam-Portfolio/6.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-2-PartyGlam-Portfolio/7.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-2-PartyGlam-Portfolio/8.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-2-PartyGlam-Portfolio/9.webp"
-  ],
-  carousel3: [
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-3-Heritage-Bride-Portfolio/10.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-3-Heritage-Bride-Portfolio/11.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-3-Heritage-Bride-Portfolio/12.webp",
-    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-3-Heritage-Bride-Portfolio/13.webp"
-  ],
-  reel: "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Reel-Cover/KBL-Mehendi-Portfolio-Reel-Cover-01.webp"
+    "https://cdn.jsdelivr.net/gh/vanshdigitals/Vanshdigitals-Assets@main/optimized/Keshvi-Beauty-Lounge/Carousel/KBL-Carousel-1-TextureVsCakey-Bridal-Authority/1.webp"
+  ]
 };
-
-const KESHVI_CAROUSELS = [
-  {
-    id: "KBL-C1",
-    title: "Texture Vs Cakey — Bridal Authority",
-    ratio: "4/5",
-    slides: KESHVI_DATA.carousel1
-  },
-  {
-    id: "KBL-C2",
-    title: "Party Glam Portfolio",
-    ratio: "4/5",
-    slides: KESHVI_DATA.carousel2
-  },
-  {
-    id: "KBL-C3",
-    title: "Heritage Bride Portfolio",
-    ratio: "4/5",
-    slides: KESHVI_DATA.carousel3
-  }
-];
 
 const BRANDS = [
   {
     id: 'ranjeet',
-    name: 'Ranjeet Raj Official',
-    role: 'Freelance Graphic Designer | Project-Based Work',
-    date: 'January 2026 – August 2026',
-    category: 'Social / Personal Brand',
-    deliverables: [`${RANJEET_CAROUSELS.length} Instagram Carousels`],
-    detail: 'Designed carousel posts for Ranjeet Raj Official based on the content and reference posts provided by the client. I understood the style and theme of the references and created the carousels accordingly, using their red, black, and white colour palette with bold typography and a consistent visual style.',
-    image: imgRanjeet,
-    carousels: RANJEET_CAROUSELS,
+    title: 'Ranjeet Raj Official',
+    label: 'Brand Content',
+    meta: '8 Carousels · view all →',
+    workCollectionsRoute: '/work-collections',
+    totalCount: 8,
+    media: {
+      style: 'cycle',
+      items: RANJEET_CAROUSELS[0].slides.slice(0, 5)
+    }
   },
   {
     id: 'builders',
-    name: 'Builders Playground',
-    role: 'Freelance Graphic Designer | Short-Term Project',
-    date: 'July 2026',
-    category: 'Brand Content',
-    deliverables: [
-      `${BUILDERS_PLAYGROUND_DATA['Reel-Covers'].length} Reel Covers`,
-      `${BUILDERS_PLAYGROUND_DATA['Highlight-Covers'].length} Highlight Covers`,
-      `1 Carousel`
-    ],
-    detail: "Created reel covers, an event poster, a social carousel and highlight covers for the brand's event; followed the existing brand theme while adapting layouts; completed within a 4–5 day engagement.",
-    image: imgBuilders,
-    reelCovers: BUILDERS_PLAYGROUND_DATA['Reel-Covers'],
-    highlightCovers: BUILDERS_PLAYGROUND_DATA['Highlight-Covers'],
-    carousels: [
-      {
-        id: "BP-01",
-        title: "Event Carousel",
-        slides: BUILDERS_PLAYGROUND_DATA['Event-Carousel']
-      }
-    ]
+    title: 'Builders Playground',
+    label: 'Brand Content',
+    meta: '1 Reel · 6 Highlights · 1 Carousel · view all →',
+    workCollectionsRoute: '/work-collections',
+    totalCount: 13,
+    media: {
+      style: 'collage',
+      items: [
+        BUILDERS_PLAYGROUND_DATA['Event-Carousel'][0],
+        BUILDERS_PLAYGROUND_DATA['Highlight-Covers'][0],
+        BUILDERS_PLAYGROUND_DATA['Reel-Covers'][0]
+      ]
+    }
   },
   {
     id: 'keshvi',
-    name: 'Keshvi Beauty Lounge',
-    role: 'Freelance Graphic Designer | Project-Based Work',
-    date: 'February 2026',
-    category: 'Beauty / Personal Brand',
-    deliverables: [
-      `${KESHVI_DATA.logo.length} Logo Designs`,
-      `${KESHVI_DATA.posters.length} Posters`,
-      `${KESHVI_CAROUSELS.length} Carousels`,
-      `1 Reel Cover`
-    ],
-    detail: "Designed a cohesive visual collection for Keshvi Beauty Lounge across brand identity, promotional posters, Instagram carousels and reel covers, maintaining a consistent beauty-focused visual direction across formats.",
-    image: imgKeshvi,
-    collections: [
-      {
-        title: "Logo",
-        items: KESHVI_DATA.logo.map((img, i) => ({
-          type: 'Static',
-          image: img,
-          title: `Keshvi Beauty Lounge Logo`,
-          typeLabel: "Logo",
-          ratio: "1/1"
-        }))
-      },
-      {
-        title: "Posters",
-        items: KESHVI_DATA.posters.map((img, i) => ({
-          type: 'Static',
-          image: img,
-          title: `Signature Packages`,
-          typeLabel: "Poster",
-          ratio: "4/5"
-        }))
-      },
-      {
-        title: "Carousels",
-        items: KESHVI_CAROUSELS.map(c => ({
-          type: 'Carousel',
-          ...c
-        }))
-      },
-      {
-        title: "Reel Cover",
-        items: [
-          {
-            type: 'Static',
-            image: KESHVI_DATA.reel,
-            title: "Mehendi Portfolio",
-            typeLabel: "Reel Cover",
-            ratio: "9/16"
-          }
-        ]
-      }
-    ]
+    title: 'Keshvi Beauty Lounge',
+    label: 'Beauty / Personal Brand',
+    meta: '2 Logos · 5 Posters · 3 Carousels · 1 Reel · view all →',
+    workCollectionsRoute: '/work-collections',
+    totalCount: 11,
+    media: {
+      style: 'collage',
+      items: [
+        KESHVI_DATA.posters[0],
+        KESHVI_DATA.carousel1[0],
+        KESHVI_DATA.logo[0]
+      ]
+    }
   }
 ];
 
-// Inner Carousel Component (Phase 3 & 4)
-function MobileInnerCarousel({ carousel, index, onSequenceComplete, prefersReducedMotion }) {
-  const containerRef = useRef(null);
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isInteracting, setIsInteracting] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isDragging, setIsDragging] = useState(false); // 1:1 finger tracking active
-  const [dragOffset, setDragOffset] = useState(0);      // live px offset during drag
-
-  const interactionTimeoutRef = useRef(null);
-  const touchStartRef = useRef({ x: 0, y: 0, time: 0 });
-
-  // Intersection observer to track visibility
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      setIsVisible(entries[0].isIntersecting);
-    }, {
-      threshold: 0.6 // Card must be 60% visible to autoplay
-    });
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-    return () => observer.disconnect();
-  }, []);
-
-  // Handle manual interaction to pause autoplay
-  const handleInteraction = useCallback(() => {
-    setIsInteracting(true);
-    if (interactionTimeoutRef.current) {
-      clearTimeout(interactionTimeoutRef.current);
-    }
-    interactionTimeoutRef.current = setTimeout(() => {
-      setIsInteracting(false);
-    }, 5000); // Resume autoplay after 5 seconds idle
-  }, []);
-
-  const goToSlide = useCallback((idx) => {
-    if (isTransitioning) return; // lock gesture during transition
-    if (idx < 0 || idx >= carousel.slides.length) return;
-    
-    handleInteraction();
-    setActiveSlide(idx);
-    
-    // Lock interactions while CSS transition plays
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 300); // match snap transition duration
-  }, [isTransitioning, carousel.slides.length, handleInteraction]);
-
-  // Touch Handlers — 1:1 finger tracking, decide target only on release
-  const SWIPE_THRESHOLD = 50; // px of horizontal travel to advance exactly one slide
-
-  const handleTouchStart = (e) => {
-    handleInteraction();
-    if (isTransitioning) return;
-    touchStartRef.current = {
-      x: e.touches[0].clientX,
-      y: e.touches[0].clientY,
-      time: Date.now()
-    };
-  };
-
-  const handleTouchMove = (e) => {
-    if (isTransitioning) return;
-    const dx = e.touches[0].clientX - touchStartRef.current.x;
-    const dy = e.touches[0].clientY - touchStartRef.current.y;
-    // Engage horizontal drag only when the gesture is primarily horizontal
-    // (lets vertical page scrolling pass through untouched).
-    if (!isDragging && Math.abs(dx) <= Math.abs(dy)) return;
-    if (!isDragging) setIsDragging(true);
-    setDragOffset(dx); // track follows finger 1:1
-  };
-
-  const handleTouchEnd = () => {
-    if (isTransitioning) return;
-    const dx = dragOffset;
-    setIsDragging(false);
-    setDragOffset(0); // release drag; goToSlide/return snaps with ease-out
-    // One intentional swipe = exactly one slide, regardless of velocity/length.
-    if (dx <= -SWIPE_THRESHOLD) {
-      goToSlide(activeSlide + 1); // dragged left -> next
-    } else if (dx >= SWIPE_THRESHOLD) {
-      goToSlide(activeSlide - 1); // dragged right -> prev
-    }
-  };
-
-  // Autoplay Effect
-  useEffect(() => {
-    if (prefersReducedMotion || !isVisible || isInteracting) return;
-
-    const timer = setTimeout(() => {
-      if (activeSlide < carousel.slides.length - 1) {
-        setActiveSlide(activeSlide + 1);
-      } else {
-        if (onSequenceComplete) onSequenceComplete();
-      }
-    }, 3000); // Hold for 3 seconds
-
-    return () => clearTimeout(timer);
-  }, [activeSlide, isVisible, isInteracting, prefersReducedMotion, carousel.slides.length, onSequenceComplete]);
-
-  return (
-    <div ref={containerRef} className="snap-start shrink-0 relative flex flex-col group/card h-full" onTouchStart={handleInteraction}>
-      <WorkMediaCard
-        ratio={carousel.ratio ?? '4/5'}
-        type="Carousel"
-        title={carousel.title}
-        media={carousel.slides}
-        controls={
-          <>
-            <div className="font-heading font-medium text-[11px] text-text-muted tracking-widest pl-1">
-              {String(activeSlide + 1).padStart(2, '0')} / {String(carousel.slides.length).padStart(2, '0')}
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => goToSlide(activeSlide - 1)}
-                disabled={activeSlide === 0 || isTransitioning}
-                className="w-7 h-7 flex items-center justify-center rounded-full bg-bg border border-border/60 text-text-primary disabled:opacity-30 transition-opacity"
-                aria-label="Previous slide"
-              >
-                <ChevronLeft size={14} />
-              </button>
-              <button
-                onClick={() => goToSlide(activeSlide + 1)}
-                disabled={activeSlide === carousel.slides.length - 1 || isTransitioning}
-                className="w-7 h-7 flex items-center justify-center rounded-full bg-bg border border-border/60 text-text-primary disabled:opacity-30 transition-opacity"
-                aria-label="Next slide"
-              >
-                <ChevronRight size={14} />
-              </button>
-            </div>
-          </>
-        }
-      >
-        {/* Swipable media track (physics unchanged) */}
-        <div
-          className="absolute inset-0 w-full h-full touch-pan-y"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div
-            className={`flex w-full h-full ${!prefersReducedMotion && !isDragging ? 'transition-transform duration-[300ms] ease-[cubic-bezier(.22,1,.36,1)]' : ''}`}
-            style={{ transform: `translateX(calc(${activeSlide * -100}% + ${dragOffset}px))` }}
-          >
-            {carousel.slides.map((slide, i) => (
-              <div key={i} className="w-full h-full shrink-0 relative">
-                <img
-                  src={slide}
-                  alt={`${carousel.title} slide ${i + 1}`}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </WorkMediaCard>
-    </div>
-  );
-}
-
-// Reusable component for each project node to track its own scroll progress
-function ProjectNode({ brand, index }) {
-  const nodeRef = useRef(null);
-  const outerTrackRef = useRef(null);
+function FeaturedWorkCard({ brand }) {
   const prefersReducedMotion = useReducedMotion();
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const cardRef = useRef(null);
   
-  // Track this specific node's intersection
-  const { scrollYProgress } = useScroll({
-    target: nodeRef,
-    offset: ["start center", "center center"]
-  });
+  const { label, title, meta, workCollectionsRoute, totalCount, media } = brand;
+  const isCycle = media.style === 'cycle';
   
-  // When the node reaches the center of the viewport, it becomes active
-  const ringColor = useTransform(scrollYProgress, [0.8, 1], ["rgba(255, 215, 34, 0)", "rgba(0, 123, 255, 0.3)"]);
-  const numberColor = useTransform(scrollYProgress, [0.8, 1], ["#000000", "#007BFF"]);
-  const numberScale = useTransform(scrollYProgress, [0.8, 1], [1, 1.05]);
-  // Called unconditionally (Rules of Hooks); applied only when motion is allowed (below).
-  const nodeBoxShadow = useTransform(scrollYProgress, [0.8, 1], ["0 0 0px rgba(0,123,255,0)", "0 0 8px rgba(0,123,255,0.4)"]);
+  useEffect(() => {
+    if (!isCycle || prefersReducedMotion) return;
+    
+    const canHover = window.matchMedia('(hover: hover)').matches;
+    
+    if (!canHover) {
+      const observer = new IntersectionObserver((entries) => {
+        setIsInView(entries[0].isIntersecting);
+      }, { threshold: 0.6 });
+      
+      if (cardRef.current) {
+        observer.observe(cardRef.current);
+      }
+      return () => observer.disconnect();
+    }
+  }, [isCycle, prefersReducedMotion]);
+
+  useEffect(() => {
+    if (!isCycle || prefersReducedMotion) return;
+    
+    const canHover = window.matchMedia('(hover: hover)').matches;
+    const shouldCycle = canHover ? isHovered : isInView;
+    
+    let timer;
+    if (shouldCycle) {
+      timer = setInterval(() => {
+        setActiveSlide(prev => (prev + 1) % media.items.length);
+      }, 1000);
+    } else {
+      if (canHover) {
+        setActiveSlide(0);
+      }
+    }
+    
+    return () => clearInterval(timer);
+  }, [isHovered, isInView, isCycle, prefersReducedMotion, media.items.length]);
+
+  const overlayCount = totalCount - 3;
 
   return (
-    <div ref={nodeRef} className="relative group z-10 pl-[44px] md:pl-0">
-      
-      {/* --- DESKTOP NODE (Untouched) --- */}
-      <div className="hidden md:block absolute -left-[54px] top-2 w-3 h-3 rounded-full bg-border group-hover:bg-[#007BFF] dark:group-hover:bg-[#FFD722] transition-colors duration-300 ring-4 ring-bg" />
-
-      {/* --- MOBILE NODE (Numbered Circle) --- */}
-      <motion.div 
-        className="md:hidden absolute left-[20px] -translate-x-1/2 top-1 w-8 h-8 rounded-full bg-[#FFD722] shadow-sm flex items-center justify-center z-10 origin-center"
-        style={prefersReducedMotion ? {} : { boxShadow: nodeBoxShadow }}
-      >
-        {/* Subtle animated ring on active */}
-        <motion.div 
-          className="absolute inset-0 rounded-full border-2" 
-          style={prefersReducedMotion ? { borderColor: 'transparent' } : { borderColor: ringColor }}
-        />
-        <motion.span 
-          className="font-sans text-[14px] font-bold tracking-tight"
-          style={prefersReducedMotion ? { color: '#000000' } : { color: numberColor, scale: numberScale }}
-        >
-          {String(index + 1).padStart(2, '0')}
-        </motion.span>
-      </motion.div>
-
-      {/* --- PROJECT CONTENT --- */}
-      <div className="flex flex-col gap-6">
-        {/* Brand Meta */}
-        <div>
-          {/* Brand title — primary identifier */}
-          <h4 className="font-heading text-2xl md:text-4xl font-bold text-text-primary leading-tight">
-            {brand.name}
-          </h4>
-          {/* Metadata — secondary */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-x-3 gap-y-0.5 font-heading font-normal text-[13px] md:text-sm text-text-muted mt-2.5">
-            <span>{brand.role}</span>
-            <span className="hidden sm:inline">&middot;</span>
-            <span>{brand.date}</span>
-            <span className="hidden sm:inline">&middot;</span>
-            <span className="text-text-secondary">{brand.category}</span>
-          </div>
-          {/* Description — before pills */}
-          {brand.detail && (
-            <p className="font-body text-[13px] md:text-sm leading-relaxed text-text-secondary max-w-[640px] mt-4">
-              {brand.detail}
-            </p>
-          )}
-          {/* Deliverable Chips — dynamic counts, wrap naturally */}
-          <div className="flex flex-wrap gap-2 mt-5">
-            {brand.deliverables.map((chip, idx) => (
-              <span key={idx} className="px-3 py-1 text-xs font-body text-text-secondary border border-border/80 rounded-full bg-transparent">
-                {chip}
-              </span>
-            ))}
-          </div>
+    <Link 
+      to={workCollectionsRoute}
+      ref={cardRef}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      aria-label={`View ${title} in Work Collections`}
+      className="group block relative w-full rounded-[20px] bg-secondary-bg border border-border/40 hover:border-[#007BFF] dark:hover:border-[#FFD722] transition-all duration-300 hover:-translate-y-1 hover:shadow-lg overflow-hidden flex flex-col"
+    >
+      {/* MEDIA AREA */}
+      <div className="relative w-full aspect-[4/5] bg-black overflow-hidden shrink-0">
+        {/* Badge */}
+        <div className="absolute top-4 left-4 z-20 px-3 py-1 bg-black/60 backdrop-blur-md text-white text-[10px] font-heading font-bold uppercase tracking-widest rounded-full border border-white/10" aria-hidden="true">
+          {isCycle ? `${totalCount} carousels` : `${totalCount} designs`}
         </div>
-
-        {/* Asymmetric Images Layout (DESKTOP ONLY) */}
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
-          <div className="md:col-span-8 rounded-2xl overflow-hidden aspect-[4/3] md:aspect-auto md:h-[480px] bg-secondary-bg border border-border/40 relative group/img cursor-crosshair">
-            <img 
-              src={brand.image} 
-              alt={`${brand.name} featured work`} 
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/img:scale-105"
-              loading="lazy"
-            />
-          </div>
-          
-          <div className="md:col-span-4 grid grid-cols-2 md:grid-cols-1 grid-rows-2 gap-4 md:gap-6">
+        
+        {isCycle ? (
+          <>
             <div 
-              className="rounded-2xl bg-secondary-bg border border-dashed border-border flex items-center justify-center p-6 text-center text-text-muted font-heading font-normal text-[10px] uppercase tracking-widest relative"
-              aria-label="Format placeholder: Social post"
+              className="flex w-full h-full transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${activeSlide * 100}%)` }}
             >
-              Social Post Format
-            </div>
-            <div 
-              className="rounded-2xl bg-secondary-bg border border-dashed border-border flex items-center justify-center p-6 text-center text-text-muted font-heading font-normal text-[10px] uppercase tracking-widest relative"
-              aria-label="Format placeholder: Detail shot"
-            >
-              Detail Shot
-            </div>
-          </div>
-        </div>
-
-        {/* Horizontal Scroll Track (MOBILE ONLY) */}
-        <div className="md:hidden relative mt-2">
-          {brand.collections ? (
-            <div className="flex flex-col gap-10 pb-4">
-              {brand.collections.map((collection, cIdx) => (
-                <div key={cIdx} className="flex flex-col gap-3">
-                  <p className="font-heading text-[11px] font-bold text-text-primary uppercase tracking-[0.2em] pl-1 opacity-80">{collection.title}</p>
-                  <div className="relative -mx-5 px-5">
-                    <div className="absolute left-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-                    <div className="absolute right-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-                    <div className="relative flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 pr-10 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                      {collection.items.map((item, idx) => {
-                        if (item.type === 'Carousel') {
-                          return (
-                            <MobileInnerCarousel 
-                              key={item.id || idx} 
-                              carousel={item} 
-                              index={idx} 
-                              prefersReducedMotion={prefersReducedMotion}
-                            />
-                          );
-                        } else {
-                          return (
-                            <StaticMobileCard 
-                              key={`${collection.title}-${idx}`} 
-                              image={item.image} 
-                              title={item.title}
-                              type={item.typeLabel || collection.title}
-                              ratio={item.ratio}
-                            />
-                          );
-                        }
-                      })}
-                    </div>
-                  </div>
-                </div>
+              {media.items.map((src, i) => (
+                <img 
+                  key={i}
+                  src={src} 
+                  alt=""
+                  loading={i === 0 ? "eager" : "lazy"}
+                  className="w-full h-full object-cover shrink-0 min-w-full"
+                />
               ))}
             </div>
-          ) : brand.id === 'builders' ? (
-            <div className="flex flex-col gap-10 pb-4">
-              {/* Reel Covers */}
-              <div className="flex flex-col gap-3">
-                <p className="font-heading text-[11px] font-bold text-text-primary uppercase tracking-[0.2em] pl-1 opacity-80">Reel Covers</p>
-                <div className="relative -mx-5 px-5">
-                  <div className="absolute left-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-                  <div className="absolute right-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-                  <div className="relative flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 pr-10 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    {brand.reelCovers.map((img, idx) => (
-                      <StaticMobileCard 
-                        key={`reel-${idx}`} 
-                        image={img} 
-                        title={`Reel Cover ${String(idx + 1).padStart(2, '0')}`}
-                        type="Reel Cover"
-                        ratio="9/16"
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-              
-              {/* Highlight Covers */}
-              <div className="flex flex-col gap-3">
-                <p className="font-heading text-[11px] font-bold text-text-primary uppercase tracking-[0.2em] pl-1 opacity-80">Highlight Covers</p>
-                <div className="relative -mx-5 px-5">
-                  <div className="absolute left-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-                  <div className="absolute right-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-                  <div className="relative flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 pr-10 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    {brand.highlightCovers.map((img, idx) => (
-                      <StaticMobileCard 
-                        key={`highlight-${idx}`} 
-                        image={img} 
-                        title={`Highlight Cover ${String(idx + 1).padStart(2, '0')}`}
-                        type="Highlight Cover"
-                        ratio="1/1"
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Event Carousel */}
-              <div className="flex flex-col gap-3">
-                <p className="font-heading text-[11px] font-bold text-text-primary uppercase tracking-[0.2em] pl-1 opacity-80">Event Carousel</p>
-                <div className="relative -mx-5 px-5">
-                  <div className="absolute left-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-                  <div className="absolute right-0 top-0 bottom-0 w-[40px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-                  <div className="relative flex overflow-x-auto snap-x snap-mandatory pb-4 gap-4 pr-10 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    {brand.carousels.map((carousel, idx) => (
-                      <MobileInnerCarousel 
-                        key={carousel.id} 
-                        carousel={carousel} 
-                        index={idx} 
-                        prefersReducedMotion={prefersReducedMotion}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="relative">
-              {/* Edge Fade Masks for existing logic */}
-              <div className="absolute left-0 top-0 bottom-0 w-[32px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to right, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-              <div className="absolute right-0 top-0 bottom-0 w-[32px] z-[2] pointer-events-none" style={{ background: 'linear-gradient(to left, var(--bg) 0%, transparent 100%)' }} aria-hidden="true" />
-              
-              <div ref={outerTrackRef} className="relative flex overflow-x-auto snap-x snap-mandatory pb-6 gap-4 pr-6 z-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                {brand.carousels ? (
-                  brand.carousels.map((carousel, idx) => (
-                    <MobileInnerCarousel 
-                      key={carousel.id} 
-                      carousel={carousel} 
-                      index={idx} 
-                      prefersReducedMotion={prefersReducedMotion}
-                      onSequenceComplete={() => {
-                        if (!outerTrackRef.current) return;
-                        const track = outerTrackRef.current;
-                        const children = track.children;
-                        if (idx + 1 < children.length) {
-                          children[idx + 1].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-                        }
-                      }}
-                    />
-                  ))
-                ) : (
-                  <StaticMobileCard
-                    image={brand.image}
-                    title={brand.name}
-                    type={brand.category}
-                    ratio="3/4"
+            {/* Dots */}
+            {!prefersReducedMotion && (
+              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-20" aria-hidden="true">
+                {media.items.map((_, i) => (
+                  <div 
+                    key={i}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${activeSlide === i ? 'w-4 bg-[#007BFF] dark:bg-[#FFD722]' : 'w-1.5 bg-white/40'}`}
                   />
-                )}
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-[3px] bg-black">
+            <div className="col-span-1 row-span-2 relative">
+              <img src={media.items[0]} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+            </div>
+            <div className="col-span-1 row-span-1 relative">
+              <img src={media.items[1]} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+            </div>
+            <div className="col-span-1 row-span-1 relative">
+              <img src={media.items[2]} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+              {overlayCount > 0 && (
+                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center" aria-hidden="true">
+                  <span className="text-white font-body font-bold text-lg md:text-xl">+{overlayCount} more</span>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-
+        )}
       </div>
-    </div>
-  );
-}
-
-function StaticMobileCard({ image, title, type, ratio }) {
-  return (
-    <WorkMediaCard ratio={ratio} type={type} title={title} media={[image]}>
-      <img
-        src={image}
-        alt={title}
-        className="absolute inset-0 w-full h-full object-cover"
-        loading="lazy"
-      />
-    </WorkMediaCard>
+      
+      {/* FOOTER */}
+      <div className="p-5 flex justify-between items-start gap-4 grow bg-bg border-t border-border/40 transition-colors duration-300">
+        <div className="flex flex-col gap-1.5">
+          <span className="text-[10px] md:text-xs font-heading font-bold uppercase tracking-widest text-[#007BFF] dark:text-[#FFD722]">
+            {label}
+          </span>
+          <h4 className="font-body font-bold text-lg md:text-xl text-text-primary leading-tight">
+            {title}
+          </h4>
+          <span className="text-xs md:text-sm text-text-muted mt-1 font-body">
+            {meta}
+          </span>
+        </div>
+        <div className="shrink-0 w-10 h-10 rounded-full border border-border/60 flex items-center justify-center text-text-primary group-hover:bg-[#007BFF] group-hover:border-[#007BFF] dark:group-hover:bg-[#FFD722] dark:group-hover:border-[#FFD722] group-hover:text-white dark:group-hover:text-black transition-all duration-300">
+          <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+        </div>
+      </div>
+    </Link>
   );
 }
 
 export default function SelectedWork() {
-  const containerRef = useRef(null);
-  const prefersReducedMotion = useReducedMotion();
-  
-  // Track entire timeline for the laser beam
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"]
-  });
-  
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 25, mass: 0.5 });
-  
   return (
     <div className="w-full">
       {/* Header */}
@@ -748,21 +242,10 @@ export default function SelectedWork() {
         </p>
       </div>
 
-      {/* Timeline Container */}
-      <div ref={containerRef} className="relative z-0 md:pl-12 md:border-l md:border-border/60 pb-16 space-y-24 md:space-y-32">
-        
-        {/* --- MOBILE TIMELINE RAIL & LASER (Hidden on Desktop) --- */}
-        <div className="md:hidden absolute left-[20px] top-4 bottom-0 w-[1px] bg-border/40 z-0" />
-        
-        {!prefersReducedMotion && (
-          <motion.div 
-            className="md:hidden absolute left-[20px] top-4 bottom-0 w-[2px] -ml-[0.5px] bg-[#007BFF] shadow-[0_0_8px_rgba(0,123,255,0.4)] origin-top z-0"
-            style={{ scaleY: smoothProgress }}
-          />
-        )}
-
-        {BRANDS.map((brand, index) => (
-          <ProjectNode key={brand.id} brand={brand} index={index} />
+      {/* Grid of Featured Work Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 relative z-0">
+        {BRANDS.map((brand) => (
+          <FeaturedWorkCard key={brand.id} brand={brand} />
         ))}
       </div>
     </div>

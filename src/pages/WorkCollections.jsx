@@ -1,107 +1,13 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
-
-// ── Brand card assets
-import imgCutsCurves  from '../assets/card-cuts-curves.webp';
-import imgWaterplane  from '../assets/card-waterplane.webp';
-import imgKeshvi      from '../assets/card-keshvi.webp';
-import imgBuilders    from '../assets/card-builders.webp';
-import imgRanjeet     from '../assets/card-ranjeet.webp';
 import ArchiveCategories from '../components/ArchiveCategories';
+import { PROJECTS, getDeliverablesString, getFlattenedAssets } from '../data/projects';
 
 // ── Decorative assets
 import yellowBadge        from '../assets/yellow-badge.webp';
 import blueYellowStars    from '../assets/blue-yellow-stars.webp';
 import curveArrow         from '../assets/arrow-stylish-curve-black.webp';
 import yellowBrush        from '../assets/yellow-brush-highlight.webp';
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Data
-// ─────────────────────────────────────────────────────────────────────────────
-const BRANDS = [
-  {
-    index: '01',
-    name: 'Cuts & Curves',
-    category: 'Fitness / Social',
-    deliverables: ['7 carousels', '60+ reel covers', '8+ posters'],
-    heroImg: imgCutsCurves,
-    heroAlt: 'Cuts & Curves — brand design work',
-    // Placeholder tile labels for remaining deliverable slots
-    placeholders: [
-      { label: 'Reel Cover', aspect: 'aspect-[9/16]' },
-      { label: 'Reel Cover', aspect: 'aspect-[9/16]' },
-      { label: 'Carousel', aspect: 'aspect-[4/5]' },
-      { label: 'Poster', aspect: 'aspect-[4/5]' },
-    ],
-    accent: 'text-[#E85D3A]',
-    tintLight: 'bg-[#FBF4F1]',
-    tintDark: 'dark:bg-[#1E1714]',
-  },
-  {
-    index: '02',
-    name: 'Waterplane',
-    category: 'Brand / Social',
-    deliverables: ['8+ carousels', 'reel covers'],
-    heroImg: imgWaterplane,
-    heroAlt: 'Waterplane — brand and social media design',
-    placeholders: [
-      { label: 'Carousel', aspect: 'aspect-[4/5]' },
-      { label: 'Reel Cover', aspect: 'aspect-[9/16]' },
-      { label: 'Carousel', aspect: 'aspect-[4/5]' },
-    ],
-    accent: 'text-[#0EA5E9]',
-    tintLight: 'bg-[#EDF4FB]',
-    tintDark: 'dark:bg-[#0F1820]',
-  },
-  {
-    index: '03',
-    name: 'Keshvi Beauty Lounge',
-    category: 'Beauty / Branding',
-    deliverables: ['Logo + palette', 'carousels', 'festival creatives'],
-    heroImg: imgKeshvi,
-    heroAlt: 'Keshvi Beauty Lounge — branding and social design',
-    placeholders: [
-      { label: 'Carousel', aspect: 'aspect-[4/5]' },
-      { label: 'Festival Creative', aspect: 'aspect-[4/5]' },
-      { label: 'Carousel', aspect: 'aspect-[4/5]' },
-    ],
-    accent: 'text-[#C48A72]',
-    tintLight: 'bg-[#FAF3F0]',
-    tintDark: 'dark:bg-[#1C1512]',
-  },
-  {
-    index: '04',
-    name: 'Builders Playground',
-    category: 'Brand Content',
-    deliverables: ['5+ reel covers', '1 poster', '1 carousel', '5 highlight covers'],
-    heroImg: imgBuilders,
-    heroAlt: 'Builders Playground — brand content design',
-    placeholders: [
-      { label: 'Reel Cover', aspect: 'aspect-[9/16]' },
-      { label: 'Highlight Cover', aspect: 'aspect-[1/1]' },
-      { label: 'Highlight Cover', aspect: 'aspect-[1/1]' },
-    ],
-    accent: 'text-[#D4A100]',
-    tintLight: 'bg-[#F8F4E8]',
-    tintDark: 'dark:bg-[#1A1910]',
-  },
-  {
-    index: '05',
-    name: 'Ranjeet Raj Official',
-    category: 'Social / Personal Brand',
-    deliverables: ['8 Instagram carousels'],
-    heroImg: imgRanjeet,
-    heroAlt: 'Ranjeet Raj Official — social media and personal brand design',
-    placeholders: [
-      { label: 'Carousel', aspect: 'aspect-[4/5]' },
-      { label: 'Carousel', aspect: 'aspect-[4/5]' },
-      { label: 'Carousel', aspect: 'aspect-[4/5]' },
-    ],
-    accent: 'text-[#7C3AED]',
-    tintLight: 'bg-[#F4F0FA]',
-    tintDark: 'dark:bg-[#160E1E]',
-  },
-];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Placeholder artwork tile
@@ -131,7 +37,7 @@ function PlaceholderTile({ label, aspect, tintLight, tintDark }) {
 function BrandBlock({ brand, showCurveArrow, showStars }) {
   return (
     <section
-      aria-labelledby={`brand-${brand.index}`}
+      aria-labelledby={`brand-${brand.id}`}
       className="relative py-14 md:py-20 border-t border-border"
     >
       {/* Sparkle accent (between some blocks) */}
@@ -152,9 +58,9 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
         {/* Left */}
         <div className="flex flex-col gap-2 min-w-0">
           <div className="flex items-baseline gap-3">
-            <span className="font-heading font-normal text-[11px] text-text-muted shrink-0">{brand.index}</span>
+            <span className="font-heading font-normal text-[11px] text-text-muted shrink-0">{brand.id}</span>
             <h2
-              id={`brand-${brand.index}`}
+              id={`brand-${brand.id}`}
               className="font-heading text-[26px] md:text-[32px] font-bold tracking-[-0.02em] text-text-primary leading-tight"
             >
               {brand.name}
@@ -167,7 +73,7 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
 
         {/* Right: deliverable chips */}
         <div className="flex flex-wrap gap-2 md:justify-end shrink-0 ml-[26px] md:ml-0">
-          {brand.deliverables.map((d) => (
+          {getDeliverablesString(brand.assets).split(' · ').map((d) => (
             <span
               key={d}
               className="
@@ -207,7 +113,7 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
         <article
           className={`
             group relative col-span-2 overflow-hidden border border-border rounded-[2px]
-            ${brand.tintLight} ${brand.tintDark}
+            ${brand.tintLightWC} ${brand.tintDarkWC}
             transition-[border-color,box-shadow] duration-300 ease-[cubic-bezier(.4,0,.2,1)]
             hover:border-border-strong hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)]
             dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.28)]
@@ -215,8 +121,8 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
         >
           <div className="aspect-[16/9] overflow-hidden">
             <img
-              src={brand.heroImg}
-              alt={brand.heroAlt}
+              src={brand.featuredImage.url}
+              alt={brand.featuredImage.alt}
               className="
                 w-full h-full object-cover
                 transition-transform duration-500 ease-[cubic-bezier(.4,0,.2,1)]
@@ -246,15 +152,21 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
           </div>
         </article>
 
-        {/* Placeholder tiles */}
-        {brand.placeholders.map((p, i) => (
-          <PlaceholderTile
-            key={i}
-            label={p.label}
-            aspect={p.aspect}
-            tintLight={brand.tintLight}
-            tintDark={brand.tintDark}
-          />
+        {/* Assets & Placeholder tiles */}
+        {getFlattenedAssets(brand.assets).map((asset) => (
+          asset.url ? (
+            <div key={asset.id} className={`${asset.aspect} w-full rounded-[2px] border border-border overflow-hidden bg-bg-subtle`}>
+              <img src={asset.url} alt={asset.label} className="w-full h-full object-cover" loading="lazy" />
+            </div>
+          ) : (
+            <PlaceholderTile
+              key={asset.id}
+              label={asset.label}
+              aspect={asset.aspect}
+              tintLight={brand.tintLightWC}
+              tintDark={brand.tintDarkWC}
+            />
+          )
         ))}
       </div>
     </section>

@@ -87,39 +87,19 @@ export default function Hero() {
         </div>
 
         {/*
-          ── PORTRAIT + ICONS ── Layer z-20 ────────────────────────────────────
-
-          TWO-LEVEL WRAPPER PATTERN:
-
-          Outer div  → handles vertical offset from PORTFOLIO so the portrait
-                       slides into its correct overlap position. Width here
-                       controls the portrait's rendered size.
-
-          Inner div  → `relative` with `w-full` — this becomes the positioning
-                       parent for ALL four icons. Icon `top/left/right` percentages
-                       are calculated against the portrait IMAGE bounds (not the
-                       padded outer div), so icons track portrait anatomy at every
-                       breakpoint.
-
-          RESPONSIVE PORTRAIT SIZING:
-            mobile  (<640px):  80% of content area — slightly smaller than before
-            sm      (640px+):  70%
-            md      (768px+):  60%
-            lg      (1024px+): 50%
-            xl cap:            580px max — prevents infinite growth on large screens
-
-          VERTICAL OFFSET (pt-*):
-            Controls how far the portrait slides down beneath PORTFOLIO.
-            Smaller values = tighter connection between text and portrait.
+          ── PORTRAIT + PLACARD ── Layer z-20 ──────────────────────────────────
         */}
-        <div
-          className="col-start-1 row-start-1 z-20 pointer-events-none
-                     w-[68%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
-                     justify-self-center self-start
-                     pt-[18vw] sm:pt-[18vw] md:pt-[18vw] lg:pt-[19vw] xl:pt-[270px]"
-        >
-          {/* Portrait Container */}
-          <div className="relative w-full">
+        <div className="col-start-1 row-start-1 z-20 w-full relative flex flex-col items-center justify-start pointer-events-none self-start">
+          
+          {/* 
+            PORTRAIT CONTAINER (z-10) 
+            Negative bottom margin causes the placard below to slide up UNDER the portrait.
+          */}
+          <div
+            className="relative z-10 w-[68%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
+                       pt-[18vw] sm:pt-[18vw] md:pt-[18vw] lg:pt-[19vw] xl:pt-[270px]
+                       -mb-[22%] sm:-mb-[18%] lg:-mb-[14%] xl:-mb-[80px]"
+          >
 
             {/* Portrait image — renders at natural aspect ratio via h-auto. Width/Height attributes prevent layout shift. */}
             <img
@@ -195,6 +175,29 @@ export default function Hero() {
             />
 
           </div>
+
+          {/* 
+            PLACARD CONTAINER (z-0) 
+            Sits behind the portrait base. Large top padding ensures text clears the overlapping photo.
+          */}
+          <div className="relative z-0 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] max-w-[580px] bg-[#DCEBFF] dark:bg-[#2A2410] rounded-[24px] pointer-events-auto flex flex-col items-center justify-end text-center pt-[28%] sm:pt-[22%] lg:pt-[18%] xl:pt-[110px] pb-6 md:pb-8 px-4 sm:px-6 transition-colors duration-300">
+            <p className="font-heading font-bold text-[13px] md:text-[14px] text-[#0A3A7A] dark:text-[#FFD722] leading-[1.6]">
+              Open For Offline <span className="opacity-50 font-normal mx-0.5">|</span> Hybrid <span className="opacity-50 font-normal mx-0.5">|</span> Online
+              <br />
+              Freelance <span className="opacity-50 font-normal mx-0.5">|</span> Internships <span className="opacity-50 font-normal mx-0.5">|</span> Job Work
+            </p>
+            
+            <div className="w-[40px] h-[1px] bg-[#0A3A7A]/20 dark:bg-[#FFD722]/20 my-3.5 md:my-4"></div>
+            
+            <p className="font-body text-[12px] md:text-[13px] text-[#0A3A7A]/75 dark:text-[#FFD722]/75 leading-[1.5]">
+              Also open to relocate
+              <br />
+              <span className="font-semibold text-[#0A3A7A] dark:text-[#FFD722] mt-0.5 inline-block tracking-wide">
+                Noida &middot; Delhi &middot; Gurugram
+              </span>
+            </p>
+          </div>
+
         </div>
 
       </div>

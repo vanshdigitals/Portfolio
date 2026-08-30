@@ -1,118 +1,59 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { usePageTransition } from '../context/TransitionContext';
-
-import imgCutsCurves  from '../assets/card-cuts-curves.webp';
-import imgWaterplane  from '../assets/card-waterplane.webp';
-import imgKeshvi      from '../assets/card-keshvi.webp';
-import imgBuilders    from '../assets/card-builders.webp';
-import imgRanjeet     from '../assets/card-ranjeet.webp';
-
-// ── Client data ────────────────────────────────────────────────────────────────
-const PROJECTS = [
-  {
-    num: '01',
-    name: 'Cuts & Curves',
-    category: 'Fitness / Social',
-    deliverables: '7 carousels · 60+ reel covers · 8+ posters',
-    img: imgCutsCurves,
-    // Warm-neutral tint: a very subtle warm sand overlay used only in light mode surface accent
-    tint: 'bg-[#F5F0EA]',
-    tintDark: 'dark:bg-[#1C1A17]',
-  },
-  {
-    num: '02',
-    name: 'Waterplane',
-    category: 'Brand / Social',
-    deliverables: '8+ carousels · reel covers',
-    img: imgWaterplane,
-    tint: 'bg-[#EDF3FB]',
-    tintDark: 'dark:bg-[#131820]',
-  },
-  {
-    num: '03',
-    name: 'Keshvi Beauty Lounge',
-    category: 'Beauty / Branding',
-    deliverables: 'Logo + palette · carousels · festival creatives',
-    img: imgKeshvi,
-    tint: 'bg-[#FAF2F0]',
-    tintDark: 'dark:bg-[#1C1614]',
-  },
-  {
-    num: '04',
-    name: 'Builders Playground',
-    category: 'Brand Content',
-    deliverables: '5+ reel covers · 1 poster · 1 carousel · 5 highlight covers',
-    img: imgBuilders,
-    tint: 'bg-[#F5F3EC]',
-    tintDark: 'dark:bg-[#1A1A14]',
-  },
-  {
-    num: '05',
-    name: 'Ranjeet Raj Official',
-    category: 'Social / Personal Brand',
-    deliverables: '8 Instagram carousels',
-    img: imgRanjeet,
-    tint: 'bg-[#F3EEF9]',
-    tintDark: 'dark:bg-[#17121E]',
-  },
-];
+import { PROJECTS, getDeliverablesString } from '../data/projects';
 
 // ── Individual Card ─────────────────────────────────────────────────────────────
 function ProjectCard({ project, index, navigateWithTransition }) {
-  const isWide = index === 0; // first card spans 2 columns on md+
-
   return (
     <article
       className={`
-        group relative flex flex-col overflow-hidden border border-border
+        group relative flex flex-col h-full overflow-hidden rounded-2xl border border-border
         transition-[border-color,box-shadow] duration-300 ease-[cubic-bezier(.4,0,.2,1)]
         hover:border-border-strong hover:shadow-[0_4px_24px_rgba(0,0,0,0.07)]
         dark:hover:shadow-[0_4px_24px_rgba(0,0,0,0.3)]
         focus-within:border-border-strong focus-within:shadow-[0_4px_24px_rgba(0,0,0,0.07)]
         ${project.tint} ${project.tintDark}
-        ${isWide ? 'sm:col-span-2 md:col-span-2' : ''}
       `}
     >
       {/* Artwork — dominant top section */}
-      <div className={`relative overflow-hidden w-full ${isWide ? 'aspect-[16/7]' : 'aspect-[4/3]'}`}>
+      <div className="relative w-full aspect-[4/5] overflow-hidden bg-bg-subtle shrink-0">
         <img
-          src={project.img}
-          alt={`${project.name} design work`}
+          src={project.featuredImage.url}
+          alt={project.featuredImage.alt}
           className="
-            w-full h-full object-cover
-            transition-transform duration-500 ease-[cubic-bezier(.4,0,.2,1)]
-            group-hover:scale-[1.02]
+            block w-full h-full object-cover object-center
+            transition-transform duration-700 ease-[cubic-bezier(.4,0,.2,1)]
+            group-hover:scale-[1.03]
             motion-reduce:group-hover:scale-100
           "
-          width="1200"
-          height="896"
           loading="lazy"
         />
       </div>
 
       {/* Card body */}
-      <div className="flex items-start justify-between gap-4 p-5">
+      <div className="flex items-start justify-between gap-4 p-5 md:p-6 pb-6 md:pb-8 grow">
         <div className="flex flex-col gap-1.5 min-w-0">
           {/* Index + category on one line */}
-          <div className="flex items-center gap-2">
-            <span className="font-heading font-normal text-[11px] text-text-muted shrink-0">{project.num}</span>
-            <span className="font-heading font-normal text-[11px] uppercase tracking-[0.06em] text-text-muted truncate">
+          <div className="flex items-center gap-2.5">
+            <span className="font-heading font-semibold text-[12px] text-text-muted shrink-0">{project.id}</span>
+            <div className="w-1 h-1 rounded-full bg-border" aria-hidden="true" />
+            <span className="font-heading font-semibold text-[12px] uppercase tracking-[0.08em] text-text-muted">
               {project.category}
             </span>
           </div>
           {/* Client name */}
-          <h3 className="font-heading text-[17px] font-semibold text-text-primary leading-tight tracking-[-0.01em]">
+          <h3 className="font-heading text-[20px] md:text-[22px] font-bold text-text-primary leading-tight tracking-tight mt-1 group-hover:text-[#007BFF] dark:group-hover:text-[#FFD722] transition-colors">
             {project.name}
           </h3>
           {/* Deliverables */}
-          <p className="font-heading font-normal text-[11px] text-text-muted leading-relaxed mt-0.5">
-            {project.deliverables}
+          <p className="font-body text-[14px] text-text-secondary leading-relaxed mt-1">
+            {getDeliverablesString(project.assets)}
           </p>
         </div>
 
         {/* Arrow — slides on hover */}
-        <div className="shrink-0 pt-0.5">
+        <div className="shrink-0 pt-1 md:pt-2">
           <ArrowUpRight
             size={18}
             className="
@@ -193,19 +134,9 @@ export default function WorkPreview() {
         </div>
 
         {/* ── Cards grid ─────────────────────────────────────────────────── */}
-        {/*
-          Layout:
-          - Card 01 (wide): spans 2 of 2 cols on sm, 2 of 3 on md
-          - Cards 02–05: 1-col mobile, 2-col sm, fills into grid on md
-          
-          We use a 2-column grid on mobile/sm and 3-column on md+.
-          Card 01 is col-span-2 on sm+ and col-span-2 on md (out of 3), 
-          while 02-03 each take 1 col. 04-05 each take 1 col on last row.
-          Total: 1 wide + 4 normal = fills naturally.
-        */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 items-stretch">
           {PROJECTS.map((project, i) => (
-            <ProjectCard key={project.num} project={project} index={i} navigateWithTransition={navigateWithTransition} />
+            <ProjectCard key={project.id} project={project} index={i} navigateWithTransition={navigateWithTransition} />
           ))}
         </div>
 
