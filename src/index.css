@@ -498,3 +498,24 @@ html.theme-transitioning * {
 .dark .shadow-shoes {
   background: radial-gradient(ellipse at center, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0) 72%);
 }
+
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.vintage-notch {
+  mask-image: radial-gradient(circle at top left, transparent 14px, black 14px),
+              radial-gradient(circle at top right, transparent 14px, black 14px),
+              radial-gradient(circle at bottom left, transparent 14px, black 14px),
+              radial-gradient(circle at bottom right, transparent 14px, black 14px);
+  mask-position: top left, top right, bottom left, bottom right;
+  mask-size: 51% 51%;
+  mask-repeat: no-repeat;
+}
+

@@ -31,33 +31,36 @@ export default function Button({
     <Tag
       {...tagProps}
       className={`
-        group inline-flex items-center gap-[14px] 
-        pt-[8px] pb-[8px] pl-[22px] pr-[8px]
-        rounded-full cursor-pointer w-fit border-none
-        bg-[#007BFF] text-white
-        dark:bg-[#FFD722] dark:text-[#111214]
-        hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 
-        focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg
-        transition-[filter] duration-200
+        group inline-flex w-fit h-[44px] items-center justify-center gap-3
+        rounded-full pl-5 pr-1.5 font-heading text-[15px] font-medium
+        transition-colors duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
+        focus-visible:outline-none focus-visible:ring-2
+        focus-visible:ring-primary focus-visible:ring-offset-2
+        focus-visible:ring-offset-bg
+        bg-[#007BFF] hover:bg-[#006AE0] text-white
+        dark:bg-[#FFD722] dark:hover:bg-[#E6C200] dark:text-[#111214]
         ${className}
       `}
     >
-      <span className="font-heading text-[15px] font-medium leading-none whitespace-nowrap">
+      <span className="leading-none whitespace-nowrap">
         {label}
       </span>
       <span className="
-        flex items-center justify-center w-[34px] h-[34px] rounded-full shrink-0
-        bg-white dark:bg-white
-        text-[#007BFF] dark:text-[#111214]
+        flex items-center justify-center w-[32px] h-[32px] rounded-full shrink-0
+        transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
+        group-hover:scale-[1.03]
+        bg-white dark:bg-[#111214] 
+        text-[#111214] dark:text-white
       ">
         <ArrowRight 
-          size={18} 
+          size={16} 
           strokeWidth={2}
           className="
-            -rotate-45 group-hover:rotate-0 group-focus-visible:rotate-0
-            transition-transform duration-[250ms] ease-[cubic-bezier(.34,1.4,.5,1)]
+            -rotate-45 group-hover:rotate-0 group-focus-visible:rotate-0 group-active:rotate-0
+            transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
             motion-reduce:transition-none
           "
+          aria-hidden="true"
         />
       </span>
     </Tag>

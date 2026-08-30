@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import aboutStand from '../assets/about-stand.png';
+import aboutStand from '../assets/about-stand.webp';
 
 export default function About() {
   const [isVisible, setIsVisible] = useState(false);
@@ -50,6 +50,9 @@ export default function About() {
           <img 
             src={aboutStand} 
             alt="Vansh standing by desk" 
+            width="900"
+            height="1165"
+            loading="lazy"
             className="w-full h-auto object-contain relative z-10 drop-shadow-[0_10px_12px_rgba(0,0,0,0.14)]"
           />
           {/* Table-base shadow (left-center) */}

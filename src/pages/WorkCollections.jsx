@@ -2,18 +2,18 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 
 // ── Brand card assets
-import imgCutsCurves  from '../assets/card-cuts-curves.jpg';
-import imgWaterplane  from '../assets/card-waterplane.jpg';
-import imgKeshvi      from '../assets/card-keshvi.jpg';
-import imgBuilders    from '../assets/card-builders.jpg';
-import imgRanjeet     from '../assets/card-ranjeet.jpg';
+import imgCutsCurves  from '../assets/card-cuts-curves.webp';
+import imgWaterplane  from '../assets/card-waterplane.webp';
+import imgKeshvi      from '../assets/card-keshvi.webp';
+import imgBuilders    from '../assets/card-builders.webp';
+import imgRanjeet     from '../assets/card-ranjeet.webp';
 import ArchiveCategories from '../components/ArchiveCategories';
 
 // ── Decorative assets
-import yellowBadge        from '../assets/yellow-badge.png';
-import blueYellowStars    from '../assets/blue-yellow-stars.png';
-import curveArrow         from '../assets/arrow-stylish-curve-black.png';
-import yellowBrush        from '../assets/yellow-brush-highlight.png';
+import yellowBadge        from '../assets/yellow-badge.webp';
+import blueYellowStars    from '../assets/blue-yellow-stars.webp';
+import curveArrow         from '../assets/arrow-stylish-curve-black.webp';
+import yellowBrush        from '../assets/yellow-brush-highlight.webp';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Data
@@ -140,6 +140,9 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
           src={blueYellowStars}
           alt=""
           aria-hidden="true"
+          loading="lazy"
+          width="128"
+          height="137"
           className="absolute -top-5 right-8 w-10 h-10 md:w-14 md:h-14 object-contain opacity-70 select-none pointer-events-none dark:opacity-50"
         />
       )}
@@ -186,6 +189,9 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
           src={curveArrow}
           alt=""
           aria-hidden="true"
+          loading="lazy"
+          width="512"
+          height="205"
           className="
             hidden lg:block absolute left-[calc(50%-40px)] top-[68px] w-16 opacity-30
             dark:opacity-60 dark:invert
@@ -217,6 +223,8 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
                 group-hover:scale-[1.02]
                 motion-reduce:group-hover:scale-100
               "
+              width="1200"
+              height="896"
               loading="lazy"
             />
           </div>
@@ -282,6 +290,8 @@ export default function WorkCollections() {
             src={yellowBadge}
             alt=""
             aria-hidden="true"
+            width="360"
+            height="360"
             className="
               hidden md:block absolute -right-28 top-[-10px] w-[180px]
               motion-safe:[animation:badge-spin_20s_linear_infinite]

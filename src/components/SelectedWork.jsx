@@ -2,9 +2,9 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Smartphone } from 'lucide-react';
 import { motion, useScroll, useSpring, useTransform, useReducedMotion } from 'framer-motion';
 import WorkMediaCard from './WorkMediaCard';
-import imgRanjeet from '../assets/card-ranjeet.jpg';
-import imgBuilders from '../assets/card-builders.jpg';
-import imgKeshvi from '../assets/card-keshvi.jpg';
+import imgRanjeet from '../assets/card-ranjeet.webp';
+import imgBuilders from '../assets/card-builders.webp';
+import imgKeshvi from '../assets/card-keshvi.webp';
 
 const RANJEET_CAROUSELS = [
   {

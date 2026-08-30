@@ -4,6 +4,8 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import WorkPreview from './components/WorkPreview';
 import About from './components/About';
+import Experience from './components/Experience';
+import Testimonials from './components/Testimonials';
 import { PlaceholderSection } from './components/SectionPlaceholders';
 import WorkCollections from './pages/WorkCollections';
 import Contact from './components/Contact';
@@ -26,18 +28,8 @@ function LandingPage() {
           title="Skills & Tools" 
           desc="Primary / Developing / Basic / Supporting tiers. NO percentage bars." 
         />
-        <PlaceholderSection 
-          id="experience" 
-          num="04" 
-          title="Experience" 
-          desc="Honest freelance/project-based experience list." 
-        />
-        <PlaceholderSection 
-          id="testimonials" 
-          num="05" 
-          title="Kind Words" 
-          desc="Client testimonials and references." 
-        />
+        <Experience />
+        <Testimonials />
         <Contact />
       </main>
       <Footer />

@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
-import chatgptIcon from '../assets/chatgpt-icon.png';
-import canvaIcon from '../assets/canva-icon.png';
-import photoshopIcon from '../assets/photoshop-icon.png';
-import illustratorIcon from '../assets/illustrator-icon.png';
+import chatgptIcon from '../assets/chatgpt-icon.webp';
+import canvaIcon from '../assets/canva-icon.webp';
+import photoshopIcon from '../assets/photoshop-icon.webp';
+import illustratorIcon from '../assets/illustrator-icon.webp';
 
 const marqueeItems = [
   "SOCIAL MEDIA DESIGN",
@@ -204,7 +204,7 @@ export default function Hero() {
         On mobile: positioned relative at the bottom of the section (acting as the top boundary of About).
         On desktop: absolute positioned inside Hero.
       */}
-      <div className="relative w-full mt-0 mb-[50px] sm:absolute sm:w-auto sm:h-auto sm:mt-0 sm:mb-0 sm:inset-x-0 sm:bottom-[3%] sm:translate-y-0 z-30 pointer-events-none flex flex-col items-center gap-[5px]">
+      <div className="relative w-full mt-0 mb-[50px] sm:absolute sm:w-auto sm:h-auto sm:mt-0 sm:mb-0 sm:inset-x-0 sm:bottom-[3%] sm:translate-y-0 z-30 pointer-events-none flex flex-col items-center gap-[15px] -rotate-1">
         <div
             className="
               w-[120vw] max-w-none

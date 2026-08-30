@@ -26,39 +26,58 @@ export function TransitionProvider({ children }) {
   const [isInitialLoad, setIsInitialLoad] = useState(false);
   
   // Handle initial preloader
+  const hasRunInitial = useRef(false);
+
   useEffect(() => {
-    if (isFirstMount.current && location.pathname === '/') {
-      isFirstMount.current = false;
+    if (hasRunInitial.current) return;
+
+    if (location.pathname === '/') {
       setIsActive(true);
       setIsInitialLoad(true);
       setStep(0);
       
+      let t1, t2, t3;
       if (prefersReducedMotion) {
-        const t1 = setTimeout(() => {
+        t1 = setTimeout(() => {
           setStep(2);
           setTimeout(() => {
             setIsActive(false);
             setIsInitialLoad(false);
+            hasRunInitial.current = true;
           }, 300);
         }, 200);
-        return () => clearTimeout(t1);
+      } else {
+        t1 = setTimeout(() => setStep(1), 250); 
+        t2 = setTimeout(() => setStep(2), 1050); 
+        t3 = setTimeout(() => {
+          setIsActive(false);
+          setIsInitialLoad(false);
+          hasRunInitial.current = true;
+        }, 1300); 
       }
-
-      const t1 = setTimeout(() => setStep(1), 250); 
-      const t2 = setTimeout(() => setStep(2), 1050); 
-      const t3 = setTimeout(() => {
-        setIsActive(false);
-        setIsInitialLoad(false);
-      }, 1300); 
       
       return () => {
+        // If unmounted before completion (e.g. Strict Mode), clear timeouts 
+        // so it can restart properly on the next mount.
         clearTimeout(t1);
-        clearTimeout(t2);
-        clearTimeout(t3);
+        if (t2) clearTimeout(t2);
+        if (t3) clearTimeout(t3);
       };
+    } else {
+      hasRunInitial.current = true;
     }
-    isFirstMount.current = false;
   }, [location.pathname, prefersReducedMotion]);
+
+  // Failsafe: if isActive gets stuck for more than 6 seconds, force dismiss
+  useEffect(() => {
+    if (isActive) {
+      const failsafe = setTimeout(() => {
+        setIsActive(false);
+        setIsInitialLoad(false);
+      }, 6000);
+      return () => clearTimeout(failsafe);
+    }
+  }, [isActive]);
 
   const navigateWithTransition = useCallback((to) => {
     if (isActive) return;

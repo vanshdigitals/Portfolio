@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { usePageTransition } from '../context/TransitionContext';
 
-import imgCutsCurves  from '../assets/card-cuts-curves.jpg';
-import imgWaterplane  from '../assets/card-waterplane.jpg';
-import imgKeshvi      from '../assets/card-keshvi.jpg';
-import imgBuilders    from '../assets/card-builders.jpg';
-import imgRanjeet     from '../assets/card-ranjeet.jpg';
+import imgCutsCurves  from '../assets/card-cuts-curves.webp';
+import imgWaterplane  from '../assets/card-waterplane.webp';
+import imgKeshvi      from '../assets/card-keshvi.webp';
+import imgBuilders    from '../assets/card-builders.webp';
+import imgRanjeet     from '../assets/card-ranjeet.webp';
 
 // ── Client data ────────────────────────────────────────────────────────────────
 const PROJECTS = [
@@ -85,6 +85,8 @@ function ProjectCard({ project, index, navigateWithTransition }) {
             group-hover:scale-[1.02]
             motion-reduce:group-hover:scale-100
           "
+          width="1200"
+          height="896"
           loading="lazy"
         />
       </div>
