@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import MarqueeStrip from './components/MarqueeStrip';
 import WorkPreview from './components/WorkPreview';
 import About from './components/About';
 import Experience from './components/Experience';
@@ -20,12 +21,18 @@ function LandingPage() {
       <Header />
       <main className="flex-grow">
         <Hero />
+        <MarqueeStrip />
         <About />
         <WorkPreview />
         <PlaceholderSection 
           id="skills" 
           num="03" 
-          title="Skills & Tools" 
+          eyebrow="SKILLS & TOOLS"
+          title={
+            <>
+              What I <span className="text-[#007BFF] dark:text-[#3B93FF]">Work</span> With
+            </>
+          }
           desc="Primary / Developing / Basic / Supporting tiers. NO percentage bars." 
         />
         <Experience />

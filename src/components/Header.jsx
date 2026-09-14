@@ -355,6 +355,7 @@ export default function Header() {
               className="
                 group flex h-[44px] w-auto items-center justify-center gap-3
                 rounded-full bg-[#007BFF] hover:bg-[#006AE0] text-white
+                dark:bg-[#FFD722] dark:hover:bg-[#E6C200] dark:text-[#111214]
                 pl-5 pr-1.5 font-heading text-[15px] font-medium
                 transition-colors duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
                 outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg
@@ -363,9 +364,7 @@ export default function Header() {
               <span>Resume</span>
               <div className="
                 flex items-center justify-center w-[32px] h-[32px] rounded-full
-                transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
-                group-hover:scale-[1.03]
-                bg-white text-[#111214]
+                bg-white dark:bg-[#111214] text-[#111214] dark:text-white
               ">
                 <ArrowRight 
                   size={16} 
@@ -510,14 +509,13 @@ export default function Header() {
               focus-visible:outline-none focus-visible:ring-2
               focus-visible:ring-primary focus-visible:ring-offset-2
               focus-visible:ring-offset-bg
-              ${isDark ? 'bg-[#FFD722] hover:bg-[#E6C200] text-[#111214]' : 'bg-[#007BFF] hover:bg-[#006AE0] text-white'}
+              bg-[#007BFF] hover:bg-[#006AE0] text-white
+              dark:bg-[#FFD722] dark:hover:bg-[#E6C200] dark:text-[#111214]
             `}
           >
             <span>Resume</span>
             <div className="
               flex items-center justify-center w-[32px] h-[32px] rounded-full
-              transition-transform duration-[260ms] ease-[cubic-bezier(.4,0,.2,1)]
-              group-hover:scale-[1.03]
               bg-white dark:bg-[#111214] text-[#111214] dark:text-white
             ">
               <ArrowRight 

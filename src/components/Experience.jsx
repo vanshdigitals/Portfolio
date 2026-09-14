@@ -79,18 +79,14 @@ export default function Experience() {
         
         {/* Section Heading */}
         <div className="mb-12 md:mb-16 text-center">
-          <span className="font-body text-sm font-bold tracking-[0.2em] text-text-muted uppercase mb-4 block">
+          <span className="font-body text-[11px] md:text-[12px] font-semibold tracking-[0.2em] text-text-muted uppercase mb-3 block">
             EXPERIENCE
           </span>
-          <h2 className="font-heading text-[clamp(32px,4vw,56px)] font-extrabold text-[#111214] dark:text-white leading-[1.1] max-w-3xl mx-auto mb-6">
-            Learning &{' '}
-            <span className="text-[#007BFF] dark:text-[#FFD722] relative inline-block whitespace-nowrap">
-              building.
-              {/* Brush underline */}
-              <span className="absolute -bottom-2 left-0 w-full h-[12px] bg-[url('/assets/yellow-brush-highlight.webp')] bg-no-repeat bg-center bg-contain -z-10 opacity-60 dark:opacity-100 hidden dark:block" aria-hidden="true"></span>
-            </span>
+          <h2 className="font-heading text-[clamp(34px,4vw,54px)] font-light md:font-normal text-text-primary leading-[1.15] tracking-[-0.02em] max-w-3xl mx-auto">
+            How I Got{' '}
+            <span className="text-[#007BFF] dark:text-[#3B93FF]">Here</span>
           </h2>
-          <p className="font-body text-[16px] text-text-muted max-w-2xl mx-auto">
+          <p className="font-body text-[15px] md:text-base leading-[1.65] text-text-secondary max-w-2xl mx-auto mt-3">
             Education, hands-on design work, and the courses shaping my craft.
           </p>
         </div>

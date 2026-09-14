@@ -1,44 +1,198 @@
-import { Fragment } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
+import { ArrowDown } from 'lucide-react';
+import Button from './Button';
 import chatgptIcon from '../assets/chatgpt-icon.webp';
 import canvaIcon from '../assets/canva-icon.webp';
 import photoshopIcon from '../assets/photoshop-icon.webp';
 import illustratorIcon from '../assets/illustrator-icon.webp';
+import desktopIconsData from '../data/heroIcons.desktop.json';
+import mobileIconsData from '../data/heroIcons.mobile.json';
+const HeroIconEditor = import.meta.env.DEV ? lazy(() => import('./dev/HeroIconEditor')) : () => null;
 
-const marqueeItems = [
-  "SOCIAL MEDIA DESIGN",
-  "CAROUSEL DESIGN",
-  "POST DESIGN",
-  "REEL COVERS",
-  "HIGHLIGHT COVERS",
-  "POSTERS",
-  "SOCIAL MEDIA BRANDING"
-];
+const assetMap = {
+  'chatgpt-icon.webp': chatgptIcon,
+  'canva-icon.webp': canvaIcon,
+  'photoshop-icon.webp': photoshopIcon,
+  'illustrator-icon.webp': illustratorIcon
+};
 
-const MarqueeContent = ({ ariaHidden = false }) => (
-  <span
-    aria-hidden={ariaHidden}
-    className={`flex items-center whitespace-nowrap font-heading font-bold uppercase text-white dark:text-[#FFD722] tracking-wide text-[9vw] sm:text-[clamp(26px,4vw,50px)] ${ariaHidden ? 'motion-reduce:hidden' : ''}`}
-  >
-    {marqueeItems.map((item, idx) => (
-      <Fragment key={idx}>
-        <span>{item}</span>
-        <svg 
-          className="w-[0.8em] h-[0.8em] text-[#FFD722] dark:text-white mx-[0.2em] shrink-0" 
-          viewBox="0 0 24 24" 
-          fill="currentColor"
+// Toggle availability/relocation editorial metadata block below the portrait
+const SHOW_AVAILABILITY_METADATA = false;
+
+function MoreAboutMeBadge() {
+  const handleClick = (e) => {
+    e.preventDefault();
+    const el = document.getElementById('about');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  return (
+    <a
+      href="/#about"
+      onClick={handleClick}
+      aria-label="Scroll to About section — More About Me"
+      className="group relative flex items-center justify-center w-[88px] h-[88px] sm:w-[100px] sm:h-[100px] md:w-[116px] md:h-[116px] lg:w-[136px] lg:h-[136px] rounded-full pointer-events-auto select-none shrink-0 text-text-primary transition-colors duration-300"
+    >
+      <svg
+        viewBox="0 0 160 160"
+        className="w-full h-full block"
+        aria-hidden="true"
+      >
+        <defs>
+          {/* Continuous circular text path: radius 60, circumference 377px, starts at 9 o'clock */}
+          <path id="heroBadgeCircle" d="M 20, 80 a 60,60 0 1,1 120,0 a 60,60 0 1,1 -120,0" fill="none" />
+        </defs>
+
+        {/* Outer rotating group: spins continuously on hover, smoothly pauses on exit */}
+        <g
+          className="motion-safe:animate-[badge-spin_10s_linear_infinite] [animation-play-state:paused] group-hover:[animation-play-state:running] group-focus-visible:[animation-play-state:running]"
+          style={{ transformOrigin: '80px 80px' }}
         >
-          <path d="M12 0C12 5 17 12 24 12C17 12 12 19 12 24C12 19 7 12 0 12C7 12 12 5 12 0Z" />
-        </svg>
-      </Fragment>
-    ))}
-  </span>
-);
+          {/* Inner group with -4.0deg optical rotation: aligns 9 o'clock and 3 o'clock stars, and 12/6 o'clock ABOUT */}
+          <g transform="rotate(-4.0 80 80)">
+            <text
+              fontFamily="var(--font-heading)"
+              fontSize="16px"
+              fontWeight="700"
+              fill="currentColor"
+              xmlSpace="preserve"
+              className="select-none tracking-normal transition-opacity duration-300 group-hover:opacity-85"
+            >
+              <textPath href="#heroBadgeCircle" textLength="377" lengthAdjust="spacing">
+                ✦ MORE ABOUT ME ✦ MORE ABOUT ME&#160;
+              </textPath>
+            </text>
+          </g>
+        </g>
+
+        {/* Center downward arrow: scaled to 16px typography scale with bold 3.6 stroke weight */}
+        <g 
+          stroke="currentColor" 
+          strokeWidth="3.6" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          fill="none" 
+          className="transition-transform duration-300 group-hover:translate-y-1.5"
+          style={{ transformOrigin: '80px 80px' }}
+        >
+          <line x1="80" y1="62" x2="80" y2="98" />
+          <polyline points="70,87 80,98 90,87" />
+        </g>
+      </svg>
+    </a>
+  );
+}
 
 export default function Hero() {
+  const isDev = import.meta.env.DEV;
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const isEditMode = isDev && urlParams?.get('edit') === 'icons';
+
+  const [isDesktop, setIsDesktop] = useState(
+    typeof window !== 'undefined' ? window.matchMedia('(min-width: 1024px)').matches : true
+  );
+
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1440
+  );
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mql = window.matchMedia('(min-width: 1024px)');
+    const onMediaChange = (e) => setIsDesktop(e.matches);
+    const onResize = () => setWindowWidth(window.innerWidth);
+
+    mql.addEventListener('change', onMediaChange);
+    window.addEventListener('resize', onResize);
+    return () => {
+      mql.removeEventListener('change', onMediaChange);
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
+
+  const [editorMode, setEditorMode] = useState('desktop');
+
+  const [desktopConfig, setDesktopConfig] = useState(() => {
+    if (isEditMode) {
+      const saved = sessionStorage.getItem('heroIconsSession_desktop');
+      if (saved) {
+        try { return JSON.parse(saved); } catch(e) {}
+      }
+    }
+    return JSON.parse(JSON.stringify(desktopIconsData));
+  });
+
+  const [mobileConfig, setMobileConfig] = useState(() => {
+    if (isEditMode) {
+      const saved = sessionStorage.getItem('heroIconsSession_mobile');
+      if (saved) {
+        try { return JSON.parse(saved); } catch(e) {}
+      }
+    }
+    return JSON.parse(JSON.stringify(mobileIconsData));
+  });
+
+  const activeConfig = isEditMode 
+    ? (editorMode === 'desktop' ? desktopConfig : mobileConfig) 
+    : (isDesktop ? desktopConfig : mobileConfig);
+
+  /**
+   * Continuous shoulder clearance formula:
+   * Prevents top icons (ChatGPT and Canva) from dropping onto the shoulder in the tablet band (480–1024px).
+   * Because the portrait padding-to-image ratio is constant (17.1%) below 1024px and only expands above 1024px
+   * (reaching 23% at 1440px), applying desktop y prematurely at tablet widths causes a ~35-45px drop onto the shoulder.
+   * In view mode, this smoothly bridges the confirmed-good mobile y and desktop y endpoints.
+   */
+  const getIconY = (icon) => {
+    if (isEditMode) return icon.y;
+    if (icon.id === 'chatgpt') {
+      const mobY = mobileConfig.icons.find(i => i.id === 'chatgpt')?.y ?? 47.5;
+      const deskY = desktopConfig.icons.find(i => i.id === 'chatgpt')?.y ?? 52.7;
+      if (windowWidth <= 600) return mobY;
+      if (windowWidth >= 1440) return deskY;
+      const t = windowWidth < 1024 
+        ? 0.15 * ((windowWidth - 600) / (1024 - 600))
+        : 0.15 + 0.85 * ((windowWidth - 1024) / (1440 - 1024));
+      return mobY + t * (deskY - mobY);
+    }
+    if (icon.id === 'canva') {
+      const mobY = mobileConfig.icons.find(i => i.id === 'canva')?.y ?? 45.0;
+      const deskY = desktopConfig.icons.find(i => i.id === 'canva')?.y ?? 50.3;
+      if (windowWidth <= 600) return mobY;
+      if (windowWidth >= 1440) return deskY;
+      const t = windowWidth < 1024 
+        ? 0.15 * ((windowWidth - 600) / (1024 - 600))
+        : 0.15 + 0.85 * ((windowWidth - 1024) / (1440 - 1024));
+      return mobY + t * (deskY - mobY);
+    }
+    return icon.y;
+  };
+
+  const [selectedId, setSelectedId] = useState('chatgpt');
+
+  useEffect(() => {
+    if (isEditMode) {
+      sessionStorage.setItem('heroIconsSession_desktop', JSON.stringify(desktopConfig));
+      sessionStorage.setItem('heroIconsSession_mobile', JSON.stringify(mobileConfig));
+    }
+  }, [desktopConfig, mobileConfig, isEditMode]);
+
+  const handleReset = () => {
+    if (editorMode === 'desktop') {
+      setDesktopConfig(JSON.parse(JSON.stringify(desktopIconsData)));
+      sessionStorage.removeItem('heroIconsSession_desktop');
+    } else {
+      setMobileConfig(JSON.parse(JSON.stringify(mobileIconsData)));
+      sessionStorage.removeItem('heroIconsSession_mobile');
+    }
+  };
+
   return (
     <section 
       id="hero" 
-      className="relative w-full mt-16 lg:mt-24 pt-0 pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-[320ms] overflow-x-clip"
+      className={`relative mt-16 lg:mt-24 pt-0 pb-0 flex flex-col items-center justify-start bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-[320ms] overflow-x-clip ${isEditMode ? (editorMode === 'desktop' ? 'w-[1440px] max-w-none mx-auto' : 'w-[390px] max-w-none mx-auto') : 'w-full'}`}
       style={{ scrollMarginTop: 'var(--header-h, 64px)' }}
     >
 
@@ -47,12 +201,17 @@ export default function Hero() {
         Single-column CSS grid. All layers share col-start-1 row-start-1 so they
         stack naturally. Height is content-driven (no fixed heights).
 
-        max-w-[1600px] caps the composition so ultra-wide / TV screens stay
-        controlled and centered.
+      {/*
+        ── COMPOSITION GROUP ──────────────────────────────────────────────────────
+        Single-column CSS grid. All layers share col-start-1 row-start-1 so they
+        stack naturally. Height is content-driven (no fixed heights).
 
-        px-4 sm:px-6 gives equal breathing room on both sides at all widths.
+        max-w-[1536px] matches the Header's container so ultra-wide / TV screens stay
+        controlled and aligned.
+
+        px-4 lg:px-5 xl:px-6 2xl:px-8 matches Header's exact responsive padding tokens.
       */}
-      <div className="relative w-full max-w-[1600px] mx-auto px-4 sm:px-6 grid grid-cols-1 items-start isolate">
+      <div className="relative w-full max-w-[1536px] mx-auto px-4 lg:px-5 xl:px-6 2xl:px-8 grid grid-cols-1 items-start isolate @container">
 
         {/*
           ── PORTFOLIO WORDMARK ── Layer z-10 (behind portrait) ────────────────
@@ -77,7 +236,7 @@ export default function Hero() {
               768px  → text ≈ 752px → shift ≈ 6.0px
               1440px → text ≈ 1415px → shift ≈ 11.3px
           */}
-          <div style={{ transform: 'translateX(0.8%)' }}>
+          <div style={{ transform: 'translateX(clamp(0px, 0.8%, calc((100cqw - 100%) / 2)))' }}>
             <h1
               className="font-furgatorio portfolio-wordmark text-[#007BFF] leading-[1.1] m-0 select-none whitespace-nowrap"
             >
@@ -87,18 +246,20 @@ export default function Hero() {
         </div>
 
         {/*
-          ── PORTRAIT + PLACARD ── Layer z-20 ──────────────────────────────────
+          ── PORTRAIT + CTA ── Layer z-20 ──────────────────────────────────────
         */}
         <div className="col-start-1 row-start-1 z-20 w-full relative flex flex-col items-center justify-start pointer-events-none self-start">
           
           {/* 
             PORTRAIT CONTAINER (z-10) 
             Negative bottom margin causes the placard below to slide up UNDER the portrait.
+            Constrained by max-w-[min(580px,71cqw)] so floating icons never exceed the safe padded content boundary.
           */}
           <div
-            className="relative z-10 w-[68%] sm:w-[70%] md:w-[60%] lg:w-[50%] max-w-[580px]
-                       pt-[18vw] sm:pt-[18vw] md:pt-[18vw] lg:pt-[19vw] xl:pt-[270px]
-                       -mb-[22%] sm:-mb-[18%] lg:-mb-[14%] xl:-mb-[80px]"
+            className={`relative z-10 ${isEditMode ? (editorMode === 'desktop' ? 'w-[clamp(400px,60cqw,580px)]' : 'w-[clamp(240px,60cqw,400px)]') : 'w-[clamp(240px,60cqw,580px)] max-w-[min(580px,71cqw)]'}
+                       pt-[clamp(70px,18cqw,270px)]
+                       ${SHOW_AVAILABILITY_METADATA ? '-mb-[22%] sm:-mb-[18%] lg:-mb-[14%] xl:-mb-[80px]' : 'mb-0'}
+                       lg:-translate-y-12 xl:-translate-y-16 lg:-mb-12 xl:-mb-16`}
           >
 
             {/* Portrait image — renders at natural aspect ratio via h-auto. Width/Height attributes prevent layout shift. */}
@@ -127,120 +288,111 @@ export default function Hero() {
                 desktop (1440px): 5vw = 72px    → clamp max 68px applies
             */}
 
-            {/* ── MOBILE ONLY: ICONS ON SHOULDERS ── */}
-            {/* ChatGPT (Mobile) — upper-left / left shoulder */}
-            <img
-              src={chatgptIcon}
-              alt="ChatGPT"
-              className="sm:hidden absolute top-[36%] left-[13%] -translate-x-1/2 -translate-y-1/2 -rotate-[45deg] w-[31%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-            {/* Canva (Mobile) — upper-right / right shoulder */}
-            <img
-              src={canvaIcon}
-              alt="Canva"
-              className="sm:hidden absolute top-[35%] right-[6%] -translate-y-1/2 rotate-[22deg] w-[26%] aspect-square object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-
-            {/* ── DESKTOP ONLY: FLOATING ICONS ── */}
-            {/* ChatGPT — upper-left */}
-            <img
-              src={chatgptIcon}
-              alt="ChatGPT"
-              className="hidden sm:block absolute top-[22%] left-[10%] -translate-y-1/2 w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-            {/* Canva — upper-right */}
-            <img
-              src={canvaIcon}
-              alt="Canva"
-              className="hidden sm:block absolute top-[22%] right-[10%] -translate-y-1/2 w-[clamp(36px,5vw,68px)] h-[clamp(36px,5vw,68px)] object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-
-            {/* ── RESPONSIVE ICONS: PHOTOSHOP & ILLUSTRATOR ── */}
-            {/* Photoshop — lower-left, arm/hand region. Pushed further out and larger on mobile. */}
-            <img
-              src={photoshopIcon}
-              alt="Photoshop"
-              className="absolute top-[78%] sm:top-[72%] left-[-22%] sm:left-[10%] -translate-y-1/2 -rotate-[80deg]
-                         w-[25%] aspect-square sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)] sm:aspect-auto
-                         object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
-
-            {/* Illustrator — lower-right, arm/hand region. Pushed further out and larger on mobile. */}
-            <img
-              src={illustratorIcon}
-              alt="Illustrator"
-              className="absolute top-[72%] right-[-22%] sm:right-[10%] -translate-y-1/2 rotate-[78deg]
-                         w-[25%] aspect-square sm:w-[clamp(36px,5vw,68px)] sm:h-[clamp(36px,5vw,68px)] sm:aspect-auto
-                         object-contain drop-shadow-md z-10 pointer-events-auto"
-            />
+            {/* ── FLOATING ICONS (DATA-DRIVEN, PROPORTIONAL) ── */}
+            {activeConfig.icons.map((icon) => {
+              const rotation = icon.id === 'photoshop' ? '-80deg' : icon.id === 'illustrator' ? '78deg' : '0deg';
+              const isSelected = isEditMode && selectedId === icon.id;
+              return (
+                <div 
+                  key={icon.id}
+                  className="absolute z-10"
+                  style={{
+                    left: `${icon.x}%`,
+                    top: `${getIconY(icon)}%`,
+                    width: '11.724%', /* 68px / 580px */
+                    aspectRatio: '1 / 1',
+                    transform: `translate(-50%, -50%) scale(${activeConfig.scale}) rotate(${icon.rotation || 0}deg)`,
+                    outline: isSelected ? '1px solid #007BFF' : 'none',
+                    pointerEvents: isEditMode ? 'auto' : 'none'
+                  }}
+                  onClick={isEditMode ? () => setSelectedId(icon.id) : undefined}
+                >
+                  <img
+                    src={assetMap[icon.asset]}
+                    alt=""
+                    style={{ transform: `rotate(${rotation})` }}
+                    className="w-full h-full object-contain drop-shadow-md pointer-events-none"
+                    draggable="false"
+                  />
+                  {isSelected && (
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-[#007BFF] text-white text-[10px] px-1 rounded whitespace-nowrap">
+                      {icon.id}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
 
           </div>
 
           {/* 
-            PLACARD CONTAINER (z-0) 
-            Sits behind the portrait base. Large top padding ensures text clears the overlapping photo.
+            EDITORIAL AVAILABILITY METADATA (Flush on page background)
+            Preserved for later restoration; set SHOW_AVAILABILITY_METADATA = true to re-enable.
           */}
-          <div className="relative z-0 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] max-w-[580px] bg-[#DCEBFF] dark:bg-[#2A2410] rounded-[24px] pointer-events-auto flex flex-col items-center justify-end text-center pt-[28%] sm:pt-[22%] lg:pt-[18%] xl:pt-[110px] pb-6 md:pb-8 px-4 sm:px-6 transition-colors duration-300">
-            <p className="font-heading font-bold text-[13px] md:text-[14px] text-[#0A3A7A] dark:text-[#FFD722] leading-[1.6]">
-              Open For Offline <span className="opacity-50 font-normal mx-0.5">|</span> Hybrid <span className="opacity-50 font-normal mx-0.5">|</span> Online
-              <br />
-              Freelance <span className="opacity-50 font-normal mx-0.5">|</span> Internships <span className="opacity-50 font-normal mx-0.5">|</span> Job Work
-            </p>
-            
-            <div className="w-[40px] h-[1px] bg-[#0A3A7A]/20 dark:bg-[#FFD722]/20 my-3.5 md:my-4"></div>
-            
-            <p className="font-body text-[12px] md:text-[13px] text-[#0A3A7A]/75 dark:text-[#FFD722]/75 leading-[1.5]">
-              Also open to relocate
-              <br />
-              <span className="font-semibold text-[#0A3A7A] dark:text-[#FFD722] mt-0.5 inline-block tracking-wide">
-                Noida &middot; Delhi &middot; Gurugram
-              </span>
-            </p>
+          {SHOW_AVAILABILITY_METADATA && (
+            <div className="relative z-0 pointer-events-auto flex flex-col items-center text-center pt-[26%] sm:pt-[22%] lg:pt-[18%] xl:pt-[105px] pb-4 md:pb-6 px-4">
+              <p className="font-body font-medium text-[13px] md:text-[14px] text-text-primary leading-[1.6]">
+                Open For Offline <span className="opacity-40 font-normal mx-1">|</span> Hybrid <span className="opacity-40 font-normal mx-1">|</span> Online
+                <br />
+                Freelance <span className="opacity-40 font-normal mx-1">|</span> Internships <span className="opacity-40 font-normal mx-1">|</span> Job Work
+              </p>
+              
+              <div className="w-10 h-px bg-hairline my-3 md:my-3.5" aria-hidden="true" />
+              
+              <p className="font-body text-[12px] md:text-[13px] text-text-secondary leading-[1.5]">
+                Also open to relocate
+                <br />
+                <span className="font-semibold text-text-primary dark:text-[#FFD722] mt-0.5 inline-block tracking-wide">
+                  Noida &middot; Delhi &middot; Gurugram
+                </span>
+              </p>
+            </div>
+          )}
+
+          {/* ── HERO BOTTOM ROW: Centered CTA Button with responsive bottom spacing ── */}
+          <div className="relative w-full max-w-full mx-auto flex items-center justify-center -mt-[64px] sm:-mt-[74px] lg:-mt-[80px] mb-10 sm:mb-12 md:mb-14 lg:mb-16 pb-0 z-30 pointer-events-none">
+            {/* EXPLORE MY WORK CTA BUTTON (Bottom-Center) */}
+            <div className="pointer-events-auto flex justify-center">
+              <Button 
+                size="hero"
+                label="Explore My Work" 
+                href="/#work" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById('work');
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+              />
+            </div>
           </div>
 
+        </div>
+
+        {/* ── STICKY BADGE TRACK (Scoped strictly to Hero section height; hidden on mobile view) ── */}
+        <div className="hidden md:flex col-start-1 row-start-1 h-full w-full pointer-events-none z-30 flex-col justify-end items-start pb-10 sm:pb-12 md:pb-14 lg:pb-16">
+          <div className="sticky bottom-10 sm:bottom-12 md:bottom-14 lg:bottom-16 pointer-events-auto flex">
+            <MoreAboutMeBadge />
+          </div>
         </div>
 
       </div>
 
-      {/*
-        ── YELLOW MARQUEE STRIP ── Layer z-30 ────────────────────────────────
-        On mobile: positioned relative at the bottom of the section (acting as the top boundary of About).
-        On desktop: absolute positioned inside Hero.
-      */}
-      <div className="relative w-full mt-0 mb-[50px] sm:absolute sm:w-auto sm:h-auto sm:mt-0 sm:mb-0 sm:inset-x-0 sm:bottom-[3%] sm:translate-y-0 z-30 pointer-events-none flex flex-col items-center gap-[15px] -rotate-1">
-        <div
-            className="
-              w-[120vw] max-w-none
-              bg-[#007BFF]
-              flex items-center
-              h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
-              pointer-events-auto
-              overflow-hidden
-            "
-          >
-            <div className="flex w-max shrink-0 motion-safe:animate-marquee-mobile sm:motion-safe:animate-marquee will-change-transform" style={{ animationDirection: 'reverse' }}>
-              <MarqueeContent />
-              <MarqueeContent ariaHidden={true} />
-            </div>
-          </div>
-            
-          {/* DUPLICATE MARQUEE */}
-          <div
-            className="
-              w-[120vw] max-w-none
-              bg-[#007BFF]
-              flex items-center
-              h-[14.5vw] sm:h-[clamp(50px,8.5vw,90px)]
-              pointer-events-auto
-              overflow-hidden
-            "
-          >
-            <div className="flex w-max shrink-0 motion-safe:animate-marquee-mobile sm:motion-safe:animate-marquee will-change-transform">
-              <MarqueeContent />
-              <MarqueeContent ariaHidden={true} />
-            </div>
-          </div>
-        </div>
+
+      {isEditMode && (
+        <Suspense fallback={null}>
+          <HeroIconEditor 
+            config={activeConfig} 
+            setConfig={editorMode === 'desktop' ? setDesktopConfig : setMobileConfig} 
+            onReset={handleReset}
+            selectedId={selectedId}
+            setSelectedId={setSelectedId}
+            editorMode={editorMode}
+            setEditorMode={setEditorMode}
+          />
+        </Suspense>
+      )}
     </section>
   );
 }

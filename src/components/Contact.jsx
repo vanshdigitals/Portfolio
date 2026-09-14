@@ -93,16 +93,12 @@ export default function Contact() {
       <div className="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-[96px]">
         {/* Section Heading */}
         <div className="mb-10 text-center relative z-10">
-          <span className="font-body text-sm font-bold tracking-[0.2em] text-text-muted uppercase mb-4 block">
+          <span className="font-body text-[11px] md:text-[12px] font-semibold tracking-[0.2em] text-text-muted uppercase mb-3 block">
             CONTACT
           </span>
-          <h2 className="font-heading text-[clamp(32px,4vw,56px)] font-extrabold text-[#111214] dark:text-white leading-[1.1] max-w-3xl mx-auto">
-            Let's work{' '}
-            <span className="text-[#007BFF] dark:text-[#FFD722] relative inline-block whitespace-nowrap">
-              together.
-              {/* Brush underline */}
-              <span className="absolute -bottom-2 left-0 w-full h-[12px] bg-[url('/assets/yellow-brush-highlight.webp')] bg-no-repeat bg-center bg-contain -z-10 opacity-60 dark:opacity-100 hidden dark:block" aria-hidden="true"></span>
-            </span>
+          <h2 className="font-heading text-[clamp(34px,4vw,54px)] font-light md:font-normal text-text-primary leading-[1.15] tracking-[-0.02em] max-w-3xl mx-auto">
+            Let's Work{' '}
+            <span className="text-[#007BFF] dark:text-[#3B93FF]">Together.</span>
           </h2>
         </div>
 

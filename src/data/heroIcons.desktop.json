@@ -1,0 +1,33 @@
+{
+  "scale": 2,
+  "icons": [
+    {
+      "id": "chatgpt",
+      "asset": "chatgpt-icon.webp",
+      "x": 21.4,
+      "y": 52.7,
+      "rotation": 335
+    },
+    {
+      "id": "canva",
+      "asset": "canva-icon.webp",
+      "x": 72.1,
+      "y": 50.3,
+      "rotation": 20
+    },
+    {
+      "id": "photoshop",
+      "asset": "photoshop-icon.webp",
+      "x": -8.6,
+      "y": 88,
+      "rotation": 355
+    },
+    {
+      "id": "illustrator",
+      "asset": "illustrator-icon.webp",
+      "x": 107.6,
+      "y": 79.9,
+      "rotation": 355
+    }
+  ]
+}

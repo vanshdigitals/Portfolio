@@ -23,6 +23,7 @@
        --surface token so cards/tiles get a visible fill in light and dark. */
   --color-brand-blue: #007BFF;
   --color-brand-yellow: #FFD722;
+  --color-brand-primary: var(--brand-primary);
   --color-secondary-bg: var(--surface);
   --color-secondary-text: var(--text-secondary);
 
@@ -51,6 +52,7 @@
     --divider: #ECEAE4;
     --primary: #007BFF;
     --accent: #FFD722;
+    --brand-primary: #007BFF;
     --hairline: rgba(17, 18, 20, 0.1);
     --scrollbar-hover: var(--primary);
   }
@@ -67,6 +69,7 @@
     --divider: #202226;
     --primary: #3B93FF;
     --accent: #FFD722;
+    --brand-primary: #FFD722;
     --hairline: rgba(255, 255, 255, 0.1);
     --scrollbar-hover: var(--accent);
   }
@@ -137,6 +140,55 @@
   header svg path {
     transition: stroke 320ms cubic-bezier(.4,0,.2,1);
   }
+}
+
+@utility font-section-h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 3.8vw, 44px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+@utility font-card-h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+@utility font-body-large {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+@utility font-body-base {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+@utility font-body-small {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+@utility font-meta-label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 @utility animate-fade-in {

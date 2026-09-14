@@ -84,57 +84,68 @@ export default function WorkPreview() {
   const { navigateWithTransition } = usePageTransition();
 
   return (
-    <section id="work" className="py-20 md:py-28 border-b border-border bg-bg">
-      <div className="w-full max-w-[1200px] mx-auto px-5 md:px-8 lg:px-12 xl:px-16">
+    <section id="work" className="pt-14 md:pt-20 pb-20 md:pb-28 border-b border-border bg-bg">
+      <div className="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-[96px]">
 
-        {/* ── Section header ─────────────────────────────────────────────── */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 md:gap-12 mb-14 md:mb-18">
+        {/* ── 1. Main Section Heading ───────────────────────────────────────── */}
+        <div className="flex flex-col gap-2.5 max-w-[580px] mb-8 md:mb-10">
+          <span className="font-body text-[11px] md:text-[12px] font-semibold uppercase tracking-[0.2em] text-text-muted">
+            FEATURED WORK
+          </span>
+          <h2 className="font-heading text-[clamp(34px,3.8vw,52px)] font-light md:font-normal leading-[1.15] tracking-[-0.02em] text-text-primary">
+            Work That{' '}
+            <span className="text-[#007BFF] dark:text-[#3B93FF]">Speaks.</span>
+          </h2>
+          <p className="font-body text-[15px] md:text-base leading-[1.65] text-text-secondary">
+            A selection of my recent work across branding, digital, and social design.
+          </p>
+        </div>
 
-          {/* Left: eyebrow + heading + sub */}
-          <div className="flex flex-col gap-3 max-w-[580px]">
-            <p className="font-heading font-normal text-[11px] uppercase tracking-[0.14em] text-text-muted">
-              Featured Work
-            </p>
-            <h2 className="font-heading text-[34px] md:text-[42px] font-bold leading-[1.1] tracking-[-0.02em] text-text-primary">
-              Designs that{' '}
-              <span className="text-[#007BFF] dark:text-[#FFD722]">make impact.</span>
-            </h2>
-            <p className="font-body text-[15px] md:text-base leading-[1.65] text-text-secondary">
-              A selection of my recent work across branding, digital, and social design.
-            </p>
+        {/* ── 2. Category Label + CTA Row ─────────────────────────────────── */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8 w-full">
+          {/* Left: Category Label */}
+          <div className="flex items-center">
+            <span className="font-heading text-[16px] md:text-[18px] font-medium text-text-primary tracking-[-0.01em]">
+              Social Media Designs
+            </span>
           </div>
 
-          {/* Right: CTA */}
-          <div className="shrink-0">
+          {/* Right: Compact Pill CTA (Resume / Explore My Work button family) */}
+          <div className="shrink-0 flex sm:justify-end">
             <Link
               to="/work-collections"
-              onClick={(e) => { e.preventDefault(); navigateWithTransition('/work-collections'); }}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateWithTransition('/work-collections');
+              }}
               className="
-                group inline-flex items-center gap-2
-                font-heading text-[14px] font-medium text-text-primary
-                border-b border-border pb-0.5
-                transition-[border-color,color] duration-200 ease-[cubic-bezier(.4,0,.2,1)]
-                hover:border-text-primary hover:text-[#007BFF] dark:hover:text-[#FFD722]
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
-                focus-visible:ring-offset-2 focus-visible:ring-offset-bg rounded-sm
+                group inline-flex items-center gap-2.5 sm:gap-3
+                h-[40px] pl-4.5 pr-1.5 rounded-full
+                bg-[#007BFF] hover:bg-[#006AE0] text-white
+                font-heading text-[13px] sm:text-[14px] font-medium
+                transition-colors duration-200 ease-[cubic-bezier(.4,0,.2,1)]
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg
               "
+              aria-label="Explore More Work Collections"
             >
-              Explore More Work Collections
-              <ArrowRight
-                size={15}
-                className="
-                  transition-transform duration-200 ease-[cubic-bezier(.4,0,.2,1)]
-                  group-hover:translate-x-[3px]
-                  motion-reduce:transition-none
-                "
-                aria-hidden="true"
-              />
+              <span>Explore More Work Collections</span>
+              <div className="
+                flex items-center justify-center w-[28px] h-[28px] rounded-full
+                bg-white text-[#111214] shrink-0
+              ">
+                <ArrowRight
+                  size={14}
+                  strokeWidth={2.2}
+                  className="transition-transform duration-200 ease-[cubic-bezier(.4,0,.2,1)] group-hover:translate-x-[2px]"
+                  aria-hidden="true"
+                />
+              </div>
             </Link>
           </div>
         </div>
 
-        {/* ── Cards grid ─────────────────────────────────────────────────── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 items-stretch">
+        {/* ── 3. Cards grid ─────────────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8 items-stretch">
           {PROJECTS.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} navigateWithTransition={navigateWithTransition} />
           ))}
