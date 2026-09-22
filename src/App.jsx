@@ -12,7 +12,6 @@ import WorkCollections from './pages/WorkCollections';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { TransitionProvider } from './context/TransitionContext';
-import MobileOnlyGate from './components/MobileOnlyGate';
 
 // ── Landing page (all sections stacked) ────────────────────────────────────────
 function LandingPage() {
@@ -99,10 +98,9 @@ function App() {
   }, [location.pathname, location.hash]);
 
   return (
-    <MobileOnlyGate>
-      <TransitionProvider>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
+    <TransitionProvider>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route
           path="/work-collections"
           element={
@@ -115,9 +113,8 @@ function App() {
             </div>
           }
         />
-        </Routes>
-      </TransitionProvider>
-    </MobileOnlyGate>
+      </Routes>
+    </TransitionProvider>
   );
 }
 
