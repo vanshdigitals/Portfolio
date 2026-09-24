@@ -179,10 +179,10 @@ function BrandBlock({ brand, showCurveArrow, showStars }) {
 export default function WorkCollections() {
   return (
     <main className="min-h-screen bg-bg pt-24 pb-32 overflow-x-hidden">
-      <div className="w-full max-w-[1200px] mx-auto px-5 md:px-8 lg:px-12 xl:px-16">
+      <div className="w-full max-w-[1200px] lg:max-w-[1540px] xl:max-w-[1680px] 2xl:max-w-[1760px] mx-auto px-5 md:px-8 lg:px-10 xl:px-12">
 
         {/* ── Intro block (Hero Energy) ───────────────────────────────────── */}
-        <div className="relative mb-[20px] md:mb-32 mt-0 md:mt-12 max-w-[800px] mx-auto text-center">
+        <div className="relative mb-[20px] md:mb-32 lg:mb-14 mt-0 md:mt-12 max-w-[800px] mx-auto text-center">
 
           {/* LEFT FRAMING: Huge Arrow */}
           <img

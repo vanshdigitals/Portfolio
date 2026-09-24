@@ -69,7 +69,7 @@ export default function ArchiveCategories() {
       
       {/* ── DESKTOP CATEGORY SELECTOR ────────────────────────────────────── */}
       <div 
-        className="hidden md:grid grid-cols-3 gap-6 mb-32"
+        className="hidden md:grid grid-cols-3 gap-6 mb-32 max-w-[1200px] mx-auto w-full"
         role="tablist"
         aria-label="Work Categories"
       >

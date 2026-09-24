@@ -16,6 +16,18 @@ import InstagramMockup from './InstagramMockup';
  * (centered), so artwork keeps its true aspect ratio — never stretched, never cropped
  * (the frame matches the art ratio, so object-cover fills exactly).
  */
+export function getCardWidthClass(ratio) {
+  const normalized = String(ratio).trim();
+  if (normalized === '9/16' || normalized === '9:16') {
+    return 'w-[clamp(240px,70vw,280px)] sm:w-[260px] md:w-[280px] lg:w-[290px] xl:w-[calc(25%-12px)]';
+  }
+  if (normalized === '1/1' || normalized === '1:1' || normalized === 'square') {
+    return 'w-[clamp(220px,65vw,260px)] sm:w-[240px] md:w-[260px] lg:w-[270px] xl:w-[calc(25%-12px)]';
+  }
+  // Default for 4/5, 3/4, etc.
+  return 'w-[clamp(260px,78vw,320px)] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[calc(25%-12px)]';
+}
+
 export default function WorkMediaCard({
   ratio = '4/5',
   type,
@@ -24,11 +36,14 @@ export default function WorkMediaCard({
   controls,
   mockup = true,
   media = [],
+  className = '',
   children,
 }) {
   const [mockupOpen, setMockupOpen] = useState(false);
+  const widthClass = getCardWidthClass(ratio);
+
   return (
-    <div className="snap-start shrink-0 flex flex-col h-full w-[clamp(240px,80vw,320px)] rounded-2xl overflow-hidden bg-surface border border-border/60 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_10px_28px_-14px_rgba(0,0,0,0.14)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.3),0_12px_32px_-14px_rgba(0,0,0,0.55)]">
+    <div className={`snap-start shrink-0 flex flex-col h-full ${className ? className : widthClass} rounded-2xl overflow-hidden bg-surface border border-border/60 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_10px_28px_-14px_rgba(0,0,0,0.14)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.3),0_12px_32px_-14px_rgba(0,0,0,0.55)]`}>
       {/* Image frame — fills card width with balanced padding; height derives from ratio */}
       <div className="p-[14px]">
         <div
