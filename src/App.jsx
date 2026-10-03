@@ -7,7 +7,7 @@ import WorkPreview from './components/WorkPreview';
 import About from './components/About';
 import Experience from './components/Experience';
 import Testimonials from './components/Testimonials';
-import { PlaceholderSection } from './components/SectionPlaceholders';
+import SkillsTools from './components/SkillsTools';
 import WorkCollections from './pages/WorkCollections';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -23,17 +23,7 @@ function LandingPage() {
         <MarqueeStrip />
         <About />
         <WorkPreview />
-        <PlaceholderSection 
-          id="skills" 
-          num="03" 
-          eyebrow="SKILLS & TOOLS"
-          title={
-            <>
-              What I <span className="text-[#007BFF] dark:text-[#3B93FF]">Work</span> With
-            </>
-          }
-          desc="Primary / Developing / Basic / Supporting tiers. NO percentage bars." 
-        />
+        <SkillsTools />
         <Experience />
         <Testimonials />
         <Contact />
